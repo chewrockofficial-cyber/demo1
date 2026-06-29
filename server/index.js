@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 3000
 
 app.use(cors())
 app.use(express.json())
-app.use(express.static(join(__dirname, '../../client')))
+app.use(express.static(join(__dirname, './public')))
 
 // ── 라우트 ────────────────────────────────────────────────────
 
@@ -58,7 +58,7 @@ app.use(cors());
 app.use(express.json());
 
 // Static files (client)
-app.use(express.static(path.join(__dirname, '../../client')));
+app.use(express.static(path.join(__dirname, './public')));
 
 // ─── Routes ──────────────────────────────────────────────────────────────────
 
