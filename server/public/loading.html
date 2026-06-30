@@ -101,7 +101,7 @@
     const delay = parseInt(params.get('delay')) || 1500
 
     if (nextPage) {
-      setTimeout(() => { window.location.href = '/loading.html?next=/login.html&delay=1500'}, 1000)
+      setTimeout(() => { window.location.href = nextPage }, delay)
     }
   </script>
 </body>
