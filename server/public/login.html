@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chew Rock — 로그인</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --chalk: #FAF8F4; --stone: #2E2926; --pebble: #7A6F68;
+      --hold: #FF6B35; --success: #4CAF82; --surface: #FFFFFF;
+      --border: #EDE8E2; --radius: 16px;
+    }
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--chalk);
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px;
+    }
+    .card {
+      background: var(--surface);
+      border-radius: 28px;
+      padding: 48px 40px 40px;
+      width: 100%; max-width: 400px;
+      box-shadow: 0 2px 0 #D4C9BC, 0 8px 40px #2E292610;
+    }
+    .logo { text-align: center; margin-bottom: 32px; }
+    .logo-icon {
+      width: 64px; height: 64px;
+      background: var(--hold); border-radius: 20px;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 30px; margin-bottom: 12px;
+      box-shadow: 0 4px 0 #D94F1A;
+    }
+    .logo-title { font-size: 24px; font-weight: 800; color: var(--stone); letter-spacing: -0.5px; }
+    .logo-sub { font-size: 13px; color: var(--pebble); margin-top: 2px; }
+    .tabs {
+      display: flex; background: var(--chalk);
+      border-radius: 12px; padding: 4px; margin-bottom: 28px; gap: 4px;
+    }
+    .tab {
+      flex: 1; padding: 10px; border: none; border-radius: 9px;
+      font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 700;
+      cursor: pointer; transition: all 0.2s;
+      background: transparent; color: var(--pebble);
+    }
+    .tab.active { background: var(--surface); color: var(--stone); box-shadow: 0 1px 4px #2E292618; }
+    .form { display: flex; flex-direction: column; gap: 14px; }
+    .field { display: flex; flex-direction: column; gap: 6px; }
+    label { font-size: 13px; font-weight: 700; color: var(--stone); }
+    input {
+      padding: 13px 16px; border: 1.5px solid var(--border);
+      border-radius: 12px; font-family: 'Nunito', sans-serif;
+      font-size: 15px; color: var(--stone); background: var(--chalk);
+      outline: none; transition: border-color 0.15s;
+    }
+    input::placeholder { color: #B8AFA8; }
+    input:focus { border-color: var(--hold); background: #FFF9F6; }
+    .error-msg {
+      font-size: 13px; color: #E05555; font-weight: 600;
+      display: none; padding: 10px 14px;
+      background: #FFF0F0; border-radius: 10px;
+    }
+    .error-msg.show { display: block; }
+    .btn-submit {
+      margin-top: 4px; padding: 15px;
+      background: var(--hold); color: #fff; border: none;
+      border-radius: 14px; font-family: 'Nunito', sans-serif;
+      font-size: 16px; font-weight: 800; cursor: pointer;
+      box-shadow: 0 4px 0 #D94F1A; transition: transform 0.1s, box-shadow 0.1s;
+    }
+    .btn-submit:active { transform: translateY(3px); box-shadow: 0 1px 0 #D94F1A; }
+    .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    #field-nickname { display: none; }
+    .success-banner { display: none; text-align: center; padding: 20px; }
+    .success-banner.show { display: block; }
+    .success-emoji { font-size: 40px; margin-bottom: 8px; }
+    .success-text { font-size: 16px; font-weight: 700; color: var(--success); }
+    .success-sub { font-size: 13px; color: var(--pebble); margin-top: 4px; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">
+      <div class="logo-icon">🧗</div>
+      <div class="logo-title">Chew Rock</div>
+      <div class="logo-sub">오늘의 클라이밍을 기록해봐요</div>
+    </div>
+    <div class="tabs">
+      <button class="tab active" id="tab-login" onclick="switchTab('login')">로그인</button>
+      <button class="tab" id="tab-register" onclick="switchTab('register')">회원가입</button>
+    </div>
+    <form class="form" id="auth-form" onsubmit="handleSubmit(event)">
+      <div class="field" id="field-nickname">
+        <label for="nickname">닉네임</label>
+        <input id="nickname" type="text" placeholder="클라이밍 이름을 지어줘요 🪨" maxlength="20">
+      </div>
+      <div class="field">
+        <label for="email">이메일</label>
+        <input id="email" type="email" placeholder="example@email.com" required>
+      </div>
+      <div class="field">
+        <label for="password">비밀번호</label>
+        <input id="password" type="password" placeholder="8자 이상 입력해주세요" required minlength="8">
+      </div>
+      <div class="error-msg" id="error-msg"></div>
+      <button class="btn-submit" type="submit" id="btn-submit">로그인</button>
+    </form>
+    <div class="success-banner" id="success-banner">
+      <div class="success-emoji">🎉</div>
+      <div class="success-text" id="success-text">로그인 성공!</div>
+      <div class="success-sub" id="success-sub">잠시 후 이동할게요</div>
+    </div>
+  </div>
+  <script>
+    let currentTab = 'login'
+    function switchTab(tab) {
+      currentTab = tab
+      document.getElementById('tab-login').classList.toggle('active', tab === 'login')
+      document.getElementById('tab-register').classList.toggle('active', tab === 'register')
+      document.getElementById('field-nickname').style.display = tab === 'register' ? 'flex' : 'none'
+      document.getElementById('btn-submit').textContent = tab === 'login' ? '로그인' : '가입하기'
+      hideError()
+    }
+    function showError(msg) {
+      const el = document.getElementById('error-msg')
+      el.textContent = msg
+      el.classList.add('show')
+    }
+    function hideError() { document.getElementById('error-msg').classList.remove('show') }
+    async function handleSubmit(e) {
+      e.preventDefault()
+      hideError()
+      const email = document.getElementById('email').value.trim()
+      const password = document.getElementById('password').value
+      const nickname = document.getElementById('nickname').value.trim()
+      const btn = document.getElementById('btn-submit')
+      if (currentTab === 'register' && !nickname) return showError('닉네임을 입력해주세요.')
+      btn.disabled = true
+      btn.textContent = '잠깐만요...'
+      try {
+        const endpoint = currentTab === 'login' ? '/api/auth/login' : '/api/auth/register'
+        const body = currentTab === 'login' ? { email, password } : { email, password, nickname }
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body)
+        })
+        const data = await res.json()
+        if (!res.ok) return showError(data.error || '오류가 발생했어요.')
+        localStorage.setItem('token', data.token)
+        localStorage.setItem('user', JSON.stringify(data.user))
+        document.getElementById('auth-form').style.display = 'none'
+        const banner = document.getElementById('success-banner')
+        banner.classList.add('show')
+        document.getElementById('success-text').textContent =
+          currentTab === 'login' ? `${data.user.nickname}님, 반가워요! 🧗` : `${data.user.nickname}님, Chew Rock에 오신 걸 환영해요!`
+        document.getElementById('success-sub').textContent =
+          currentTab === 'login' ? '잠시 후 이동할게요' : '첫 클라이밍을 기록해봐요'
+        setTimeout(() => { window.location.href = '/' }, 1500)
+      } catch (err) {
+        showError('서버에 연결할 수 없어요. 잠시 후 다시 시도해주세요.')
+      } finally {
+        btn.disabled = false
+        btn.textContent = currentTab === 'login' ? '로그인' : '가입하기'
+      }
+    }
+  </script>
+</body>
+</html>

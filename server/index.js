@@ -1,80 +1,50 @@
-<<<<<<< HEAD
 import express from 'express'
-import cors from 'cors'
-//import Database from 'better-sqlite3'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
-import { mkdirSync } from 'fs'
+import Database from 'better-sqlite3'
+import authRouter from './routes/auth.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
+const app = express()
+const PORT = 3000
 
-// ── Express 설정 ───────────────────────────────────────────────
-const app  = express()
-const PORT = process.env.PORT || 3000
+const db = new Database(join(__dirname, 'db.sqlite'))
 
-app.use(cors())
+db.exec(`
+  CREATE TABLE IF NOT EXISTS users (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    email       TEXT    UNIQUE NOT NULL,
+    password    TEXT    NOT NULL,
+    nickname    TEXT    NOT NULL,
+    profile_img TEXT,
+    created_at  TEXT    NOT NULL
+  );
+  CREATE TABLE IF NOT EXISTS records (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id     INTEGER NOT NULL,
+    gym_name    TEXT    NOT NULL,
+    route_name  TEXT,
+    color       TEXT,
+    grade       TEXT,
+    result      TEXT    NOT NULL,
+    memo        TEXT,
+    photo_url   TEXT,
+    climbed_at  TEXT    NOT NULL,
+    created_at  TEXT    NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+  );
+`)
+
 app.use(express.json())
-app.use(express.static(join(__dirname, './public')))
+app.use(express.static(join(__dirname, 'public')))
+app.locals.db = db
 
-// ── 라우트 ────────────────────────────────────────────────────
+app.use('/api/auth', authRouter)
 
-// GET /api/hello  → 기본 인사
 app.get('/api/hello', (req, res) => {
-  res.json({ message: 'Hello, chewrock! 🎉' })
+  res.json({ message: 'hello, chewrock' })
 })
 
-// GET /api/messages  → 저장된 메시지 전체 조회
-app.get('/api/messages', (req, res) => {
-  const rows = 'hello, ';
-  res.json(rows)
-})
-
-// POST /api/messages  → 메시지 저장
-app.post('/api/messages', (req, res) => {
-  const { text } = req.body
-  if (!text) return res.status(400).json({ error: 'text 필드가 필요합니다.' })
-
-  const info   = 'info';//stmts.insertMessage.run({ text })
-  const newMsg = 'asdf';//stmts.getMessage.get(info.lastInsertRowid)
-
-  res.status(201).json(newMsg)
-})
-
-// ── 서버 시작 ─────────────────────────────────────────────────
 app.listen(PORT, () => {
   console.log(`✅  Server running → http://localhost:${PORT}`)
 })
-=======
-const express = require('express');
-const cors = require('cors');
-const path = require('path');
-//const db = require('./db');
-
-const app = express();
-const PORT = process.env.PORT || 3000;
-
-// ─── Middleware ───────────────────────────────────────────────────────────────
-app.use(cors());
-app.use(express.json());
-
-// Static files (client)
-app.use(express.static(path.join(__dirname, './public')));
-
-// ─── Routes ──────────────────────────────────────────────────────────────────
-
-// Health check
-app.get('/api/hello', (req, res) => {
-  const message = 'hello, yejin'; //db.getHello();
-  res.json({ message });
-});
-
-// 루트: index.html 서빙
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../client/index.html'));
-});
-
-// ─── Start ───────────────────────────────────────────────────────────────────
-app.listen(PORT, () => {
-  console.log(`✅ Chewrock server running at http://localhost:${PORT}`);
-});
->>>>>>> 3f3fb4da540d81b7583ab736e8fe34cd2788ac5e
