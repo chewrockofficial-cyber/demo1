@@ -281,8 +281,8 @@
           currentTab === 'login' ? `${data.user.nickname}님, 반가워요!` : `${data.user.nickname}님, 환영해요!`
         document.getElementById('success-sub').textContent =
           currentTab === 'login' ? '잠시 후 이동할게요' : '첫 클라이밍을 기록해봐요'
-        setTimeout(() => { setTimeout(() => { window.location.href = '/loading.html?next=/login.html&delay=1500' }, 1000) }, 1500)
-      } catch (err) {
+        setTimeout(() => { window.location.href = '/loading.html?next=/index.html&delay=1500' }, 1500)
+ } catch (err) {
         showError('서버에 연결할 수 없어요. 잠시 후 다시 시도해주세요.')
       } finally {
         btn.disabled = false
