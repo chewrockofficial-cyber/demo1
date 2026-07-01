@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chew Rock — Shop</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Galmuri11:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #F5F3EE;
+      --ink:      #1A1A1A;
+      --muted:    #8A867E;
+      --line:     #1A1A1A;
+      --surface:  #FFFFFF;
+      --field:    #FAF8F4;
+      --lilac:    #B8A5E3;
+      --lilac-d:  #8B73C7;
+      --owned:    #E5E2DA;
+      --new:      #FF6B6B;
+    }
+
+    body {
+      font-family: 'Galmuri11', monospace;
+      background: var(--bg);
+      min-height: 100vh;
+      color: var(--ink);
+      image-rendering: pixelated;
+      padding-bottom: 80px;
+    }
+
+    .container {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    /* 헤더 */
+    .header {
+      background: #2A2520;
+      border: 2.5px solid var(--line);
+      border-radius: 14px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 4px 4px 0 var(--line);
+      margin-bottom: 16px;
+    }
+
+    .header-title {
+      color: #fff;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    .balance {
+      background: var(--ink);
+      border: 1.5px solid #fff;
+      padding: 6px 12px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .balance img {
+      width: 22px;
+      height: 22px;
+      image-rendering: pixelated;
+    }
+    .balance-text {
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    /* 오늘의 딜 */
+    .deal {
+      background: var(--surface);
+      border: 2.5px solid var(--line);
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 16px;
+      box-shadow: 4px 4px 0 var(--line);
+    }
+    .deal-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .deal-dot {
+      width: 12px;
+      height: 12px;
+      background: var(--lilac);
+      border: 1.5px solid var(--line);
+    }
+    .deal-title {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+    .deal-card {
+      background: var(--field);
+      border: 2px solid var(--line);
+      border-radius: 10px;
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .deal-image {
+      width: 60px;
+      height: 60px;
+      background: #E8D5F5;
+      border: 2px solid var(--line);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+    }
+    .deal-info {
+      flex: 1;
+    }
+    .deal-category {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 2px;
+    }
+    .deal-name {
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .deal-price {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .price-old {
+      font-size: 11px;
+      color: #B8B4AB;
+      text-decoration: line-through;
+    }
+    .price-new {
+      background: var(--ink);
+      color: #fff;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .price-new img {
+      width: 14px;
+      height: 14px;
+      image-rendering: pixelated;
+    }
+
+    /* 카테고리 탭 */
+    .tabs {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 16px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+    .tab {
+      background: var(--surface);
+      color: var(--ink);
+      border: 2px solid var(--line);
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      flex-shrink: 0;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .tab.active {
+      background: var(--ink);
+      color: #fff;
+    }
+    .tab:not(.active):hover {
+      background: var(--field);
+    }
+
+    /* 아이템 그리드 */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    .item {
+      background: var(--surface);
+      border: 2.5px solid var(--line);
+      border-radius: 12px;
+      padding: 10px;
+      box-shadow: 3px 3px 0 var(--line);
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.1s;
+    }
+    .item:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 4px 4px 0 var(--line);
+    }
+    .item:active {
+      transform: translate(3px, 3px);
+      box-shadow: 0 0 0 var(--line);
+    }
+    .item.owned {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+    .item.owned:hover {
+      transform: none;
+      box-shadow: 3px 3px 0 var(--line);
+    }
+    .badge-new {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      background: var(--new);
+      color: #fff;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 9px;
+      font-weight: 700;
+      border: 1.5px solid var(--line);
+      z-index: 1;
+    }
+    .item-image {
+      background: var(--field);
+      border: 1.5px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 34px;
+      margin-bottom: 8px;
+      aspect-ratio: 1;
+      position: relative;
+    }
+    .owned-check {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: var(--ink);
+    }
+    .item-category {
+      font-size: 10px;
+      color: var(--muted);
+      margin-bottom: 2px;
+    }
+    .item-name {
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      line-height: 1.3;
+      min-height: 32px;
+    }
+    .item-price {
+      background: var(--lilac);
+      border: 1.5px solid var(--line);
+      padding: 5px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--ink);
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+    .item-price img {
+      width: 14px;
+      height: 14px;
+      image-rendering: pixelated;
+    }
+    .price-owned {
+      background: var(--owned);
+      border-color: var(--muted);
+      color: var(--muted);
+    }
+
+    /* 하단 네비 */
+    .nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--ink);
+      padding: 10px 16px;
+      display: flex;
+      justify-content: space-around;
+      border-top: 2.5px solid var(--line);
+    }
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      opacity: 0.5;
+      cursor: pointer;
+      transition: opacity 0.15s;
+      background: none;
+      border: none;
+      color: #fff;
+      font-family: inherit;
+    }
+    .nav-item.active { opacity: 1; }
+    .nav-item.active .nav-label { color: var(--lilac); font-weight: 700; }
+    .nav-icon { font-size: 18px; }
+    .nav-label { color: #fff; font-size: 10px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- 헤더 -->
+    <div class="header">
+      <div class="header-title">SHOP</div>
+      <div class="balance">
+        <img id="balance-icon" src="/images/chalk_piece.png" alt="쵸크">
+        <span class="balance-text">x<span id="balance-count">128</span></span>
+      </div>
+    </div>
+
+    <!-- 오늘의 딜 -->
+    <div class="deal">
+      <div class="deal-header">
+        <div class="deal-dot"></div>
+        <div class="deal-title">TODAY'S DEAL</div>
+      </div>
+      <div class="deal-card">
+        <div class="deal-image">
+  <img src="/images/top_navy_crop.png" alt="" style="width: 90%; height: 90%; object-fit: contain; image-rendering: pixelated;">
+</div>
+        <div class="deal-info">
+          <div class="deal-category">신발</div>
+          <div class="deal-name">네이비 크롭탑</div>
+          <div class="deal-price">
+            <span class="price-old">35</span>
+            <div class="price-new">
+              <img src="/images/chalk_piece.png" alt="">
+              <span>x25</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 카테고리 탭 -->
+    <div class="tabs" id="tabs">
+      <button class="tab active" data-category="all">ALL</button>
+      <button class="tab" data-category="top">상의</button>
+      <button class="tab" data-category="bottom">하의</button>
+      <button class="tab" data-category="shoes">신발</button>
+      <button class="tab" data-category="etc">잡화</button>
+    </div>
+
+    <!-- 아이템 그리드 -->
+    <div class="grid" id="grid"></div>
+  </div>
+
+  <!-- 하단 네비 -->
+  <nav class="nav">
+    <button class="nav-item">
+      <span class="nav-icon">🏠</span>
+      <span class="nav-label">홈</span>
+    </button>
+    <button class="nav-item">
+      <span class="nav-icon">📝</span>
+      <span class="nav-label">기록</span>
+    </button>
+    <button class="nav-item active">
+      <span class="nav-icon">🛍️</span>
+      <span class="nav-label">상점</span>
+    </button>
+    <button class="nav-item">
+      <span class="nav-icon">👤</span>
+      <span class="nav-label">프로필</span>
+    </button>
+  </nav>
+
+  <script>
+    // ── 쵸크 잔액 관리 ────────────────────────────────
+    // 100개 미만: chalk_piece, 100개 이상: chalk_bag
+    let balance = 128
+
+    function updateBalance() {
+      document.getElementById('balance-count').textContent = balance
+      const icon = document.getElementById('balance-icon')
+      icon.src = balance >= 100 ? '/images/chalk_bag.png' : '/images/chalk_piece.png'
+    }
+    updateBalance()
+
+    // ── 아이템 데이터 (더미) ────────────────────────
+    const items = [
+      // 상의
+      { id: 1,  category: 'top',    image: '/images/top_white_tshirt.png',    name: '화이트 티셔츠',   price: 12, owned: false, isNew: false },
+      { id: 2,  category: 'top',    image: '/images/top_navy_crop.png',       name: '네이비 크롭탑',   price: 15, owned: false, isNew: true  },
+
+      // 초크백 (5색)
+      { id: 3,  category: 'etc',    image: '/images/chalkbag_square_white.png', name: '스퀘어 초크백 (화이트)', price: 20, owned: false, isNew: false },
+      { id: 4,  category: 'etc',    image: '/images/chalkbag_square_yellow.png', name: '스퀘어 초크백 (옐로우)', price: 22, owned: false, isNew: false },
+      { id: 5,  category: 'etc',    image: '/images/chalkbag_round_black.png',   name: '라운드 초크백 (블랙)',   price: 18, owned: false, isNew: true  },
+      { id: 6,  category: 'etc',    image: '/images/chalkbag_round_khaki.png',   name: '라운드 초크백 (카키)',   price: 18, owned: false, isNew: false },
+      { id: 7,  category: 'etc',    image: '/images/chalkbag_round_pink.png',    name: '라운드 초크백 (핑크)',   price: 20, owned: false, isNew: true  },
+
+      // 클라이밍 용품
+      { id: 8,  category: 'etc',    image: '/images/item_brush_short.png',     name: '숏 브러시',       price: 8,  owned: false, isNew: false },
+      { id: 9,  category: 'etc',    image: '/images/item_brush_long.png',      name: '롱 브러시',       price: 10, owned: false, isNew: false },
+      { id: 10, category: 'etc',    image: '/images/item_tripod.png',          name: '기록용 삼각대',   price: 30, owned: false, isNew: false },
+      { id: 11, category: 'etc',    image: '/images/item_americano.png',       name: '아이스 아메리카노', price: 5, owned: false, isNew: false },
+      // 클라이밍 슈즈 (5색)
+      { id: 12, category: 'shoes',  image: '/images/climbingshoes_black_gray.png',    name: '클라이밍화 (블랙)',    price: 35, owned: false, isNew: false },
+      { id: 13, category: 'shoes',  image: '/images/climbingshoes_gray_blue.png',     name: '클라이밍화 (블루)',    price: 35, owned: false, isNew: true  },
+      { id: 14, category: 'shoes',  image: '/images/climbingshoes_white_pink.png',    name: '클라이밍화 (핑크)',    price: 38, owned: false, isNew: true  },
+      { id: 15, category: 'shoes',  image: '/images/climbingshoes_yellow_brown.png',  name: '클라이밍화 (브라운)',  price: 32, owned: false, isNew: false },
+      { id: 16, category: 'shoes',  image: '/images/climbingshoes_yellow_green.png',  name: '클라이밍화 (그린)',    price: 32, owned: false, isNew: false },
+    ]
+
+    // ── 그리드 렌더링 ────────────────────────────────
+    const categoryLabel = { top: '상의', bottom: '하의', shoes: '신발', etc: '잡화' }
+    let currentCategory = 'all'
+
+    function render() {
+      const grid = document.getElementById('grid')
+      const filtered = currentCategory === 'all'
+        ? items
+        : items.filter(i => i.category === currentCategory)
+
+      grid.innerHTML = filtered.map(item => `
+        <div class="item ${item.owned ? 'owned' : ''}" onclick="buyItem(${item.id})">
+          ${item.isNew && !item.owned ? '<div class="badge-new">NEW</div>' : ''}
+          <div class="item-image">
+            <img src="${item.image}" alt="${item.name}" style="width: 90%; height: 90%; object-fit: contain; image-rendering: pixelated;">
+${item.owned ? '<div class="owned-check">✓</div>' : ''}
+          </div>
+          <div class="item-category">${categoryLabel[item.category]}</div>
+          <div class="item-name">${item.name}</div>
+          <div class="item-price ${item.owned ? 'price-owned' : ''}">
+            ${item.owned
+              ? '보유 중'
+              : `<img src="/images/chalk_piece.png" alt=""><span>x${item.price}</span>`}
+          </div>
+        </div>
+      `).join('')
+    }
+    render()
+
+    // ── 탭 전환 ──────────────────────────────────────
+    document.getElementById('tabs').addEventListener('click', (e) => {
+      if (!e.target.classList.contains('tab')) return
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'))
+      e.target.classList.add('active')
+      currentCategory = e.target.dataset.category
+      render()
+    })
+
+    // ── 구매 (임시) ──────────────────────────────────
+    function buyItem(id) {
+      const item = items.find(i => i.id === id)
+      if (!item || item.owned) return
+
+      if (balance < item.price) {
+        alert(`쵸크가 부족해요! 🪨\n필요: ${item.price} / 보유: ${balance}`)
+        return
+      }
+
+      if (confirm(`"${item.name}"을(를) 쵸크 ${item.price}개로 구매할까요?`)) {
+        balance -= item.price
+        item.owned = true
+        updateBalance()
+        render()
+      }
+    }
+  </script>
+</body>
+</html>
