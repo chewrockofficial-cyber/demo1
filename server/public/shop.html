@@ -4,484 +4,365 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chew Rock — Shop</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Galmuri11:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+    .px { font-family: 'Press Start 2P', monospace; }
 
-    :root {
-      --bg:       #F5F3EE;
-      --ink:      #1A1A1A;
-      --muted:    #8A867E;
-      --line:     #1A1A1A;
-      --surface:  #FFFFFF;
-      --field:    #FAF8F4;
-      --lilac:    #B8A5E3;
-      --lilac-d:  #8B73C7;
-      --owned:    #E5E2DA;
-      --new:      #FF6B6B;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    body {
-      font-family: 'Galmuri11', monospace;
-      background: var(--bg);
-      min-height: 100vh;
-      color: var(--ink);
-      image-rendering: pixelated;
-      padding-bottom: 80px;
-    }
-
-    .container {
-      max-width: 480px;
-      margin: 0 auto;
-      padding: 16px;
-    }
-
-    /* 헤더 */
-    .header {
-      background: #2A2520;
-      border: 2.5px solid var(--line);
-      border-radius: 14px;
-      padding: 12px 16px;
+    html, body {
+      background: #f0f0f0;
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      box-shadow: 4px 4px 0 var(--line);
-      margin-bottom: 16px;
+      justify-content: center;
+      min-height: 100vh;
     }
 
-    .header-title {
-      color: #fff;
-      font-size: 15px;
-      font-weight: 700;
+    /* 폰 프레임 (예진님 스타일) */
+    .phone {
+      width: 360px;
+      height: 740px;
+      background: #fff;
+      border: 2px solid #ddd;
+      border-radius: 32px;
+      margin: 1rem auto;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* 상단 헤더 */
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 30px 20px 8px;
+      flex-shrink: 0;
+    }
+    .topbar-title {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 12px;
+      color: #111;
       letter-spacing: 1px;
     }
-
     .balance {
-      background: var(--ink);
-      border: 1.5px solid #fff;
-      padding: 6px 12px;
-      border-radius: 8px;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
+      background: #f8f8f8;
+      border: 1.5px solid #ddd;
+      padding: 6px 10px;
+      border-radius: 8px;
     }
     .balance img {
       width: 22px;
-      height: 22px;
+      height: auto;
       image-rendering: pixelated;
+      display: block;
     }
     .balance-text {
-      color: #fff;
-      font-size: 13px;
-      font-weight: 700;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 10px;
+      color: #111;
     }
 
-    /* 오늘의 딜 */
-    .deal {
-      background: var(--surface);
-      border: 2.5px solid var(--line);
-      border-radius: 14px;
-      padding: 14px;
-      margin-bottom: 16px;
-      box-shadow: 4px 4px 0 var(--line);
-    }
-    .deal-header {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 10px;
-    }
-    .deal-dot {
-      width: 12px;
-      height: 12px;
-      background: var(--lilac);
-      border: 1.5px solid var(--line);
-    }
-    .deal-title {
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 1px;
-    }
-    .deal-card {
-      background: var(--field);
-      border: 2px solid var(--line);
-      border-radius: 10px;
-      padding: 12px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .deal-image {
-      width: 60px;
-      height: 60px;
-      background: #E8D5F5;
-      border: 2px solid var(--line);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 30px;
-    }
-    .deal-info {
+    /* 스크롤 영역 */
+    .scroll-area {
       flex: 1;
+      overflow-y: auto;
+      padding: 8px 16px 12px;
     }
-    .deal-category {
-      font-size: 11px;
-      color: var(--muted);
-      margin-bottom: 2px;
-    }
-    .deal-name {
-      font-size: 13px;
-      font-weight: 700;
-      margin-bottom: 6px;
-    }
-    .deal-price {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .price-old {
-      font-size: 11px;
-      color: #B8B4AB;
-      text-decoration: line-through;
-    }
-    .price-new {
-      background: var(--ink);
-      color: #fff;
-      padding: 3px 8px;
-      border-radius: 6px;
-      font-size: 11px;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-    .price-new img {
-      width: 14px;
-      height: 14px;
-      image-rendering: pixelated;
-    }
+    .scroll-area::-webkit-scrollbar { width: 4px; }
+    .scroll-area::-webkit-scrollbar-thumb { background: #ddd; border-radius: 4px; }
 
-    /* 카테고리 탭 */
-    .tabs {
+    /* 카테고리 탭 (예진님 pills 스타일) */
+    .pills {
       display: flex;
-      gap: 6px;
-      margin-bottom: 16px;
-      overflow-x: auto;
-      padding-bottom: 4px;
+      gap: 5px;
+      justify-content: center;
+      padding: 8px 0 12px;
+      flex-wrap: wrap;
     }
-    .tab {
-      background: var(--surface);
-      color: var(--ink);
-      border: 2px solid var(--line);
-      padding: 8px 14px;
-      border-radius: 8px;
-      font-family: inherit;
-      font-size: 12px;
-      font-weight: 700;
-      flex-shrink: 0;
+    .pill {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 6px;
+      padding: 5px 8px;
+      border-radius: 4px;
+      border: 1.5px solid #ddd;
+      color: #bbb;
+      background: #f8f8f8;
       cursor: pointer;
       transition: all 0.15s;
     }
-    .tab.active {
-      background: var(--ink);
-      color: #fff;
-    }
-    .tab:not(.active):hover {
-      background: var(--field);
+    .pill.active {
+      border-color: #222;
+      color: #111;
+      background: #fff;
     }
 
     /* 아이템 그리드 */
     .grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
+      gap: 10px;
     }
     .item {
-      background: var(--surface);
-      border: 2.5px solid var(--line);
-      border-radius: 12px;
-      padding: 10px;
-      box-shadow: 3px 3px 0 var(--line);
-      position: relative;
+      background: #fff;
+      border: 1.5px solid #ddd;
+      border-radius: 10px;
+      padding: 8px;
       cursor: pointer;
-      transition: transform 0.1s, box-shadow 0.1s;
+      transition: transform 0.1s, border-color 0.15s;
+      position: relative;
     }
     .item:hover {
-      transform: translate(-1px, -1px);
-      box-shadow: 4px 4px 0 var(--line);
-    }
-    .item:active {
-      transform: translate(3px, 3px);
-      box-shadow: 0 0 0 var(--line);
+      border-color: #222;
+      transform: translateY(-1px);
     }
     .item.owned {
-      opacity: 0.55;
+      opacity: 0.5;
       cursor: not-allowed;
     }
     .item.owned:hover {
+      border-color: #ddd;
       transform: none;
-      box-shadow: 3px 3px 0 var(--line);
     }
+
     .badge-new {
       position: absolute;
-      top: 6px;
-      right: 6px;
-      background: var(--new);
+      top: 4px;
+      right: 4px;
+      background: #ff4444;
       color: #fff;
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-size: 9px;
-      font-weight: 700;
-      border: 1.5px solid var(--line);
-      z-index: 1;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 5px;
+      padding: 3px 5px;
+      border-radius: 3px;
+      letter-spacing: 0.5px;
+      z-index: 2;
     }
+
     .item-image {
-      background: var(--field);
-      border: 1.5px solid var(--line);
-      border-radius: 8px;
-      padding: 12px;
+      background: #fafafa;
+      border-radius: 6px;
+      padding: 8px;
+      aspect-ratio: 1;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 34px;
-      margin-bottom: 8px;
-      aspect-ratio: 1;
+      margin-bottom: 6px;
       position: relative;
+    }
+    .item-image img {
+      width: 90%;
+      height: 90%;
+      object-fit: contain;
+      image-rendering: pixelated;
     }
     .owned-check {
       position: absolute;
-      inset: 0;
-      background: rgba(0,0,0,0.1);
+      top: 4px;
+      right: 4px;
+      background: #111;
+      color: #fff;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 20px;
-      color: var(--ink);
+      font-size: 11px;
     }
-    .item-category {
-      font-size: 10px;
-      color: var(--muted);
-      margin-bottom: 2px;
-    }
+
     .item-name {
-      font-size: 12px;
-      font-weight: 700;
+      font-size: 11px;
+      color: #333;
       margin-bottom: 6px;
       line-height: 1.3;
-      min-height: 32px;
+      min-height: 30px;
     }
     .item-price {
-      background: var(--lilac);
-      border: 1.5px solid var(--line);
-      padding: 5px 8px;
-      border-radius: 6px;
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--ink);
-      text-align: center;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 4px;
+      background: #f8f8f8;
+      border: 1.5px solid #eee;
+      padding: 4px 6px;
+      border-radius: 5px;
     }
     .item-price img {
       width: 14px;
-      height: 14px;
+      height: auto;
       image-rendering: pixelated;
     }
-    .price-owned {
-      background: var(--owned);
-      border-color: var(--muted);
-      color: var(--muted);
+    .item-price-text {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 8px;
+      color: #111;
     }
+    .price-owned {
+      background: #f0f0f0;
+      color: #999;
+    }
+    .price-owned .item-price-text { color: #999; }
 
-    /* 하단 네비 */
-    .nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: var(--ink);
-      padding: 10px 16px;
+    /* 하단 네비 (예진님과 완전 동일) */
+    .bottomnav {
+      background: #fff;
+      border-top: 1.5px solid #eee;
       display: flex;
-      justify-content: space-around;
-      border-top: 2.5px solid var(--line);
+      padding: 14px 0 20px;
+      flex-shrink: 0;
     }
     .nav-item {
+      flex: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 4px;
-      opacity: 0.5;
+      gap: 8px;
       cursor: pointer;
-      transition: opacity 0.15s;
-      background: none;
-      border: none;
-      color: #fff;
-      font-family: inherit;
+      padding: 4px 0;
+      color: #bbb;
     }
-    .nav-item.active { opacity: 1; }
-    .nav-item.active .nav-label { color: var(--lilac); font-weight: 700; }
-    .nav-icon { font-size: 18px; }
-    .nav-label { color: #fff; font-size: 10px; }
+    .nav-label {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 8px;
+    }
+    .nav-item.active { color: #111; }
+    .nav-item.active .nav-label { color: #111; }
+    .nav-item.active svg { color: #111; }
+    .nav-item svg { color: #bbb; }
   </style>
 </head>
 <body>
-  <div class="container">
-    <!-- 헤더 -->
-    <div class="header">
-      <div class="header-title">SHOP</div>
+  <div class="phone">
+    <!-- 상단 -->
+    <div class="topbar">
+      <div class="topbar-title">SHOP</div>
       <div class="balance">
         <img id="balance-icon" src="/images/chalk_piece.png" alt="쵸크">
-        <span class="balance-text">x<span id="balance-count">128</span></span>
+        <span class="balance-text">×<span id="balance-count">128</span></span>
       </div>
     </div>
 
-    <!-- 오늘의 딜 -->
-    <div class="deal">
-      <div class="deal-header">
-        <div class="deal-dot"></div>
-        <div class="deal-title">TODAY'S DEAL</div>
+    <!-- 스크롤 영역 -->
+    <div class="scroll-area">
+      <div class="pills" id="pills">
+        <div class="pill active" data-category="all">ALL</div>
+        <div class="pill" data-category="top">TOP</div>
+        <div class="pill" data-category="bottom">BOTTOM</div>
+        <div class="pill" data-category="shoes">SHOES</div>
+        <div class="pill" data-category="etc">ETC</div>
       </div>
-      <div class="deal-card">
-        <div class="deal-image">
-  <img src="/images/top_navy_crop.png" alt="" style="width: 90%; height: 90%; object-fit: contain; image-rendering: pixelated;">
-</div>
-        <div class="deal-info">
-          <div class="deal-category">신발</div>
-          <div class="deal-name">네이비 크롭탑</div>
-          <div class="deal-price">
-            <span class="price-old">35</span>
-            <div class="price-new">
-              <img src="/images/chalk_piece.png" alt="">
-              <span>x25</span>
-            </div>
-          </div>
-        </div>
-      </div>
+
+      <div class="grid" id="grid"></div>
     </div>
 
-    <!-- 카테고리 탭 -->
-    <div class="tabs" id="tabs">
-      <button class="tab active" data-category="all">ALL</button>
-      <button class="tab" data-category="top">상의</button>
-      <button class="tab" data-category="bottom">하의</button>
-      <button class="tab" data-category="shoes">신발</button>
-      <button class="tab" data-category="etc">잡화</button>
+    <!-- 하단 네비 -->
+    <div class="bottomnav">
+      <div class="nav-item" onclick="location.href='/'">
+        <svg width="32" height="32" viewBox="0 0 32 32">
+          <path d="M16 4 C22 3, 27 7, 27 13 C27 18, 24 21, 19 22 L19 27 C19 28.5, 17.8 29, 16 29 C14.2 29, 13 28.5, 13 27 L13 22 C8 21, 5 18, 5 13 C5 7, 10 3, 16 4 Z" fill="currentColor"/>
+          <circle cx="16" cy="13" r="2.6" fill="#fff"/>
+        </svg>
+        <div class="nav-label">메인</div>
+      </div>
+      <div class="nav-item">
+        <svg width="32" height="32" viewBox="0 0 32 32">
+          <path d="M16 3 C24 2, 29 9, 28 16 C27 24, 21 29, 14 28 C7 27, 2 21, 3 14 C4 8, 9 4, 16 3 Z" fill="currentColor"/>
+          <path d="M16 9 L16 16 L22 19" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <circle cx="16" cy="16" r="2.4" fill="#fff"/>
+        </svg>
+        <div class="nav-label">기록</div>
+      </div>
+      <div class="nav-item">
+        <svg width="32" height="32" viewBox="0 0 32 32">
+          <path d="M5 12 C5 9, 7 7, 10 7 L19 7 C23 7, 25 9.5, 28 12 C25 14.5, 23 17, 19 17 L10 17 C7 17, 5 15, 5 12 Z" fill="currentColor"/>
+          <rect x="9" y="17" width="4" height="9" rx="1.5" fill="currentColor"/>
+          <circle cx="13" cy="12" r="2.3" fill="#fff"/>
+        </svg>
+        <div class="nav-label">마을</div>
+      </div>
+      <div class="nav-item active">
+        <svg width="32" height="32" viewBox="0 0 32 32">
+          <path d="M9 6 C14 3, 20 4, 24 8 C28 12, 27 19, 23 23 C19 27, 12 28, 8 24 C4 20, 4 13, 9 6 Z" fill="currentColor"/>
+          <circle cx="12" cy="11" r="1.8" fill="#fff"/>
+          <circle cx="19" cy="9" r="1.5" fill="#fff"/>
+          <circle cx="22" cy="16" r="1.8" fill="#fff"/>
+          <circle cx="16" cy="20" r="1.6" fill="#fff"/>
+          <circle cx="10" cy="18" r="1.4" fill="#fff"/>
+        </svg>
+        <div class="nav-label">상점</div>
+      </div>
     </div>
-
-    <!-- 아이템 그리드 -->
-    <div class="grid" id="grid"></div>
   </div>
 
-  <!-- 하단 네비 -->
-  <nav class="nav">
-    <button class="nav-item">
-      <span class="nav-icon">🏠</span>
-      <span class="nav-label">홈</span>
-    </button>
-    <button class="nav-item">
-      <span class="nav-icon">📝</span>
-      <span class="nav-label">기록</span>
-    </button>
-    <button class="nav-item active">
-      <span class="nav-icon">🛍️</span>
-      <span class="nav-label">상점</span>
-    </button>
-    <button class="nav-item">
-      <span class="nav-icon">👤</span>
-      <span class="nav-label">프로필</span>
-    </button>
-  </nav>
-
   <script>
-    // ── 쵸크 잔액 관리 ────────────────────────────────
-    // 100개 미만: chalk_piece, 100개 이상: chalk_bag
+    // ── 잔액 ──────────────────────
     let balance = 128
-
     function updateBalance() {
       document.getElementById('balance-count').textContent = balance
       const icon = document.getElementById('balance-icon')
       icon.src = balance >= 100 ? '/images/chalk_bag.png' : '/images/chalk_piece.png'
     }
-    updateBalance()
 
-    // ── 아이템 데이터 (더미) ────────────────────────
+    // ── 아이템 ────────────────────
     const items = [
-      // 상의
-      { id: 1,  category: 'top',    image: '/images/top_white_tshirt.png',    name: '화이트 티셔츠',   price: 12, owned: false, isNew: false },
-      { id: 2,  category: 'top',    image: '/images/top_navy_crop.png',       name: '네이비 크롭탑',   price: 15, owned: false, isNew: true  },
-
-      // 초크백 (5색)
-      { id: 3,  category: 'etc',    image: '/images/chalkbag_square_white.png', name: '스퀘어 초크백 (화이트)', price: 20, owned: false, isNew: false },
-      { id: 4,  category: 'etc',    image: '/images/chalkbag_square_yellow.png', name: '스퀘어 초크백 (옐로우)', price: 22, owned: false, isNew: false },
-      { id: 5,  category: 'etc',    image: '/images/chalkbag_round_black.png',   name: '라운드 초크백 (블랙)',   price: 18, owned: false, isNew: true  },
-      { id: 6,  category: 'etc',    image: '/images/chalkbag_round_khaki.png',   name: '라운드 초크백 (카키)',   price: 18, owned: false, isNew: false },
-      { id: 7,  category: 'etc',    image: '/images/chalkbag_round_pink.png',    name: '라운드 초크백 (핑크)',   price: 20, owned: false, isNew: true  },
-
-      // 클라이밍 용품
-      { id: 8,  category: 'etc',    image: '/images/item_brush_short.png',     name: '숏 브러시',       price: 8,  owned: false, isNew: false },
-      { id: 9,  category: 'etc',    image: '/images/item_brush_long.png',      name: '롱 브러시',       price: 10, owned: false, isNew: false },
-      { id: 10, category: 'etc',    image: '/images/item_tripod.png',          name: '기록용 삼각대',   price: 30, owned: false, isNew: false },
-      { id: 11, category: 'etc',    image: '/images/item_americano.png',       name: '아이스 아메리카노', price: 5, owned: false, isNew: false },
-      // 클라이밍 슈즈 (5색)
-      { id: 12, category: 'shoes',  image: '/images/climbingshoes_black_gray.png',    name: '클라이밍화 (블랙)',    price: 35, owned: false, isNew: false },
-      { id: 13, category: 'shoes',  image: '/images/climbingshoes_gray_blue.png',     name: '클라이밍화 (블루)',    price: 35, owned: false, isNew: true  },
-      { id: 14, category: 'shoes',  image: '/images/climbingshoes_white_pink.png',    name: '클라이밍화 (핑크)',    price: 38, owned: false, isNew: true  },
-      { id: 15, category: 'shoes',  image: '/images/climbingshoes_yellow_brown.png',  name: '클라이밍화 (브라운)',  price: 32, owned: false, isNew: false },
-      { id: 16, category: 'shoes',  image: '/images/climbingshoes_yellow_green.png',  name: '클라이밍화 (그린)',    price: 32, owned: false, isNew: false },
+      { id: 1,  category: 'top',    image: '/images/top_white_tshirt.png',           name: '화이트 티셔츠',       price: 12, owned: false, isNew: false },
+      { id: 2,  category: 'top',    image: '/images/top_navy_crop.png',              name: '네이비 크롭탑',       price: 15, owned: false, isNew: true  },
+      { id: 3,  category: 'etc',    image: '/images/chalkbag_square_white.png',      name: '스퀘어 초크백 화이트', price: 20, owned: false, isNew: false },
+      { id: 4,  category: 'etc',    image: '/images/chalkbag_square_yellow.png',     name: '스퀘어 초크백 옐로우', price: 22, owned: false, isNew: false },
+      { id: 5,  category: 'etc',    image: '/images/chalkbag_round_black.png',       name: '라운드 초크백 블랙',   price: 18, owned: false, isNew: true  },
+      { id: 6,  category: 'etc',    image: '/images/chalkbag_round_khaki.png',       name: '라운드 초크백 카키',   price: 18, owned: false, isNew: false },
+      { id: 7,  category: 'etc',    image: '/images/chalkbag_round_pink.png',        name: '라운드 초크백 핑크',   price: 20, owned: false, isNew: true  },
+      { id: 8,  category: 'etc',    image: '/images/item_brush_short.png',           name: '숏 브러시',           price: 8,  owned: false, isNew: false },
+      { id: 9,  category: 'etc',    image: '/images/item_brush_long.png',            name: '롱 브러시',           price: 10, owned: false, isNew: false },
+      { id: 10, category: 'etc',    image: '/images/item_tripod.png',                name: '기록용 삼각대',       price: 30, owned: false, isNew: false },
+      { id: 11, category: 'etc',    image: '/images/item_americano.png',             name: '아이스 아메리카노',   price: 5,  owned: false, isNew: false },
+      { id: 12, category: 'shoes',  image: '/images/climbingshoes_black_gray.png',   name: '클라이밍화 블랙',     price: 35, owned: false, isNew: false },
+      { id: 13, category: 'shoes',  image: '/images/climbingshoes_gray_blue.png',    name: '클라이밍화 블루',     price: 35, owned: false, isNew: true  },
+      { id: 14, category: 'shoes',  image: '/images/climbingshoes_white_pink.png',   name: '클라이밍화 핑크',     price: 38, owned: false, isNew: true  },
+      { id: 15, category: 'shoes',  image: '/images/climbingshoes_yellow_brown.png', name: '클라이밍화 브라운',   price: 32, owned: false, isNew: false },
+      { id: 16, category: 'shoes',  image: '/images/climbingshoes_yellow_green.png', name: '클라이밍화 그린',     price: 32, owned: false, isNew: false },
     ]
 
-    // ── 그리드 렌더링 ────────────────────────────────
-    const categoryLabel = { top: '상의', bottom: '하의', shoes: '신발', etc: '잡화' }
     let currentCategory = 'all'
 
     function render() {
       const grid = document.getElementById('grid')
-      const filtered = currentCategory === 'all'
-        ? items
-        : items.filter(i => i.category === currentCategory)
-
+      const filtered = currentCategory === 'all' ? items : items.filter(i => i.category === currentCategory)
       grid.innerHTML = filtered.map(item => `
         <div class="item ${item.owned ? 'owned' : ''}" onclick="buyItem(${item.id})">
           ${item.isNew && !item.owned ? '<div class="badge-new">NEW</div>' : ''}
           <div class="item-image">
-            <img src="${item.image}" alt="${item.name}" style="width: 90%; height: 90%; object-fit: contain; image-rendering: pixelated;">
-${item.owned ? '<div class="owned-check">✓</div>' : ''}
+            <img src="${item.image}" alt="${item.name}">
+            ${item.owned ? '<div class="owned-check">✓</div>' : ''}
           </div>
-          <div class="item-category">${categoryLabel[item.category]}</div>
           <div class="item-name">${item.name}</div>
           <div class="item-price ${item.owned ? 'price-owned' : ''}">
             ${item.owned
-              ? '보유 중'
-              : `<img src="/images/chalk_piece.png" alt=""><span>x${item.price}</span>`}
+              ? '<span class="item-price-text">보유중</span>'
+              : `<img src="/images/chalk_piece.png" alt=""><span class="item-price-text">×${item.price}</span>`}
           </div>
         </div>
       `).join('')
     }
-    render()
 
-    // ── 탭 전환 ──────────────────────────────────────
-    document.getElementById('tabs').addEventListener('click', (e) => {
-      if (!e.target.classList.contains('tab')) return
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'))
+    document.getElementById('pills').addEventListener('click', (e) => {
+      if (!e.target.classList.contains('pill')) return
+      document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'))
       e.target.classList.add('active')
       currentCategory = e.target.dataset.category
       render()
     })
 
-    // ── 구매 (임시) ──────────────────────────────────
     function buyItem(id) {
       const item = items.find(i => i.id === id)
       if (!item || item.owned) return
-
       if (balance < item.price) {
-        alert(`쵸크가 부족해요! 🪨\n필요: ${item.price} / 보유: ${balance}`)
+        alert(`쵸크가 부족해요!\n필요: ${item.price} / 보유: ${balance}`)
         return
       }
-
       if (confirm(`"${item.name}"을(를) 쵸크 ${item.price}개로 구매할까요?`)) {
         balance -= item.price
         item.owned = true
@@ -489,6 +370,9 @@ ${item.owned ? '<div class="owned-check">✓</div>' : ''}
         render()
       }
     }
+
+    updateBalance()
+    render()
   </script>
 </body>
 </html>

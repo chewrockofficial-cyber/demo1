@@ -132,8 +132,15 @@ svg{color:#bbb}
 
 <script>
 function setNav(i) {
+  // 페이지 이동
+  const pages = ['/', '/records.html', '/', '/shop.html']
+  // 메인(0), 기록(1), 마을(2)은 아직 없으니까 상점만 이동
+  if (i === 3) {
+    window.location.href = '/shop.html'
+    return
+  }
   document.querySelectorAll('.nav-item').forEach((el, idx) => {
-    el.classList.toggle('active', idx === i);
+    el.classList.toggle('active', idx === i)
   });
 }
 </script>
