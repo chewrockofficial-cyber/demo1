@@ -16,23 +16,24 @@
   font-display: swap;
 }
 
-/* ══════════════════════════════════
-   Chew Rock Design System Override
-   Galmuri11 + 픽셀 UI 통일
-══════════════════════════════════ */
-*, *::before, *::after {
-  font-family: 'Galmuri11', 'Press Start 2P', monospace !important;
-}
+
+/* Chew Rock Design System - Safe Override */
+* { font-family: 'Galmuri11', 'Press Start 2P', monospace !important; }
 .px { font-family: 'Galmuri11', monospace !important; font-weight: 700 !important; }
-button { border-radius: 0 !important; font-family: 'Galmuri11', monospace !important; font-weight: 700 !important; }
-input, textarea { border-radius: 0 !important; font-family: 'Galmuri11', monospace !important; border: 2px solid #111 !important; }
-input:focus, textarea:focus { outline: none !important; box-shadow: inset 2px 2px 0 #E0E0E0 !important; }
-/* 각진 border-radius 제거 */
-[class*="card"],[class*="panel"],[class*="modal"],[class*="chip"],
-[class*="badge"],[class*="bubble"],[class*="tag"],[class*="bar"],
-.member-chip,.sub-modal,.gym-panel,.notice-board,.item-box {
-  border-radius: 0 !important;
-}
+button { font-family: 'Galmuri11', monospace !important; font-weight: 700 !important; }
+/* phone 프레임은 절대 건드리지 않음 */
+.phone { border-radius: 32px !important; }
+/* pill은 유지 */
+.pill { border-radius: 4px !important; }
+/* notif-dot 유지 */
+.notif-dot { border-radius: 50% !important; }
+/* toast 픽셀 */
+.toast { border-radius: 0 !important; font-weight: 700 !important; }
+/* 메뉴바 굵은 선 */
+.bottomnav { border-top: 3px solid #111 !important; }
+/* 이미지 픽셀 */
+img { image-rendering: pixelated; }
+
 /* 메뉴바 굵은 선 */
 .bottomnav { border-top: 3px solid #111 !important; }
 /* 토스트 픽셀 */
