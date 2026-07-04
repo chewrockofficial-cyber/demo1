@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <style>
 @font-face {
   font-family: 'Galmuri11';
@@ -15,48 +14,11 @@
   font-weight: 700;
   font-display: swap;
 }
-
-
-/* 메뉴바 굵은 선 */
-.bottomnav { border-top: 3px solid #111 !important; }
-/* 토스트 픽셀 */
-.toast { border-radius: 0 !important; border: 3px solid #333 !important; font-weight: 700 !important; box-shadow: 4px 4px 0 #555 !important; }
-/* 진행바 각진 */
-.chalk-bar-bg,[class*="-bar-bg"],[class*="-track"] { border-radius: 0 !important; border: 2px solid #111 !important; }
-.chalk-bar,[class*="-bar"],[class*="-fill"] { border-radius: 0 !important; }
-/* 버튼 픽셀 그림자 */
-.btn-record,.btn-enter-gym,.btn-find,.btn-join-gym,[class*="btn-record"],[class*="btn-enter"] {
-  border-radius: 0 !important;
-  box-shadow: 4px 4px 0 #555 !important;
-  font-weight: 700 !important;
-}
-/* 기록 탭 버튼들 */
-button[onclick], .tab-btn { border-radius: 0 !important; }
-/* 픽셀 이미지 렌더링 */
-img { image-rendering: pixelated; }
-/* 모달 각진 */
-.gym-panel { border-radius: 0 !important; border-top-width: 3px !important; }
-.sub-modal { border-radius: 0 !important; }
-/* 인풋 각진 */
-input[type=text], input[type=number], textarea, select {
-  border-radius: 0 !important; border: 2px solid #111 !important;
-  font-family: 'Galmuri11', monospace !important;
-}
-/* 난이도/조건 칩들 */
-[class*="-chip"], [class*="-pill"], [class*="-tag"] { border-radius: 0 !important; }
-/* 멤버 칩 각진 */
-.member-chip { border-radius: 0 !important; }
-/* 상점 카드 */
-[class*="item-card"], [class*="product"] { border-radius: 0 !important; }
-
-
-/* Chew Rock: Galmuri11 폰트만 적용 */
 * { font-family: 'Galmuri11', 'Press Start 2P', monospace !important; }
 .phone { border-radius: 32px !important; overflow: hidden !important; }
-.pill { border-radius: 4px !important; }
+.pill  { border-radius: 4px !important; }
 .notif-dot { border-radius: 50% !important; }
 img { image-rendering: pixelated; }
-
 </style>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -73,6 +35,7 @@ html, body {
 </head>
 <body>
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 .px{font-family:'Press Start 2P',monospace}
 *{box-sizing:border-box;margin:0;padding:0}
 .phone{
@@ -106,7 +69,21 @@ svg{color:#bbb}
 
 <div class="phone">
   <div class="topbar">
-    <div class="notif-wrap" onclick="window.location.href='notification.html'" style="cursor:pointer;width:44px;height:44px;display:flex;align-items:center;justify-content:center;"><img id="noticeIcon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAYAAADhAJiYAAAFHklEQVR42t2YeWxUVRSHv3Pvm5nO0AItliJUQFGUSooFFQgJJEJCgjuKxiUmSmgkalJjYoKJQkDZDKihYpSQqHGpuIAbIDEqDaSCNS5t2CIFgUJbKcx0Yei85fhHy6L/KGNnSDzJS17uy7353jm/e865F/5vZoxREVEEFWv0nnvun/5f1pN0JzqOo54XsP6LL7HWnoHjkw/fx4rz2Jo1r6/OLlAoous//4Lq6mo2b96IGId+/fpx2223s+mzDfjqVm395rv7LnRdm16cRD/5/EtqqreyfMliWpqP0XL0GIcPHiQRP87s8rnk5vUfPWTwpafr6+q2X9CPpsWDcNett6CqIEFAgFV85s9f4CxatMitHbeDvLw+RGOxtgtfOw1TgcVLlvHAgw8i50V9wYIF3uzy8sej0QjGGBIn4pIVIINl2/c1NDQ0oEa884DCP/7wY2VJ6RicnAi5/WKdWQHy1aO0tJThw4eDH5wNe0lJCcOGDaOpqYkfar7HPe0ms+MhY9hdV8+uXbv+Mj5r1izXcRy2b/2OrzZvZMCAolRWgES7vVFWVoYxxj87LqKB74METJ069eHKypc3ZCtBK3RnaLEmBVBbWxsrGzdWl61YpdeUjNKxE8dXpKfPNDO8GMNXW75G/cAA1NXVBaGcGM0tjRw90khR/4Ku7BYxQZ99bqHakKMQ0j4R0QkTbtQ55Y/qkiXL70q7NqY7MeSE2LJlC+s++Ihcx+Xn6kpOnGjjaONhWltbvawDua4rO3Zs47XVlVgFif9EJBJh06ZN5Ofne1wsM8ZoYQR9d2W5IuicOXNGXjSY4jA6LIqO6I+OKkKvykeHx9CVi+fNXlZR8cB1xuhYQatWrBj576WZLgzoR8sHcdw1jJswkpg5SXs8ReO+Dp6vAmdfghenTCLP93iiuoZ1yQ7JmIaKDfre0nzyb5jOzXNfZ9A1MyDk0qfAUlici7E+saGDGTSwP+7eBjokyJyocwV9c+mlFI6fxciJz6DJWhL73wcNISIUXJbDVUN9Ui2/883ug3w7YABNsWgiY0AlhWD69uXqiY9C22e0N2xAejwgYhAxPHJHiPF3DuTp32qoqN9JxcqXyjLSoPW16CtPFTF0zGhETpHY8x4iDuChGiBiAI8hlxdxbx9lytWWxVWtJFy3KyNArt9dWFUFkk3nCpsaRP7eGwuqiojgB4GfESAnBKoWUh5+58kemKC7le2JvjEWVe15AhzHIZRKSUY0pB7kODmITWJywudVWjmrIVUX1RQS6oZzPSUajfoZAfIVkn47NgD/VFOPZs5ABaimet7DPV6DIAiIx+PhXgeaOXPmvaEwXFEygrA0kzi0nvOlcU7UcLKlg6YDJ/F8iESUtWvXPtOrmbq0dPTWX+vqJ+/cOI9rrwiIFowCP4mIEPg+IgFu225OJ46gpw+jqRwCz9B6pJ2fG6IsfWcvnX2Ld+6trx/fK0AxB317/nRumDaCy66cxrF9nyImgo+PCdoImxT4LtZrx9pTZz1ngzyO/RZnz9FLePLVnTS0dEqv7LKUZxgkvxAJPMTeRK7uBs9HNQAj4GrPeU0JgnMib24+RDzuMji3g1zT2Xshs9Zqgfh4BnyBsIIIeALGh8CCDbo7bet0f3Nd6FKwChELXTZMIvnP2z/tag8QC6EfLpyBY1wi1iHZBVXVf1B8/Yy7X3hh4cdZvf04Y4WgjXUP0dV0gLfXdbFHRl256o239l/USysBjYJOmjj54oJkwv4EPtUme78TFeEAAAAASUVORK5CYII=" alt="알림" width="36" height="36" style="image-rendering:pixelated;display:block;"/></div>
+    <div class="notif-wrap" onclick="window.location.href='notification.html'" style="cursor:pointer">
+      <svg width="30" height="30" viewBox="0 0 24 24" style="image-rendering:pixelated;display:block">
+        <rect x="2" y="4" width="20" height="2" fill="#222"/>
+        <rect x="2" y="4" width="2" height="14" fill="#222"/>
+        <rect x="20" y="4" width="2" height="14" fill="#222"/>
+        <rect x="2" y="16" width="20" height="2" fill="#222"/>
+        <rect x="4" y="6" width="2" height="2" fill="#222"/>
+        <rect x="6" y="8" width="2" height="2" fill="#222"/>
+        <rect x="8" y="10" width="2" height="2" fill="#222"/>
+        <rect x="10" y="12" width="4" height="2" fill="#222"/>
+        <rect x="14" y="10" width="2" height="2" fill="#222"/>
+        <rect x="16" y="8" width="2" height="2" fill="#222"/>
+        <rect x="18" y="6" width="2" height="2" fill="#222"/>
+      </svg>
+      <div class="notif-dot"></div>
     </div>
   </div>
 
@@ -182,13 +159,5 @@ function setNav(i) {
 }
 </script>
 
-<script>
-(function() {
-  var hasUnread = true;
-  var icon = document.getElementById("noticeIcon");
-  if (!icon) return;
-  icon.src = hasUnread ? "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAYAAADhAJiYAAAFHklEQVR42t2YeWxUVRSHv3Pvm5nO0AItliJUQFGUSooFFQgJJEJCgjuKxiUmSmgkalJjYoKJQkDZDKihYpSQqHGpuIAbIDEqDaSCNS5t2CIFgUJbKcx0Yei85fhHy6L/KGNnSDzJS17uy7353jm/e865F/5vZoxREVEEFWv0nnvun/5f1pN0JzqOo54XsP6LL7HWnoHjkw/fx4rz2Jo1r6/OLlAoous//4Lq6mo2b96IGId+/fpx2223s+mzDfjqVm395rv7LnRdm16cRD/5/EtqqreyfMliWpqP0XL0GIcPHiQRP87s8rnk5vUfPWTwpafr6+q2X9CPpsWDcNett6CqIEFAgFV85s9f4CxatMitHbeDvLw+RGOxtgtfOw1TgcVLlvHAgw8i50V9wYIF3uzy8sej0QjGGBIn4pIVIINl2/c1NDQ0oEa884DCP/7wY2VJ6RicnAi5/WKdWQHy1aO0tJThw4eDH5wNe0lJCcOGDaOpqYkfar7HPe0ms+MhY9hdV8+uXbv+Mj5r1izXcRy2b/2OrzZvZMCAolRWgES7vVFWVoYxxj87LqKB74METJ069eHKypc3ZCtBK3RnaLEmBVBbWxsrGzdWl61YpdeUjNKxE8dXpKfPNDO8GMNXW75G/cAA1NXVBaGcGM0tjRw90khR/4Ku7BYxQZ99bqHakKMQ0j4R0QkTbtQ55Y/qkiXL70q7NqY7MeSE2LJlC+s++Ihcx+Xn6kpOnGjjaONhWltbvawDua4rO3Zs47XVlVgFif9EJBJh06ZN5Ofne1wsM8ZoYQR9d2W5IuicOXNGXjSY4jA6LIqO6I+OKkKvykeHx9CVi+fNXlZR8cB1xuhYQatWrBj576WZLgzoR8sHcdw1jJswkpg5SXs8ReO+Dp6vAmdfghenTCLP93iiuoZ1yQ7JmIaKDfre0nzyb5jOzXNfZ9A1MyDk0qfAUlici7E+saGDGTSwP+7eBjokyJyocwV9c+mlFI6fxciJz6DJWhL73wcNISIUXJbDVUN9Ui2/883ug3w7YABNsWgiY0AlhWD69uXqiY9C22e0N2xAejwgYhAxPHJHiPF3DuTp32qoqN9JxcqXyjLSoPW16CtPFTF0zGhETpHY8x4iDuChGiBiAI8hlxdxbx9lytWWxVWtJFy3KyNArt9dWFUFkk3nCpsaRP7eGwuqiojgB4GfESAnBKoWUh5+58kemKC7le2JvjEWVe15AhzHIZRKSUY0pB7kODmITWJywudVWjmrIVUX1RQS6oZzPSUajfoZAfIVkn47NgD/VFOPZs5ABaimet7DPV6DIAiIx+PhXgeaOXPmvaEwXFEygrA0kzi0nvOlcU7UcLKlg6YDJ/F8iESUtWvXPtOrmbq0dPTWX+vqJ+/cOI9rrwiIFowCP4mIEPg+IgFu225OJ46gpw+jqRwCz9B6pJ2fG6IsfWcvnX2Ld+6trx/fK0AxB317/nRumDaCy66cxrF9nyImgo+PCdoImxT4LtZrx9pTZz1ngzyO/RZnz9FLePLVnTS0dEqv7LKUZxgkvxAJPMTeRK7uBs9HNQAj4GrPeU0JgnMib24+RDzuMji3g1zT2Xshs9Zqgfh4BnyBsIIIeALGh8CCDbo7bet0f3Nd6FKwChELXTZMIvnP2z/tag8QC6EfLpyBY1wi1iHZBVXVf1B8/Yy7X3hh4cdZvf04Y4WgjXUP0dV0gLfXdbFHRl256o239l/USysBjYJOmjj54oJkwv4EPtUme78TFeEAAAAASUVORK5CYII=" : "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAYAAADhAJiYAAAEb0lEQVR42s2YS2xVVRSGv732vve2BY1XKI/GCAQ00iC1QAFLA4aJLyYmjBw4cmJIjERBDEYSRdCg1fgY6MQEI4MmYhBtIaX0MVBIK8GQVB7aCFYsIq/S5z1n7+XgNqW1xNBLe3WNTnKy1/rO2mv9e+0D/zMzt+1BjBoFNWBM1p36YPIOZK1VVc/e/QcQEVQVEcFgWffY2px95/4lVnTv17W0tLRwqP4g1lpCCDy69gkqVy1n/fp1+HgCduCWYIzR/XUN+tKmV1ScVWtETXbXVER089bX9JsDh1Uwmq/aU0CNMTr0PKqmAP1q/0G1CTduIMmFxjnHrneqefqZZ4cLediCGgARIcR+/L5zAYrjmNbWH/i18zfEGXx0IxEumdDnN25CbBbKez/5GRIRysrKmDd3PvqPeHEm4pE1a2lqasJYyU+GRBxH247R2dlJCGH0y4QjaEz12zsQGT+Q5Lpl5YtLKV+8CHF2tD4BRckUxijee5PXLgPUJmRkJ+mX++p00+at6pzLqeUlVylyzrGvrp4Q34ibSDnEBhoP1+PjmHwC4X1MY0Njtu1dNluRjwkhcPz4MTTHU0By3zVLc+MBvthTAx4Gf/kUwdLc0DS20PNl4qxWVa1WEO1trtAVKyvVOaciovxXZozRAuu04/PHFWNvG+a22vIu0AgIWfkheBhUKAS68z1+gNNju2aRIc19K4tw8QDGGNq/u0bsEqzecpoQxu8/J6BCix7d9QAlS9OkV7yL6b9M94ltqHpELKeOXiJpMlS8eJ5onDFy6TI99MZ8ZiyfR3r5Hsz1n7l2YhsQMMagGlhYkaanfyqH35rDmPFkooHuSEKBjZm2ZDviOuj+6T0Mo9vch340cYlEIkWxm1wd0pY3F3B/1QycTKHn+xeGOi07U9+QqEIefLgEGyt1O0qx1t5ylsZ92qs3qEYQ+rIqrcPtP8a1qhJCPBp2IjPknENECcET+jqHA6mGm4wolkBmCCpMDlAcxyAJjE3RE11Bgx0hkKNdhTCIkMQ4i3MyWTUkxHEGozFTi6bjrR8GGZMlE2VXqEHNJAGJgC3qJwRPfO4znGZBzE0CSlSSvTgaj4/iiQWqra1NAbpkgWFOeQXXE5VcuH4nV20ZvYkyMgVLGUgtIrLTQAwQc+bUSTR1jXgQKmaCOKO7dx+cMlFKrQ/dA20NW/AlT2F7j4AvQq1gfA9x/wXou4gnInPl+KiF589cpe9i4LlPfqftrAf995i3BGRNUtuq5zKn3FG08AP6T2+EEQUtYglh7HVHNXC1y/BnRzfGpah69SRRZgKAEPTJsjTFMy2XdRZF8TmSyRSqOnRc6LAWiUIwELyhZ2CQgW5PwnicS/Dtj31kMvHtA9XU1CTb29uZPXu2/pFOmzXFxaG5uZntr++MqjesYjAYClMJVJWIDC9/eISPPn4/CUtJpzsMQFdXl6msrAzLli2LJnVAK707qd2tG/Sv+kpt3Xmvlk53qqr5/z800mZNQdVCgYezveTtLpYX+xvbGe35A42wIwAAAABJRU5ErkJggg==";
-})();
-</script>
 </body>
 </html>
