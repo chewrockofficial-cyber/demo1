@@ -17,23 +17,6 @@
 }
 
 
-/* Chew Rock Design System - Safe Override */
-* { font-family: 'Galmuri11', 'Press Start 2P', monospace !important; }
-.px { font-family: 'Galmuri11', monospace !important; font-weight: 700 !important; }
-button { font-family: 'Galmuri11', monospace !important; font-weight: 700 !important; }
-/* phone 프레임은 절대 건드리지 않음 */
-.phone { border-radius: 32px !important; }
-/* pill은 유지 */
-.pill { border-radius: 4px !important; }
-/* notif-dot 유지 */
-.notif-dot { border-radius: 50% !important; }
-/* toast 픽셀 */
-.toast { border-radius: 0 !important; font-weight: 700 !important; }
-/* 메뉴바 굵은 선 */
-.bottomnav { border-top: 3px solid #111 !important; }
-/* 이미지 픽셀 */
-img { image-rendering: pixelated; }
-
 /* 메뉴바 굵은 선 */
 .bottomnav { border-top: 3px solid #111 !important; }
 /* 토스트 픽셀 */
@@ -65,6 +48,14 @@ input[type=text], input[type=number], textarea, select {
 .member-chip { border-radius: 0 !important; }
 /* 상점 카드 */
 [class*="item-card"], [class*="product"] { border-radius: 0 !important; }
+
+
+/* Chew Rock: Galmuri11 폰트만 적용 */
+* { font-family: 'Galmuri11', 'Press Start 2P', monospace !important; }
+.phone { border-radius: 32px !important; overflow: hidden !important; }
+.pill { border-radius: 4px !important; }
+.notif-dot { border-radius: 50% !important; }
+img { image-rendering: pixelated; }
 
 </style>
 <meta charset="UTF-8">
