@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chew Rock — Fitting Room</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+    .px { font-family: 'Press Start 2P', monospace; }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      background: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .phone {
+      width: 360px;
+      height: 740px;
+      background: #fff;
+      border: 2px solid #ddd;
+      border-radius: 32px;
+      margin: 1rem auto;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* 상단 */
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 30px 20px 8px;
+      flex-shrink: 0;
+    }
+    .topbar-title {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 12px;
+      color: #111;
+      letter-spacing: 1px;
+    }
+    .back-btn {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 8px;
+      color: #888;
+      background: none;
+      border: 1.5px solid #ddd;
+      padding: 6px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .back-btn:hover { border-color: #222; color: #111; }
+
+    /* 나비 미리보기 */
+    .preview {
+      background: #fafafa;
+      margin: 12px 20px 8px;
+      border: 1.5px solid #eee;
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .nabi-canvas {
+      position: relative;
+      width: 160px;
+      height: 160px;
+    }
+    .nabi-canvas img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      image-rendering: pixelated;
+    }
+    /* 레이어 우선순위 (z-index) */
+    .layer-base    { z-index: 1; }
+    .layer-bottom  { z-index: 2; }
+    .layer-shoes   { z-index: 3; }
+    .layer-top     { z-index: 4; }
+    .layer-bag     { z-index: 5; }
+    .layer-hand    { z-index: 6; }
+
+    /* 저장 버튼 */
+    .save-row {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      padding: 0 20px 8px;
+    }
+    .reset-btn, .save-btn {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 8px;
+      padding: 8px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      border: 1.5px solid #ddd;
+      background: #fff;
+      color: #888;
+    }
+    .save-btn {
+      background: #111;
+      color: #fff;
+      border-color: #111;
+    }
+    .save-btn:hover { background: #333; }
+    .reset-btn:hover { border-color: #222; color: #111; }
+
+    /* 카테고리 탭 */
+    .pills {
+      display: flex;
+      gap: 5px;
+      justify-content: center;
+      padding: 8px 12px 12px;
+      flex-shrink: 0;
+    }
+    .pill {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 6px;
+      padding: 5px 8px;
+      border-radius: 4px;
+      border: 1.5px solid #ddd;
+      color: #bbb;
+      background: #f8f8f8;
+      cursor: pointer;
+    }
+    .pill.active {
+      border-color: #222;
+      color: #111;
+      background: #fff;
+    }
+
+    /* 아이템 그리드 */
+    .scroll-area {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0 16px 12px;
+    }
+    .scroll-area::-webkit-scrollbar { width: 4px; }
+    .scroll-area::-webkit-scrollbar-thumb { background: #ddd; border-radius: 4px; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+    .item {
+      background: #fff;
+      border: 1.5px solid #eee;
+      border-radius: 8px;
+      padding: 6px;
+      cursor: pointer;
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      transition: all 0.15s;
+    }
+    .item:hover { border-color: #222; }
+    .item.worn {
+      border-color: #111;
+      border-width: 2px;
+      background: #f5f0ff;
+    }
+    .item img {
+      width: 90%;
+      height: 90%;
+      object-fit: contain;
+      image-rendering: pixelated;
+    }
+    .worn-badge {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      background: #111;
+      color: #fff;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 5px;
+      padding: 3px 4px;
+      border-radius: 3px;
+    }
+
+    /* 빈 상태 */
+    .empty {
+      text-align: center;
+      padding: 40px 20px;
+      color: #999;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 8px;
+      line-height: 2;
+    }
+    .empty-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+      opacity: 0.5;
+    }
+    .shop-link {
+      display: inline-block;
+      margin-top: 14px;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 8px;
+      color: #111;
+      background: #fff;
+      border: 1.5px solid #222;
+      padding: 8px 14px;
+      border-radius: 6px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .shop-link:hover { background: #111; color: #fff; }
+
+    /* 하단 네비 */
+    .bottomnav {
+      background: #fff;
+      border-top: 1.5px solid #eee;
+      display: flex;
+      padding: 14px 0 20px;
+      flex-shrink: 0;
+    }
+    .nav-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      padding: 4px 0;
+      color: #bbb;
+    }
+    .nav-label {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 8px;
+    }
+    .nav-item.active { color: #111; }
+    .nav-item.active .nav-label { color: #111; }
+    .nav-item.active svg { color: #111; }
+    .nav-item svg { color: #bbb; }
+  </style>
+</head>
+<body>
+  <div class="phone">
+    <!-- 상단 -->
+    <div class="topbar">
+      <div class="topbar-title">FITTING ROOM</div>
+      <button class="back-btn" onclick="location.href='/'">← 홈</button>
+    </div>
+
+    <!-- 나비 미리보기 (이미지 오면 여기에 겹쳐 표시) -->
+    <div class="preview">
+      <div class="nabi-canvas" id="nabi-canvas">
+        <!-- 임시: 기존 나비 이미지 -->
+        <img class="layer-base" src="/images/nabi_front_01.png" alt="나비">
+        <!-- 착용한 아이템 레이어들이 JS로 여기에 추가됨 -->
+      </div>
+    </div>
+
+    <!-- 초기화/저장 -->
+    <div class="save-row">
+      <button class="reset-btn" onclick="resetAll()">전체해제</button>
+      <button class="save-btn" onclick="saveOutfit()">저장</button>
+    </div>
+
+    <!-- 카테고리 탭 -->
+    <div class="pills" id="pills">
+      <div class="pill active" data-category="top">상의</div>
+      <div class="pill" data-category="bottom">하의</div>
+      <div class="pill" data-category="shoes">신발</div>
+      <div class="pill" data-category="head">머리</div>
+      <div class="pill" data-category="etc">잡화</div>
+    </div>
+
+    <!-- 보유 아이템 그리드 -->
+    <div class="scroll-area">
+      <div id="content"></div>
+    </div>
+
+    <!-- 하단 네비 -->
+    <div class="bottomnav">
+      <div class="nav-item" onclick="location.href='/'">
+        <svg width="32" height="32" viewBox="0 0 32 32">
+          <path d="M16 4 C22 3, 27 7, 27 13 C27 18, 24 21, 19 22 L19 27 C19 28.5, 17.8 29, 16 29 C14.2 29, 13 28.5, 13 27 L13 22 C8 21, 5 18, 5 13 C5 7, 10 3, 16 4 Z" fill="currentColor"/>
+          <circle cx="16" cy="13" r="2.6" fill="#fff"/>
+        </svg>
+        <div class="nav-label">메인</div>
+      </div>
+      <div class="nav-item">
+        <svg width="32" height="32" viewBox="0 0 32 32">
+          <path d="M16 3 C24 2, 29 9, 28 16 C27 24, 21 29, 14 28 C7 27, 2 21, 3 14 C4 8, 9 4, 16 3 Z" fill="currentColor"/>
+          <path d="M16 9 L16 16 L22 19" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <circle cx="16" cy="16" r="2.4" fill="#fff"/>
+        </svg>
+        <div class="nav-label">기록</div>
+      </div>
+      <div class="nav-item">
+        <svg width="32" height="32" viewBox="0 0 32 32">
+          <path d="M5 12 C5 9, 7 7, 10 7 L19 7 C23 7, 25 9.5, 28 12 C25 14.5, 23 17, 19 17 L10 17 C7 17, 5 15, 5 12 Z" fill="currentColor"/>
+          <rect x="9" y="17" width="4" height="9" rx="1.5" fill="currentColor"/>
+          <circle cx="13" cy="12" r="2.3" fill="#fff"/>
+        </svg>
+        <div class="nav-label">마을</div>
+      </div>
+      <div class="nav-item" onclick="location.href='/shop.html'">
+        <svg width="32" height="32" viewBox="0 0 32 32">
+          <path d="M9 6 C14 3, 20 4, 24 8 C28 12, 27 19, 23 23 C19 27, 12 28, 8 24 C4 20, 4 13, 9 6 Z" fill="currentColor"/>
+          <circle cx="12" cy="11" r="1.8" fill="#fff"/>
+          <circle cx="19" cy="9" r="1.5" fill="#fff"/>
+          <circle cx="22" cy="16" r="1.8" fill="#fff"/>
+          <circle cx="16" cy="20" r="1.6" fill="#fff"/>
+          <circle cx="10" cy="18" r="1.4" fill="#fff"/>
+        </svg>
+        <div class="nav-label">상점</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ── 유저 정보 (나중에 서버에서 받아올 것) ────────
+    // 지금은 임시로 localStorage에서 관리
+    const userLevel = parseInt(localStorage.getItem('userLevel') || '1')  // 1~5
+    const nabiBaseSrc = `/images/nabi_front_0${userLevel}_basic.png`
+    // ── 유저 보유 아이템 (테스트: 빈 상태) ──────────
+    // 나중에 DB랑 연결. 지금은 localStorage로 시뮬레이션
+    let ownedItems = JSON.parse(localStorage.getItem('ownedItems') || '[]')
+
+    // ── 착용 상태 (카테고리별 1개씩) ──────────────
+    let outfit = JSON.parse(localStorage.getItem('outfit') || '{}')
+    // 예: { top: 1, shoes: 12, etc: [3, 8] }  // etc는 여러 개 가능
+
+    // ── 전체 아이템 정보 (상점과 동일, 나중에 공유) ──
+    const allItems = [
+      { id: 1,  category: 'top',    image: '/images/top_white_tshirt.png',           overlay: '/images/top_white_tshirt_on_nabi.png',           name: '화이트 티셔츠' },
+      { id: 2,  category: 'top',    image: '/images/top_navy_crop.png',              overlay: '/images/top_navy_crop_on_nabi.png',              name: '네이비 크롭탑' },
+      { id: 3,  category: 'etc',    image: '/images/chalkbag_square_white.png',      overlay: '/images/chalkbag_square_white_on_nabi.png',      name: '스퀘어 초크백 화이트' },
+      { id: 4,  category: 'etc',    image: '/images/chalkbag_square_yellow.png',     overlay: '/images/chalkbag_square_yellow_on_nabi.png',     name: '스퀘어 초크백 옐로우' },
+      { id: 5,  category: 'etc',    image: '/images/chalkbag_round_black.png',       overlay: '/images/chalkbag_round_black_on_nabi.png',       name: '라운드 초크백 블랙' },
+      { id: 6,  category: 'etc',    image: '/images/chalkbag_round_khaki.png',       overlay: '/images/chalkbag_round_khaki_on_nabi.png',       name: '라운드 초크백 카키' },
+      { id: 7,  category: 'etc',    image: '/images/chalkbag_round_pink.png',        overlay: '/images/chalkbag_round_pink_on_nabi.png',        name: '라운드 초크백 핑크' },
+      { id: 8,  category: 'etc',    image: '/images/item_brush_short.png',           overlay: '/images/item_brush_short_on_nabi.png',           name: '숏 브러시' },
+      { id: 9,  category: 'etc',    image: '/images/item_brush_long.png',            overlay: '/images/item_brush_long_on_nabi.png',            name: '롱 브러시' },
+      { id: 10, category: 'etc',    image: '/images/item_tripod.png',                overlay: '/images/item_tripod_on_nabi.png',                name: '기록용 삼각대' },
+      { id: 11, category: 'etc',    image: '/images/item_americano.png',             overlay: '/images/item_americano_on_nabi.png',             name: '아이스 아메리카노' },
+      { id: 12, category: 'shoes',  image: '/images/climbingshoes_black_gray.png',   overlay: '/images/climbingshoes_black_gray_on_nabi.png',   name: '클라이밍화 블랙' },
+      { id: 13, category: 'shoes',  image: '/images/climbingshoes_gray_blue.png',    overlay: '/images/climbingshoes_gray_blue_on_nabi.png',    name: '클라이밍화 블루' },
+      { id: 14, category: 'shoes',  image: '/images/climbingshoes_white_pink.png',   overlay: '/images/climbingshoes_white_pink_on_nabi.png',   name: '클라이밍화 핑크' },
+      { id: 15, category: 'shoes',  image: '/images/climbingshoes_yellow_brown.png', overlay: '/images/climbingshoes_yellow_brown_on_nabi.png', name: '클라이밍화 브라운' },
+      { id: 16, category: 'shoes',  image: '/images/climbingshoes_yellow_green.png', overlay: '/images/climbingshoes_yellow_green_on_nabi.png', name: '클라이밍화 그린' },
+      { id: 17, category: 'head',   image: '/images/head_accessory_blue_beret.png',  name: '블루 베레',       price: 12, owned: false, isNew: true  },
+      { id: 18, category: 'head',   image: '/images/head_accessory_crown.png',       name: '왕관',           price: 50, owned: false, isNew: true  },
+      { id: 19, category: 'head',   image: '/images/head_accessory_party_cone.png',  name: '파티 콘',        price: 8,  owned: false, isNew: true  },
+    ]
+
+    let currentCategory = 'top'
+    const categoryLabels = { top: '상의', bottom: '하의', shoes: '신발', head: '머리', etc: '잡화' }
+
+    // ── 그리드 렌더링 ──────────────────────────────
+    function render() {
+      const container = document.getElementById('content')
+      const myItems = allItems.filter(i => ownedItems.includes(i.id) && i.category === currentCategory)
+
+      if (myItems.length === 0) {
+        container.innerHTML = `
+          <div class="empty">
+            <div class="empty-icon">🪨</div>
+            <div>${categoryLabels[currentCategory]} 아이템이 없어요</div>
+            <div>상점에서 구매해보세요!</div>
+            <a class="shop-link" onclick="location.href='/shop.html'">상점 가기</a>
+          </div>
+        `
+        return
+      }
+
+      container.innerHTML = `
+        <div class="grid">
+          ${myItems.map(item => {
+            const isWorn = outfit[item.category] === item.id ||
+                          (Array.isArray(outfit[item.category]) && outfit[item.category].includes(item.id))
+            return `
+              <div class="item ${isWorn ? 'worn' : ''}" onclick="toggleItem(${item.id})">
+                ${isWorn ? '<div class="worn-badge">ON</div>' : ''}
+                <img src="${item.image}" alt="${item.name}">
+              </div>
+            `
+          }).join('')}
+        </div>
+      `
+    }
+
+    // ── 착용 토글 ──────────────────────────────────
+    function toggleItem(id) {
+      const item = allItems.find(i => i.id === id)
+      if (!item) return
+
+      const cat = item.category
+
+      // 상의/하의/신발: 카테고리당 1개만
+      if (cat === 'top' || cat === 'bottom' || cat === 'shoes') {
+        if (outfit[cat] === id) {
+          delete outfit[cat] // 해제
+        } else {
+          outfit[cat] = id // 착용 (다른 것과 교체)
+        }
+      }
+      // 잡화: 여러 개 가능
+      else if (cat === 'etc') {
+        if (!Array.isArray(outfit[cat])) outfit[cat] = []
+        const idx = outfit[cat].indexOf(id)
+        if (idx > -1) outfit[cat].splice(idx, 1)
+        else outfit[cat].push(id)
+      }
+
+      updateNabiPreview()
+      render()
+    }
+
+    // ── 나비 미리보기 업데이트 ─────────────────────
+    function updateNabiPreview() {
+      const canvas = document.getElementById('nabi-canvas')
+      // 베이스만 남기고 나머지 제거
+      canvas.querySelectorAll('img:not(.layer-base)').forEach(el => el.remove())
+
+      // 착용한 아이템들을 레이어로 추가
+      const layerMap = { bottom: 'layer-bottom', shoes: 'layer-shoes', top: 'layer-top', etc: 'layer-bag', head: 'layer-hand' }
+
+      for (const [cat, value] of Object.entries(outfit)) {
+        const ids = Array.isArray(value) ? value : [value]
+        ids.forEach(id => {
+          const item = allItems.find(i => i.id === id)
+          if (!item) return
+          const img = document.createElement('img')
+          img.src = item.overlay
+          img.alt = item.name
+          img.className = layerMap[cat] || 'layer-hand'
+          // overlay 이미지가 아직 없을 수 있음. 에러 나면 숨김
+          img.onerror = () => { img.style.display = 'none' }
+          canvas.appendChild(img)
+        })
+      }
+    }
+
+    // ── 초기화 / 저장 ─────────────────────────────
+    function resetAll() {
+      if (!confirm('모두 벗을까요?')) return
+      outfit = {}
+      updateNabiPreview()
+      render()
+    }
+
+    function saveOutfit() {
+      localStorage.setItem('outfit', JSON.stringify(outfit))
+      alert('저장했어요! 🎉')
+    }
+
+    // ── 탭 전환 ────────────────────────────────────
+    document.getElementById('pills').addEventListener('click', (e) => {
+      if (!e.target.classList.contains('pill')) return
+      document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'))
+      e.target.classList.add('active')
+      currentCategory = e.target.dataset.category
+      render()
+    })
+
+    // ── 초기 실행 ──────────────────────────────────
+    document.getElementById('nabi-base').src = nabiBaseSrc
+    updateNabiPreview()
+    render()
+  </script>
+</body>
+</html>
