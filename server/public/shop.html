@@ -1,49 +1,11 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<style>
-@font-face {
-  font-family: 'Galmuri11';
-  src: url('https://cdn.jsdelivr.net/gh/quiple/galmuri/dist/Galmuri11.woff2') format('woff2');
-  font-weight: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Galmuri11';
-  src: url('https://cdn.jsdelivr.net/gh/quiple/galmuri/dist/Galmuri11-Bold.woff2') format('woff2');
-  font-weight: 700;
-  font-display: swap;
-}
-
-/* 모달 각진 */
-.gym-panel { border-radius: 0 !important; border-top-width: 3px !important; }
-.sub-modal { border-radius: 0 !important; }
-/* 인풋 각진 */
-input[type=text], input[type=number], textarea, select {
-  border-radius: 0 !important; border: 2px solid #111 !important;
-  font-family: 'Galmuri11', monospace !important;
-}
-/* 난이도/조건 칩들 */
-[class*="-chip"], [class*="-pill"], [class*="-tag"] { border-radius: 0 !important; }
-/* 멤버 칩 각진 */
-.member-chip { border-radius: 0 !important; }
-/* 상점 카드 */
-[class*="item-card"], [class*="product"] { border-radius: 0 !important; }
-
-
-/* Chew Rock: Galmuri11 폰트만 적용 */
-* { font-family: 'Galmuri11', 'Press Start 2P', monospace !important; }
-.phone { border-radius: 32px !important; overflow: hidden !important; }
-.pill { border-radius: 4px !important; }
-.notif-dot { border-radius: 50% !important; }
-img { image-rendering: pixelated; }
-
-</style>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chew Rock — Shop</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
     .px { font-family: 'Press Start 2P', monospace; }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -103,11 +65,44 @@ img { image-rendering: pixelated; }
       color: #111;
     }
 
+    /* 나비 미리보기 (스크롤 밖, 고정 영역) */
+    .preview {
+      background: #fafafa;
+      margin: 8px 20px 4px;
+      border: 1.5px solid #eee;
+      border-radius: 12px;
+      padding: 12px;
+      display: flex;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .nabi-canvas {
+      position: relative;
+      width: 128px;
+      height: 128px;
+    }
+    .nabi-canvas img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      image-rendering: pixelated;
+    }
+    /* 레이어 우선순위 (fitting.html과 동일) */
+    .layer-base    { z-index: 1; }
+    .layer-bottom  { z-index: 2; }
+    .layer-shoes   { z-index: 3; }
+    .layer-top     { z-index: 4; }
+    .layer-bag     { z-index: 5; }
+    .layer-hand    { z-index: 6; }
+
     /* 스크롤 영역 */
     .scroll-area {
       flex: 1;
       overflow-y: auto;
-      padding: 8px 16px 12px;
+      padding: 4px 16px 12px;
     }
     .scroll-area::-webkit-scrollbar { width: 4px; }
     .scroll-area::-webkit-scrollbar-thumb { background: #ddd; border-radius: 4px; }
@@ -156,13 +151,18 @@ img { image-rendering: pixelated; }
       border-color: #222;
       transform: translateY(-1px);
     }
-    .item.owned {
-      opacity: 0.5;
-      cursor: not-allowed;
+    /* 보유중(구매 완료) - 클릭하면 착용 토글이라 계속 클릭 가능 */
+    .item.owned .item-price { background: #f0f0f0; }
+    /* 실제로 착용중 (outfit에 반영됨) */
+    .item.worn {
+      border-color: #111;
+      border-width: 2px;
+      background: #f5f0ff;
     }
-    .item.owned:hover {
-      border-color: #ddd;
-      transform: none;
+    /* 구매 전 미리보기 중 (아직 결제 안 함) */
+    .item.previewing {
+      border-color: #4a7dff;
+      box-shadow: 0 0 0 2px rgba(74, 125, 255, 0.15);
     }
 
     .badge-new {
@@ -244,6 +244,35 @@ img { image-rendering: pixelated; }
     }
     .price-owned .item-price-text { color: #999; }
 
+    /* 미리보기 중일 때만 나타나는 구매바 (하단 네비 바로 위, 가로 중앙) */
+    .buy-bar {
+      display: none;
+      justify-content: center;
+      padding: 10px 0;
+      border-top: 1.5px solid #eee;
+      flex-shrink: 0;
+    }
+    .buy-bar.show { display: flex; }
+    .buy-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 9px;
+      color: #fff;
+      background: #111;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+    .buy-btn:active { background: #333; }
+    .buy-btn img {
+      width: 14px;
+      height: auto;
+      image-rendering: pixelated;
+    }
+
     /* 하단 네비 (예진님과 완전 동일) */
     .bottomnav {
       background: #fff;
@@ -268,8 +297,6 @@ img { image-rendering: pixelated; }
     }
     .nav-item.active { color: #111; }
     .nav-item.active .nav-label { color: #111; }
-    .nav-item.active svg { color: #111; }
-    .nav-item svg { color: #bbb; }
   </style>
 </head>
 <body>
@@ -283,6 +310,14 @@ img { image-rendering: pixelated; }
       </div>
     </div>
 
+    <!-- 나비 미리보기 (스크롤 밖에 고정) -->
+    <div class="preview">
+      <div class="nabi-canvas" id="nabi-canvas">
+        <img class="layer-base" id="nabi-base" src="/images/nabi_front_01.png" alt="나비">
+        <!-- 착용중인 아이템 레이어가 JS로 여기에 추가됨 -->
+      </div>
+    </div>
+
     <!-- 스크롤 영역 -->
     <div class="scroll-area">
       <div class="pills" id="pills">
@@ -290,14 +325,23 @@ img { image-rendering: pixelated; }
         <div class="pill" data-category="top">TOP</div>
         <div class="pill" data-category="bottom">BOTTOM</div>
         <div class="pill" data-category="shoes">SHOES</div>
+        <div class="pill" data-category="head">HEAD</div>
         <div class="pill" data-category="etc">ETC</div>
       </div>
 
       <div class="grid" id="grid"></div>
     </div>
 
-    <!-- 하단 네비 -->
-    <div class="bottomnav">
+    <!-- 미리보기 중일 때만 뜨는 구매 버튼 (하단 네비 위) -->
+    <div class="buy-bar" id="buy-bar">
+      <button class="buy-btn" id="buy-btn" onclick="confirmPurchase()">
+        <img src="/images/chalk_piece.png" alt="">
+        <span id="buy-btn-text">구매하기</span>
+      </button>
+    </div>
+
+      <!-- 메뉴바 -->
+  <div class="bottomnav">
     <div class="nav-item" onclick="window.location.href='/'">
       <img src="data:image/png;base64,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" style="width:36px;height:36px;image-rendering:pixelated;opacity:0.4"/>
       <div class="nav-label">메인</div>
@@ -315,27 +359,7 @@ img { image-rendering: pixelated; }
       <div class="nav-label">상점</div>
     </div>
   </div>
-    </div>
-    </div>
-    </div>
-    </div>
-  </div>
-    </div>
-    </div>
-
-  </div>
-    </div>
-    </div>
-  </div>
-      </div>
-      
-      </div>
-      
-      </div>
-      
-      </div>
-    </div>
-  </div>
+</div>
 
   <script>
     // ── 잔액 ──────────────────────
@@ -346,33 +370,73 @@ img { image-rendering: pixelated; }
       icon.src = balance >= 100 ? '/images/chalk_bag.png' : '/images/chalk_piece.png'
     }
 
+    // ── 나비 캐릭터: 로그인 유저 정보와 동기화 ──────────
+    // TODO(백엔드 연동): loadUserProfile()이 /api/user/me 같은 엔드포인트를 호출해
+    // { level, outfit }을 받아오도록 fetch URL/응답 형태만 맞추면 됨.
+    // 엔드포인트 준비 전까지는 localStorage 값으로 폴백함.
+    let userLevel = parseInt(localStorage.getItem('userLevel') || '1')
+    // 예: { top: 1, shoes: 12, etc: [3, 8] }
+    let outfit = JSON.parse(localStorage.getItem('outfit') || '{}')
+
+    async function loadUserProfile() {
+      const token = localStorage.getItem('token') // 로그인 시 저장하는 키 이름에 맞게 조정
+      if (!token) return // 비로그인 상태면 localStorage 값 그대로 사용
+      try {
+        const res = await fetch('/api/user/me', {
+          headers: { Authorization: `Bearer ${token}` }
+        })
+        if (!res.ok) return // 엔드포인트 없으면 조용히 폴백
+        const data = await res.json() // 기대 형태: { level: 1~5, outfit: {...} }
+        if (data.level) userLevel = data.level
+        if (data.outfit) outfit = data.outfit
+      } catch (err) {
+        console.warn('유저 정보 동기화 실패, localStorage 값 사용', err)
+      }
+    }
+
     // ── 아이템 ────────────────────
+    // overlay: 나비에게 입혔을 때 겹쳐 보여줄 이미지 (fitting.html과 동일한 네이밍 규칙: {아이템명}_on_nabi.png)
     const items = [
-      { id: 1,  category: 'top',    image: '/images/top_white_tshirt.png',           name: '화이트 티셔츠',       price: 12, owned: false, isNew: false },
-      { id: 2,  category: 'top',    image: '/images/top_navy_crop.png',              name: '네이비 크롭탑',       price: 15, owned: false, isNew: true  },
-      { id: 3,  category: 'etc',    image: '/images/chalkbag_square_white.png',      name: '스퀘어 초크백 화이트', price: 20, owned: false, isNew: false },
-      { id: 4,  category: 'etc',    image: '/images/chalkbag_square_yellow.png',     name: '스퀘어 초크백 옐로우', price: 22, owned: false, isNew: false },
-      { id: 5,  category: 'etc',    image: '/images/chalkbag_round_black.png',       name: '라운드 초크백 블랙',   price: 18, owned: false, isNew: true  },
-      { id: 6,  category: 'etc',    image: '/images/chalkbag_round_khaki.png',       name: '라운드 초크백 카키',   price: 18, owned: false, isNew: false },
-      { id: 7,  category: 'etc',    image: '/images/chalkbag_round_pink.png',        name: '라운드 초크백 핑크',   price: 20, owned: false, isNew: true  },
-      { id: 8,  category: 'etc',    image: '/images/item_brush_short.png',           name: '숏 브러시',           price: 8,  owned: false, isNew: false },
-      { id: 9,  category: 'etc',    image: '/images/item_brush_long.png',            name: '롱 브러시',           price: 10, owned: false, isNew: false },
-      { id: 10, category: 'etc',    image: '/images/item_tripod.png',                name: '기록용 삼각대',       price: 30, owned: false, isNew: false },
-      { id: 11, category: 'etc',    image: '/images/item_americano.png',             name: '아이스 아메리카노',   price: 5,  owned: false, isNew: false },
-      { id: 12, category: 'shoes',  image: '/images/climbingshoes_black_gray.png',   name: '클라이밍화 블랙',     price: 35, owned: false, isNew: false },
-      { id: 13, category: 'shoes',  image: '/images/climbingshoes_gray_blue.png',    name: '클라이밍화 블루',     price: 35, owned: false, isNew: true  },
-      { id: 14, category: 'shoes',  image: '/images/climbingshoes_white_pink.png',   name: '클라이밍화 핑크',     price: 38, owned: false, isNew: true  },
-      { id: 15, category: 'shoes',  image: '/images/climbingshoes_yellow_brown.png', name: '클라이밍화 브라운',   price: 32, owned: false, isNew: false },
-      { id: 16, category: 'shoes',  image: '/images/climbingshoes_yellow_green.png', name: '클라이밍화 그린',     price: 32, owned: false, isNew: false },
+      { id: 1,  category: 'top',    image: '/images/top_white_tshirt.png',           overlay: '/images/top_white_tshirt_on_nabi.png',           name: '화이트 티셔츠',       price: 12, owned: false, isNew: false },
+      { id: 2,  category: 'top',    image: '/images/top_navy_crop.png',              overlay: '/images/top_navy_crop_on_nabi.png',              name: '네이비 크롭탑',       price: 15, owned: false, isNew: true  },
+      { id: 3,  category: 'etc',    image: '/images/chalkbag_square_white.png',      overlay: '/images/chalkbag_square_white_on_nabi.png',      name: '스퀘어 초크백 화이트', price: 20, owned: false, isNew: false },
+      { id: 4,  category: 'etc',    image: '/images/chalkbag_square_yellow.png',     overlay: '/images/chalkbag_square_yellow_on_nabi.png',     name: '스퀘어 초크백 옐로우', price: 22, owned: false, isNew: false },
+      { id: 5,  category: 'etc',    image: '/images/chalkbag_round_black.png',       overlay: '/images/chalkbag_round_black_on_nabi.png',       name: '라운드 초크백 블랙',   price: 18, owned: false, isNew: true  },
+      { id: 6,  category: 'etc',    image: '/images/chalkbag_round_khaki.png',       overlay: '/images/chalkbag_round_khaki_on_nabi.png',       name: '라운드 초크백 카키',   price: 18, owned: false, isNew: false },
+      { id: 7,  category: 'etc',    image: '/images/chalkbag_round_pink.png',        overlay: '/images/chalkbag_round_pink_on_nabi.png',        name: '라운드 초크백 핑크',   price: 20, owned: false, isNew: true  },
+      { id: 8,  category: 'etc',    image: '/images/item_brush_short.png',           overlay: '/images/item_brush_short_on_nabi.png',           name: '숏 브러시',           price: 8,  owned: false, isNew: false },
+      { id: 9,  category: 'etc',    image: '/images/item_brush_long.png',            overlay: '/images/item_brush_long_on_nabi.png',            name: '롱 브러시',           price: 10, owned: false, isNew: false },
+      { id: 10, category: 'etc',    image: '/images/item_tripod.png',                overlay: '/images/item_tripod_on_nabi.png',                name: '기록용 삼각대',       price: 30, owned: false, isNew: false },
+      { id: 11, category: 'etc',    image: '/images/item_americano.png',             overlay: '/images/item_americano_on_nabi.png',             name: '아이스 아메리카노',   price: 5,  owned: false, isNew: false },
+      { id: 12, category: 'shoes',  image: '/images/climbingshoes_black_gray.png',   overlay: '/images/climbingshoes_black_gray_on_nabi.png',   name: '클라이밍화 블랙',     price: 35, owned: false, isNew: false },
+      { id: 13, category: 'shoes',  image: '/images/climbingshoes_gray_blue.png',    overlay: '/images/climbingshoes_gray_blue_on_nabi.png',    name: '클라이밍화 블루',     price: 35, owned: false, isNew: true  },
+      { id: 14, category: 'shoes',  image: '/images/climbingshoes_white_pink.png',   overlay: '/images/climbingshoes_white_pink_on_nabi.png',   name: '클라이밍화 핑크',     price: 38, owned: false, isNew: true  },
+      { id: 15, category: 'shoes',  image: '/images/climbingshoes_yellow_brown.png', overlay: '/images/climbingshoes_yellow_brown_on_nabi.png', name: '클라이밍화 브라운',   price: 32, owned: false, isNew: false },
+      { id: 16, category: 'shoes',  image: '/images/climbingshoes_yellow_green.png', overlay: '/images/climbingshoes_yellow_green_on_nabi.png', name: '클라이밍화 그린',     price: 32, owned: false, isNew: false },
+      { id: 17, category: 'head',   image: '/images/head_accessory_blue_beret.png',  overlay: '/images/head_accessory_blue_beret_on_nabi.png',  name: '블루 베레',           price: 12, owned: false, isNew: true  },
+      { id: 18, category: 'head',   image: '/images/head_accessory_crown.png',       overlay: '/images/head_accessory_crown_on_nabi.png',       name: '왕관',               price: 50, owned: false, isNew: true  },
+      { id: 19, category: 'head',   image: '/images/head_accessory_party_cone.png',  overlay: '/images/head_accessory_party_cone_on_nabi.png',  name: '파티 콘',            price: 8,  owned: false, isNew: true  },
     ]
 
     let currentCategory = 'all'
+    // 지금 미리 입어보고 있는(구매 확정 전) 아이템 id. 한 번에 1개만 유지.
+    let previewId = null
+
+    // 특정 카테고리(슬롯)에서 실제로 착용중인지 확인
+    function isWorn(item) {
+      const val = outfit[item.category]
+      if (Array.isArray(val)) return val.includes(item.id)
+      return val === item.id
+    }
 
     function render() {
       const grid = document.getElementById('grid')
       const filtered = currentCategory === 'all' ? items : items.filter(i => i.category === currentCategory)
-      grid.innerHTML = filtered.map(item => `
-        <div class="item ${item.owned ? 'owned' : ''}" onclick="buyItem(${item.id})">
+      grid.innerHTML = filtered.map(item => {
+        const worn = item.owned && isWorn(item)
+        const previewing = previewId === item.id
+        return `
+        <div class="item ${item.owned ? 'owned' : ''} ${worn ? 'worn' : ''} ${previewing ? 'previewing' : ''}" onclick="onItemClick(${item.id})">
           ${item.isNew && !item.owned ? '<div class="badge-new">NEW</div>' : ''}
           <div class="item-image">
             <img src="${item.image}" alt="${item.name}">
@@ -381,11 +445,11 @@ img { image-rendering: pixelated; }
           <div class="item-name">${item.name}</div>
           <div class="item-price ${item.owned ? 'price-owned' : ''}">
             ${item.owned
-              ? '<span class="item-price-text">보유중</span>'
+              ? `<span class="item-price-text">${worn ? '착용중' : '탭하여 착용'}</span>`
               : `<img src="/images/chalk_piece.png" alt=""><span class="item-price-text">×${item.price}</span>`}
           </div>
         </div>
-      `).join('')
+      `}).join('')
     }
 
     document.getElementById('pills').addEventListener('click', (e) => {
@@ -396,23 +460,141 @@ img { image-rendering: pixelated; }
       render()
     })
 
-    function buyItem(id) {
+    // ── 아이템 클릭 처리 ────────────────────────────
+    // - 보유중: 바로 착용/해제 토글 (구매 절차 없음)
+    // - 미보유: 미리보기 토글 + 구매바 노출. 같은 아이템 재클릭 시 미리보기 취소
+    function onItemClick(id) {
       const item = items.find(i => i.id === id)
-      if (!item || item.owned) return
+      if (!item) return
+
+      if (item.owned) {
+        toggleWorn(item)
+        return
+      }
+
+      previewId = (previewId === id) ? null : id
+      renderNabiPreview()
+      renderBuyBar()
+      render()
+    }
+
+    // 보유 아이템의 실제 착용 상태를 토글하고 저장
+    function toggleWorn(item) {
+      const cat = item.category
+      if (cat === 'etc') {
+        if (!Array.isArray(outfit.etc)) outfit.etc = []
+        const idx = outfit.etc.indexOf(item.id)
+        if (idx > -1) outfit.etc.splice(idx, 1)
+        else outfit.etc.push(item.id)
+      } else {
+        if (outfit[cat] === item.id) delete outfit[cat]
+        else outfit[cat] = item.id // 같은 슬롯의 다른 아이템은 자동 교체
+      }
+      saveOutfit()
+      renderNabiPreview()
+      render()
+    }
+
+    // 구매 확정 시 해당 아이템을 바로 착용 상태로 반영
+    function equipAfterPurchase(item) {
+      const cat = item.category
+      if (cat === 'etc') {
+        if (!Array.isArray(outfit.etc)) outfit.etc = []
+        if (!outfit.etc.includes(item.id)) outfit.etc.push(item.id)
+      } else {
+        outfit[cat] = item.id
+      }
+      saveOutfit()
+    }
+
+    function saveOutfit() {
+      localStorage.setItem('outfit', JSON.stringify(outfit))
+      // TODO(백엔드 연동): PUT /api/user/outfit 같은 엔드포인트로 교체하면
+      // 서버 DB에도 착용 상태가 저장됨.
+    }
+
+    // ── 구매바 표시/숨김 ────────────────────────────
+    function renderBuyBar() {
+      const bar = document.getElementById('buy-bar')
+      if (previewId == null) {
+        bar.classList.remove('show')
+        return
+      }
+      const item = items.find(i => i.id === previewId)
+      document.getElementById('buy-btn-text').textContent = `구매하기 ×${item.price}`
+      bar.classList.add('show')
+    }
+
+    function confirmPurchase() {
+      const item = items.find(i => i.id === previewId)
+      if (!item) return
       if (balance < item.price) {
         alert(`쵸크가 부족해요!\n필요: ${item.price} / 보유: ${balance}`)
         return
       }
-      if (confirm(`"${item.name}"을(를) 쵸크 ${item.price}개로 구매할까요?`)) {
-        balance -= item.price
-        item.owned = true
-        updateBalance()
-        render()
+      balance -= item.price
+      item.owned = true
+      equipAfterPurchase(item)
+      previewId = null
+      updateBalance()
+      renderBuyBar()
+      renderNabiPreview()
+      render()
+    }
+
+    // ── 나비에게 보여줄 코디 계산 ────────────────────
+    // 실제 outfit은 건드리지 않고, 미리보기 중인 아이템을 얹은 임시 버전만 만든다
+    function getDisplayOutfit() {
+      const display = JSON.parse(JSON.stringify(outfit))
+      if (previewId != null) {
+        const item = items.find(i => i.id === previewId)
+        if (item) {
+          if (item.category === 'etc') {
+            const list = Array.isArray(display.etc) ? display.etc.slice() : []
+            if (!list.includes(item.id)) list.push(item.id)
+            display.etc = list
+          } else {
+            display[item.category] = item.id // 단일 슬롯은 미리보기 아이템으로 교체
+          }
+        }
+      }
+      return display
+    }
+
+    // ── 나비 미리보기 렌더링 (fitting.html의 updateNabiPreview와 동일 로직) ──
+    function renderNabiPreview() {
+      const canvas = document.getElementById('nabi-canvas')
+      document.getElementById('nabi-base').src = `/images/nabi_front_0${userLevel}.png`
+
+      canvas.querySelectorAll('img:not(.layer-base)').forEach(el => el.remove())
+
+      const layerMap = { bottom: 'layer-bottom', shoes: 'layer-shoes', top: 'layer-top', etc: 'layer-bag', head: 'layer-hand' }
+      const displayOutfit = getDisplayOutfit()
+
+      for (const [cat, value] of Object.entries(displayOutfit)) {
+        const ids = Array.isArray(value) ? value : [value]
+        ids.forEach(id => {
+          const item = items.find(i => i.id === id)
+          if (!item || !item.overlay) return
+          const img = document.createElement('img')
+          img.src = item.overlay
+          img.alt = item.name
+          img.className = layerMap[cat] || 'layer-hand'
+          img.onerror = () => { img.style.display = 'none' } // overlay 이미지가 아직 없으면 조용히 숨김
+          canvas.appendChild(img)
+        })
       }
     }
 
-    updateBalance()
-    render()
+    async function init() {
+      await loadUserProfile() // 로그인 유저 정보로 userLevel / outfit 동기화 시도
+      updateBalance()
+      renderNabiPreview()
+      renderBuyBar()
+      render()
+    }
+
+    init()
   </script>
 </body>
 </html>
