@@ -5,6 +5,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Nabi</title>
 <style>
+@font-face {
+  font-family: 'Galmuri11';
+  src: url('https://cdn.jsdelivr.net/gh/quiple/galmuri/dist/Galmuri11.woff2') format('woff2');
+  font-weight: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Galmuri11';
+  src: url('https://cdn.jsdelivr.net/gh/quiple/galmuri/dist/Galmuri11-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-display: swap;
+}
+* { font-family: 'Galmuri11', 'Press Start 2P', monospace !important; }
+.phone { border-radius: 32px !important; overflow: hidden !important; }
+.pill  { border-radius: 4px !important; }
+.notif-dot { border-radius: 50% !important; }
+img { image-rendering: pixelated; }
+</style>
+<style>
 html, body {
   margin: 0; padding: 0;
   background: #f0f0f0;
@@ -46,6 +65,120 @@ html, body {
 .nav-item.active .nav-label{color:#111}
 .nav-item.active svg{color:#111}
 svg{color:#bbb}
+
+/* ============================================================
+   PIXEL BUTTON DESIGN SYSTEM (Chew Rock 공통 컴포넌트)
+   - 모든 화면(index/gym/shop/record/notification)에 동일하게 적용
+   ============================================================ */
+:root{
+  --pxb-ink:#1a1a1a;
+  --pxb-border:3px;
+  --pxb-radius:0px;
+  --pxb-shadow:5px;
+}
+
+/* 기본 버튼 (흰 배경 / 활성) */
+.btn-px{
+  position:relative;
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:13px 22px;
+  background:#fff;
+  border:var(--pxb-border) solid var(--pxb-ink);
+  border-radius:var(--pxb-radius);
+  box-shadow:var(--pxb-shadow) var(--pxb-shadow) 0 0 var(--pxb-ink);
+  font-family:'Galmuri11','Press Start 2P',monospace;
+  font-weight:700;font-size:14px;color:var(--pxb-ink);
+  cursor:pointer;user-select:none;
+  transition:transform .06s ease, box-shadow .06s ease;
+}
+.btn-px:active{
+  transform:translate(var(--pxb-shadow),var(--pxb-shadow));
+  box-shadow:0 0 0 0 var(--pxb-ink);
+}
+.btn-px::before{
+  content:"";position:absolute;inset:6px;pointer-events:none;
+  background-repeat:no-repeat;background-size:5px 5px;
+  background-position:0 0,100% 0,0 100%,100% 100%;
+  background-image:
+    radial-gradient(circle,rgba(0,0,0,.4) 42%,transparent 43%),
+    radial-gradient(circle,rgba(0,0,0,.4) 42%,transparent 43%),
+    radial-gradient(circle,rgba(0,0,0,.4) 42%,transparent 43%),
+    radial-gradient(circle,rgba(0,0,0,.4) 42%,transparent 43%);
+}
+/* 보조(회색) 버튼 */
+.btn-px.secondary{background:#dcdde0}
+/* 비활성 버튼 */
+.btn-px.disabled{
+  background:#f0f0f0;color:#bbb;border-color:#ccc;
+  box-shadow:var(--pxb-shadow) var(--pxb-shadow) 0 0 #ccc;
+  cursor:not-allowed;pointer-events:none;
+}
+.btn-px.disabled::before{opacity:.25}
+
+/* 정사각 아이콘 버튼 (×, +, ↑, ← 등) */
+.icon-btn-px{
+  position:relative;flex-shrink:0;
+  width:38px;height:38px;
+  display:inline-flex;align-items:center;justify-content:center;
+  background:#fff;border:var(--pxb-border) solid var(--pxb-ink);
+  border-radius:var(--pxb-radius);
+  box-shadow:4px 4px 0 0 var(--pxb-ink);
+  font-size:16px;font-weight:900;color:var(--pxb-ink);line-height:1;
+  cursor:pointer;transition:transform .06s ease, box-shadow .06s ease;
+}
+.icon-btn-px:active{transform:translate(4px,4px);box-shadow:0 0 0 0 var(--pxb-ink)}
+.icon-btn-px::before{
+  content:"";position:absolute;inset:5px;pointer-events:none;
+  background-repeat:no-repeat;background-size:4px 4px;
+  background-position:0 0,100% 0,0 100%,100% 100%;
+  background-image:
+    radial-gradient(circle,rgba(0,0,0,.4) 42%,transparent 43%),
+    radial-gradient(circle,rgba(0,0,0,.4) 42%,transparent 43%),
+    radial-gradient(circle,rgba(0,0,0,.4) 42%,transparent 43%),
+    radial-gradient(circle,rgba(0,0,0,.4) 42%,transparent 43%);
+}
+
+/* 아이템/재화 칩 (쵸크 x120 스타일) */
+.chip-px{
+  position:relative;
+  display:inline-flex;align-items:center;gap:8px;
+  padding:6px 16px 6px 6px;
+  background:#dcdde0;border:var(--pxb-border) solid var(--pxb-ink);
+  border-radius:var(--pxb-radius);
+  box-shadow:4px 4px 0 0 var(--pxb-ink);
+  cursor:pointer;transition:transform .06s ease, box-shadow .06s ease;
+}
+.chip-px:active{transform:translate(4px,4px);box-shadow:0 0 0 0 var(--pxb-ink)}
+.chip-px-icon{
+  width:30px;height:30px;border-radius:0;background:#fff;
+  border:2px solid var(--pxb-ink);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;overflow:hidden;
+}
+.chip-px-icon img{width:22px;height:auto;object-fit:contain;image-rendering:pixelated}
+.chip-px-text{font-family:'Galmuri11',monospace;font-weight:700;font-size:12px;color:var(--pxb-ink);white-space:nowrap}
+
+/* 패널/모달 컨테이너 (통일된 테두리) */
+.card-px{
+  background:#fff;border:var(--pxb-border) solid var(--pxb-ink);
+  border-radius:var(--pxb-radius);
+  box-shadow:var(--pxb-shadow) var(--pxb-shadow) 0 0 var(--pxb-ink);
+}
+
+/* 소형 버튼 (카드 내부용) */
+.btn-px.sm{padding:10px 16px;font-size:13px;box-shadow:3px 3px 0 0 var(--pxb-ink)}
+.btn-px.sm:active{transform:translate(3px,3px);box-shadow:0 0 0 0 var(--pxb-ink)}
+.btn-px.sm.disabled{box-shadow:3px 3px 0 0 #ccc}
+
+/* 쵸크 대시보드 */
+.dash-section{margin-bottom:20px}
+.dash-section-title{font-size:13px;color:#888;margin-bottom:8px;display:flex;align-items:center;gap:5px}
+.dash-card{border:2px solid #eee;border-radius:10px;padding:12px;display:flex;align-items:center;gap:10px;margin-bottom:8px;background:#fafafa}
+.dash-card-icon{width:32px;height:32px;border-radius:50%;background:#fff;border:2px solid #ddd;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.dash-card-info{flex:1;min-width:0}
+.dash-card-title{font-size:14px;color:#111}
+.dash-card-desc{font-size:11px;color:#999;margin-top:4px;line-height:1.5}
+.dash-progress-bar{height:6px;background:#eee;border-radius:3px;overflow:hidden;margin-top:6px}
+.dash-progress-fill{height:100%;background:#2a9d8f;transition:width .2s}
 </style>
 
 <div class="phone">
@@ -83,8 +216,10 @@ svg{color:#bbb}
 
   <div class="char-area">
     <img class="nabi-img" src="data:image/png;base64,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" alt="Powdered Nabi" />
-    <div class="chalk-row">
-      <img class="chalk-img" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAbCAMAAAAqGX2oAAABWGlDQ1BJQ0MgUHJvZmlsZQAAeJx9kLFLw1AQxr9WpaB1EB0cHDKJQ5SSCro4tBVEcQhVweqUvqapkMZHkiIFN/+Bgv+BCs5uFoc6OjgIopPo5uSk4KLleS+JpCJ6j+N+fO+74zggOW5wbvcDqDu+W1zKK5ulLSX1jAS9IAzm8Zyur0r+rj/j/T703k7LWb///43Biukxqp+UGcZdH0ioxPqezyXvE4+5tBRxS7IV8onkcsjngWe9WCC+JlZYzagQvxCr5R7d6uG63WDRDnL7tOlsrMk5lBNYxA48cNgw0IQCHdk//LOBv4BdcjfhUp+FGnzqyZEiJ5jEy3DAMAOVWEOGUpN3ju53F91PjbWDJ2ChI4S4iLWVDnA2Rydrx9rUPDAyBFy1ueEagdRHmaxWgddTYLgEjN5Qz7ZXzWrh9uk8MPAoxNskkDoEui0hPo6E6B5T8wNw6XwBA6diE8HYWhMAAAD/UExURf7+/gICAkJCQrC4vCcnJzc4OIKLkdLX2hcXF6aprB0hJdnd4n6Kj5CVmcbHxzs8QEBAP2BiZLO9wQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHPjxzsAAABAdFJOU/////////////////////////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACOC0byAAAAu0lEQVR42s2SyxLCIAxFE/KASGnV//9Yw2NcALp0PAu6yOHObVqAHxPP88sUHcj1+DRnHI+dQphYADLEyIy8u59ya+H0qLXA6Ak541ZISI6ZFZRVCN4MQ0eQ1w5JsDkNXgXP7/f9ZF6FcwhiyqEqaQ4QawFi1gWcA1yQKhRLO8FfKyK1CjXAhYLTDsAF6h0d1WMrEIlclwip6iTwWOPgmAXy1SA+3/ND54/R9vcYcy26/2cC3jrpHgz+ihdV+ASspGHtHgAAAABJRU5ErkJggg==" alt="chalk" />
+    <div class="chalk-row chip-px" onclick="window.location.href='chalk-dashboard.html'">
+      <span class="chip-px-icon">
+        <img class="chalk-img" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAbCAMAAAAqGX2oAAABWGlDQ1BJQ0MgUHJvZmlsZQAAeJx9kLFLw1AQxr9WpaB1EB0cHDKJQ5SSCro4tBVEcQhVweqUvqapkMZHkiIFN/+Bgv+BCs5uFoc6OjgIopPo5uSk4KLleS+JpCJ6j+N+fO+74zggOW5wbvcDqDu+W1zKK5ulLSX1jAS9IAzm8Zyur0r+rj/j/T703k7LWb///43Biukxqp+UGcZdH0ioxPqezyXvE4+5tBRxS7IV8onkcsjngWe9WCC+JlZYzagQvxCr5R7d6uG63WDRDnL7tOlsrMk5lBNYxA48cNgw0IQCHdk//LOBv4BdcjfhUp+FGnzqyZEiJ5jEy3DAMAOVWEOGUpN3ju53F91PjbWDJ2ChI4S4iLWVDnA2Rydrx9rUPDAyBFy1ueEagdRHmaxWgddTYLgEjN5Qz7ZXzWrh9uk8MPAoxNskkDoEui0hPo6E6B5T8wNw6XwBA6diE8HYWhMAAAD/UExURf7+/gICAkJCQrC4vCcnJzc4OIKLkdLX2hcXF6aprB0hJdnd4n6Kj5CVmcbHxzs8QEBAP2BiZLO9wQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHPjxzsAAABAdFJOU/////////////////////////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACOC0byAAAAu0lEQVR42s2SyxLCIAxFE/KASGnV//9Yw2NcALp0PAu6yOHObVqAHxPP88sUHcj1+DRnHI+dQphYADLEyIy8u59ya+H0qLXA6Ak541ZISI6ZFZRVCN4MQ0eQ1w5JsDkNXgXP7/f9ZF6FcwhiyqEqaQ4QawFi1gWcA1yQKhRLO8FfKyK1CjXAhYLTDsAF6h0d1WMrEIlclwip6iTwWOPgmAXy1SA+3/ND54/R9vcYcy26/2cC3jrpHgz+ihdV+ASspGHtHgAAAABJRU5ErkJggg==" alt="chalk" />
+      </span>
       <div class="chalk-text">
         <div class="px chalk-count">12</div>
         <div class="px chalk-unit">꼬집</div>
@@ -144,6 +279,8 @@ function setNav(i) {
   });
 }
 </script>
+
+
 
 </body>
 </html>

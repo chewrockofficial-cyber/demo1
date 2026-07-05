@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>쵸크 대시보드 - Nabi</title>
+<style>
+@font-face {
+  font-family: 'Galmuri11';
+  src: url('https://cdn.jsdelivr.net/gh/quiple/galmuri/dist/Galmuri11.woff2') format('woff2');
+  font-weight: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Galmuri11';
+  src: url('https://cdn.jsdelivr.net/gh/quiple/galmuri/dist/Galmuri11-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-display: swap;
+}
+* { font-family: 'Galmuri11', 'Press Start 2P', monospace !important; }
+.phone { border-radius: 32px !important; overflow: hidden !important; }
+img { image-rendering: pixelated; }
+</style>
+<style>
+html, body {
+  margin: 0; padding: 0;
+  background: #f0f0f0;
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+}
+</style>
+</head>
+<body>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+.px{font-family:'Press Start 2P',monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+.phone{
+  width:360px;height:740px;background:#fff;
+  border:2px solid #ddd;border-radius:32px;
+  margin:1rem auto;display:flex;flex-direction:column;overflow:hidden
+}
+.page-header{display:flex;align-items:center;gap:12px;padding:18px;border-bottom:2px solid #eee;flex-shrink:0}
+.page-header-title{flex:1;min-width:0}
+.page-header-title .px{font-size:15px;color:#111}
+.page-header-sub{font-size:12px;color:#888;margin-top:4px}
+
+</head>
+<body>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+.px{font-family:'Press Start 2P',monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+.phone{
+  width:360px;height:740px;background:#fff;
+  border:2px solid #ddd;border-radius:32px;
+  margin:1rem auto;display:flex;flex-direction:column;overflow:hidden
+}
+.topbar{display:flex;justify-content:flex-end;align-items:center;padding:38px 38px 4px}
+.notif-wrap{position:relative;display:inline-block}
+.notif-dot{width:9px;height:9px;background:#ff4444;border:2px solid #fff;border-radius:50%;position:absolute;top:-2px;right:-2px}
+.stage-area{text-align:center;padding:44px 0 2px}
+.stage-text{font-size:13.5px;color:#111;letter-spacing:1px}
+.stage-sub{font-size:7px;color:#888;margin-top:6px}
+.pills{display:flex;gap:5px;justify-content:center;padding:10px 16px 4px;flex-wrap:wrap}
+.pill{font-size:6px;padding:4px 7px;border-radius:4px;border:1.5px solid #ddd;color:#bbb;background:#f8f8f8;font-family:'Press Start 2P',monospace}
+.pill.active{border-color:#222;color:#111;background:#fff}
+.char-area{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0}
+.nabi-img{width:130px;height:auto;image-rendering:pixelated;display:block}
+.chalk-row{display:flex;align-items:center;gap:10px;margin-top:18px}
+.chalk-img{width:34px;height:auto;image-rendering:pixelated;display:block}
+.chalk-text{display:flex;align-items:baseline;gap:6px}
+.chalk-count{font-size:15px;color:#111}
+.chalk-unit{font-size:8px;color:#999}
+.bottomnav{background:#fff;border-top:1.5px solid #eee;display:flex;padding:14px 0 20px}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;padding:4px 0}
+.nav-label{font-size:8px;color:#bbb;font-family:'Press Start 2P',monospace}
+.nav-item.active .nav-label{color:#111}
+.nav-item.active svg{color:#111}
+svg{color:#bbb}
+
+/* ============================================================
+   PIXEL BUTTON DESIGN SYSTEM (Chew Rock 공통 컴포넌트)
+   - 모든 화면(index/gym/shop/record/notification)에 동일하게 적용
+   ============================================================ */
+:root{
+  --pxb-ink:#1a1a1a;
+  --pxb-border:3px;
+  --pxb-radius:0px;
+  --pxb-shadow:5px;
+}
+
+/* 기본 버튼 (흰 배경 / 활성) */
+.btn-px{
+  position:relative;
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:13px 22px;
+  background:#fff;
+  border:var(--pxb-border) solid var(--pxb-ink);
+  border-radius:var(--pxb-radius);
+  box-shadow:var(--pxb-shadow) var(--pxb-shadow) 0 0 var(--pxb-ink);
+  font-family:'Galmuri11','Press Start 2P',monospace;
+  font-weight:700;font-size:14px;color:var(--pxb-ink);
+  cursor:pointer;user-select:none;
+  transition:transform .06s ease, box-shadow .06s ease;
+}
+.btn-px:active{
+  transform:translate(var(--pxb-shadow),var(--pxb-shadow));
+  box-shadow:0 0 0 0 var(--pxb-ink);
+}
+.btn-px::before{
+  content:"";position:absolute;inset:6px;pointer-events:none;
+  background-repeat:no-repeat;background-size:5px 5px;
+  background-position:0 0,100% 0,0 100%,100% 100%;
+  background-image:
+    radial-gradient(circle,rgba(0,0,0,.4) 42%,transparent 43%),
+    radial-gradient(circle,rgba(0,0,0,.4) 42%,transparent 43%),
+    radial-gradient(circle,rgba(0,0,0,.4) 42%,transparent 43%),
+    radial-gradient(circle,rgba(0,0,0,.4) 42%,transparent 43%);
+}
+/* 보조(회색) 버튼 */
+.btn-px.secondary{background:#dcdde0}
+/* 비활성 버튼 */
+.btn-px.disabled{
+  background:#f0f0f0;color:#bbb;border-color:#ccc;
+  box-shadow:var(--pxb-shadow) var(--pxb-shadow) 0 0 #ccc;
+  cursor:not-allowed;pointer-events:none;
+}
+.btn-px.disabled::before{opacity:.25}
+
+/* 정사각 아이콘 버튼 (×, +, ↑, ← 등) */
+.icon-btn-px{
+  position:relative;flex-shrink:0;
+  width:38px;height:38px;
+  display:inline-flex;align-items:center;justify-content:center;
+  background:#fff;border:var(--pxb-border) solid var(--pxb-ink);
+  border-radius:var(--pxb-radius);
+  box-shadow:4px 4px 0 0 var(--pxb-ink);
+  font-size:16px;font-weight:900;color:var(--pxb-ink);line-height:1;
+  cursor:pointer;transition:transform .06s ease, box-shadow .06s ease;
+}
+.icon-btn-px:active{transform:translate(4px,4px);box-shadow:0 0 0 0 var(--pxb-ink)}
+.icon-btn-px::before{
+  content:"";position:absolute;inset:5px;pointer-events:none;
+  background-repeat:no-repeat;background-size:4px 4px;
+  background-position:0 0,100% 0,0 100%,100% 100%;
+  background-image:
+    radial-gradient(circle,rgba(0,0,0,.4) 42%,transparent 43%),
+    radial-gradient(circle,rgba(0,0,0,.4) 42%,transparent 43%),
+    radial-gradient(circle,rgba(0,0,0,.4) 42%,transparent 43%),
+    radial-gradient(circle,rgba(0,0,0,.4) 42%,transparent 43%);
+}
+
+/* 아이템/재화 칩 (쵸크 x120 스타일) */
+.chip-px{
+  position:relative;
+  display:inline-flex;align-items:center;gap:8px;
+  padding:6px 16px 6px 6px;
+  background:#dcdde0;border:var(--pxb-border) solid var(--pxb-ink);
+  border-radius:var(--pxb-radius);
+  box-shadow:4px 4px 0 0 var(--pxb-ink);
+  cursor:pointer;transition:transform .06s ease, box-shadow .06s ease;
+}
+.chip-px:active{transform:translate(4px,4px);box-shadow:0 0 0 0 var(--pxb-ink)}
+.chip-px-icon{
+  width:30px;height:30px;border-radius:0;background:#fff;
+  border:2px solid var(--pxb-ink);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;overflow:hidden;
+}
+.chip-px-icon img{width:22px;height:auto;object-fit:contain;image-rendering:pixelated}
+.chip-px-text{font-family:'Galmuri11',monospace;font-weight:700;font-size:14px;color:var(--pxb-ink);white-space:nowrap}
+
+/* 패널/모달 컨테이너 (통일된 테두리) */
+.card-px{
+  background:#fff;border:var(--pxb-border) solid var(--pxb-ink);
+  border-radius:var(--pxb-radius);
+  box-shadow:var(--pxb-shadow) var(--pxb-shadow) 0 0 var(--pxb-ink);
+}
+
+/* 소형 버튼 (카드 내부용) */
+.btn-px.sm{padding:10px 16px;font-size:13px;box-shadow:3px 3px 0 0 var(--pxb-ink)}
+.btn-px.sm:active{transform:translate(3px,3px);box-shadow:0 0 0 0 var(--pxb-ink)}
+.btn-px.sm.disabled{box-shadow:3px 3px 0 0 #ccc}
+
+/* 쵸크 대시보드 */
+.dash-section{margin-bottom:20px}
+.dash-section-title{font-size:13px;color:#888;margin-bottom:10px;display:flex;align-items:center;gap:5px}
+.dash-card{border:2px solid #eee;border-radius:0;padding:14px;display:flex;align-items:center;gap:12px;margin-bottom:10px;background:#fafafa}
+.dash-card-icon{width:34px;height:34px;border-radius:0;background:#fff;border:2px solid #ddd;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.dash-card-info{flex:1;min-width:0}
+.dash-card-title{font-size:14px;color:#111}
+.dash-card-desc{font-size:11px;color:#999;margin-top:4px;line-height:1.5}
+.dash-progress-bar{height:6px;background:#eee;border-radius:3px;overflow:hidden;margin-top:6px}
+.dash-progress-fill{height:100%;background:#2a9d8f;transition:width .2s}
+</style>
+
+<div class="phone">
+  <!-- 헤더 -->
+  <div class="page-header">
+    <button class="icon-btn-px" onclick="window.location.href='index.html'" style="width:34px;height:34px;font-size:16px">←</button>
+    <div class="page-header-title">
+      <div class="px">🤍 쵸크 대시보드</div>
+      <div class="px page-header-sub">총 <span id="chalkTotal">0</span>꼬집 보유</div>
+    </div>
+  </div>
+
+  <!-- 대시보드 컨텐츠 -->
+  <div id="chalkDashboardBody" style="overflow-y:auto;padding:16px 18px;flex:1"></div>
+
+  <!-- 하단 액션 -->
+  <div style="display:flex;justify-content:space-between;gap:8px;
+    padding:12px 18px 16px;border-top:2px solid #eee;flex-shrink:0">
+    <button class="btn-px secondary sm" onclick="window.location.href='index.html'">← 뒤로가기</button>
+    <button class="btn-px sm" onclick="openChalkHistory()">사용 히스토리</button>
+  </div>
+</div>
+
+<!-- 쵸크 사용 히스토리 모달 -->
+<div id="chalkHistoryBackdrop" onclick="closeChalkHistory(event)" style="
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,0.45);z-index:520;
+  align-items:flex-end;justify-content:center;
+">
+  <div onclick="event.stopPropagation()" style="
+    background:#fff;width:360px;
+    border:var(--pxb-border) solid var(--pxb-ink);
+    border-bottom:none;
+    border-radius:20px 20px 0 0;
+    max-height:70vh;display:flex;flex-direction:column;
+  ">
+    <div style="width:40px;height:4px;background:#ddd;border:1px solid #ccc;
+      border-radius:2px;margin:12px auto 0;flex-shrink:0"></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;
+      padding:14px 18px 12px;border-bottom:2px solid #eee;flex-shrink:0">
+      <div class="px" style="font-size:15px;color:#111">🧾 쵸크 사용 히스토리</div>
+      <button class="icon-btn-px" onclick="closeChalkHistory()" style="width:32px;height:32px;font-size:16px">×</button>
+    </div>
+    <div id="chalkLogList" style="overflow-y:auto;padding:12px 18px 24px;flex:1"></div>
+  </div>
+</div>
+
+<script>
+// ── 더미 상태 (실서비스 연동 전 프론트 목업) ─────────────
+var chalkState = {
+  balance: 12,
+  attendanceChecked: false,     // 오늘 출석 체크 여부
+  recordCount: 7,               // 누적 기록 개수(더미)
+  milestones: {                 // 기록 개수 보상
+    5:  { reward: 5,  claimed: true  },
+    10: { reward: 10, claimed: false },
+    20: { reward: 20, claimed: false }
+  },
+  adWatchCount: 2,              // 오늘 시청한 광고 수
+  adWatchLimit: 5               // 하루 최대 시청 가능 횟수
+};
+
+// 쵸크 구매(현질) 옵션
+var CHALK_PRODUCTS = [
+  { amt: 30,  price: 1200,  label: "30꼬집" },
+  { amt: 100, price: 3500,  label: "100꼬집" },
+  { amt: 300, price: 9900,  label: "300꼬집" }
+];
+
+// 쵸크 사용/획득 히스토리 더미 데이터
+var CHALK_LOG = [
+  { icon: "🧗", type: "클라이밍 기록", desc: "더클라임 강남 · 5개 루트", amt: +5,  date: "오늘" },
+  { icon: "🏆", type: "연속 기록 보상", desc: "7일 연속 달성!",           amt: +10, date: "어제" },
+  { icon: "🤍", type: "공동 쵸크 기부", desc: "더클라임 강남에 기부",     amt: -3,  date: "어제" },
+  { icon: "🧗", type: "클라이밍 기록", desc: "비스킷 홍대 · 3개 루트",   amt: +3,  date: "3일 전" },
+  { icon: "🎁", type: "출석 보상",      desc: "오늘의 출석 체크",          amt: +1,  date: "3일 전" },
+  { icon: "🧗", type: "클라이밍 기록", desc: "클라밍고 성수 · 8개 루트", amt: +8,  date: "5일 전" },
+  { icon: "🤍", type: "공동 쵸크 기부", desc: "클라밍고 성수에 기부",     amt: -5,  date: "5일 전" },
+  { icon: "🏆", type: "마일스톤 보상", desc: "누적 10회 기록 달성",        amt: +20, date: "일주일 전" },
+  { icon: "🧗", type: "클라이밍 기록", desc: "더클라임 강남 · 4개 루트", amt: +4,  date: "일주일 전" },
+];
+
+function fmtWon(n){ return n.toLocaleString("ko-KR") + "원"; }
+
+function addChalk(n){
+  chalkState.balance += n;
+  updateChalkDisplay();
+}
+
+function updateChalkDisplay(){
+  var total = document.getElementById("chalkTotal");
+  if (total) total.textContent = chalkState.balance;
+}
+
+// ── 대시보드 렌더링 ─────────────
+function renderChalkDashboard(){
+  var s = chalkState;
+
+  var attendanceHTML =
+    '<div class="dash-section">' +
+      '<div class="px dash-section-title">📅 출석 체크</div>' +
+      '<div class="dash-card">' +
+        '<div class="dash-card-icon">🎁</div>' +
+        '<div class="dash-card-info">' +
+          '<div class="px dash-card-title">오늘의 출석 체크</div>' +
+          '<div class="px dash-card-desc">앱 접속 시 +1꼬집 지급</div>' +
+        '</div>' +
+        (s.attendanceChecked
+          ? '<button class="btn-px sm disabled">완료</button>'
+          : '<button class="btn-px sm" onclick="checkAttendance()">받기</button>') +
+      '</div>' +
+    '</div>';
+
+  var milestoneCards = [5, 10, 20].map(function(m){
+    var info = s.milestones[m];
+    var reached = s.recordCount >= m;
+    var pct = Math.min(100, Math.round(s.recordCount / m * 100));
+    var btn;
+    if (info.claimed) btn = '<button class="btn-px sm disabled">완료</button>';
+    else if (reached) btn = '<button class="btn-px sm" onclick="claimMilestone(' + m + ')">받기</button>';
+    else btn = '<button class="btn-px sm disabled">' + s.recordCount + '/' + m + '</button>';
+
+    return (
+      '<div class="dash-card" style="align-items:flex-start">' +
+        '<div class="dash-card-icon" style="margin-top:2px">🧗</div>' +
+        '<div class="dash-card-info">' +
+          '<div class="px dash-card-title">기록 ' + m + '개 업데이트</div>' +
+          '<div class="px dash-card-desc">완료 시 +' + info.reward + '꼬집</div>' +
+          '<div class="dash-progress-bar"><div class="dash-progress-fill" style="width:' + pct + '%"></div></div>' +
+        '</div>' +
+        btn +
+      '</div>'
+    );
+  }).join("");
+
+  var milestoneHTML =
+    '<div class="dash-section">' +
+      '<div class="px dash-section-title">🏆 기록 마일스톤 보상</div>' +
+      milestoneCards +
+    '</div>';
+
+  var adDone = s.adWatchCount >= s.adWatchLimit;
+  var adHTML =
+    '<div class="dash-section">' +
+      '<div class="px dash-section-title">📺 광고 보고 받기</div>' +
+      '<div class="dash-card">' +
+        '<div class="dash-card-icon">▶️</div>' +
+        '<div class="dash-card-info">' +
+          '<div class="px dash-card-title">광고 시청하고 +1꼬집</div>' +
+          '<div class="px dash-card-desc">오늘 ' + s.adWatchCount + '/' + s.adWatchLimit + '회 시청</div>' +
+        '</div>' +
+        (adDone
+          ? '<button class="btn-px sm disabled">마감</button>'
+          : '<button class="btn-px sm" onclick="watchAd()">시청</button>') +
+      '</div>' +
+    '</div>';
+
+  var buyCards = CHALK_PRODUCTS.map(function(p, i){
+    return (
+      '<div class="dash-card">' +
+        '<div class="dash-card-icon">💰</div>' +
+        '<div class="dash-card-info">' +
+          '<div class="px dash-card-title">' + p.label + '</div>' +
+          '<div class="px dash-card-desc">' + fmtWon(p.price) + '</div>' +
+        '</div>' +
+        '<button class="btn-px sm" onclick="buyChalk(' + i + ')">구매</button>' +
+      '</div>'
+    );
+  }).join("");
+
+  var buyHTML =
+    '<div class="dash-section" style="margin-bottom:4px">' +
+      '<div class="px dash-section-title">💳 쵸크 충전하기</div>' +
+      buyCards +
+    '</div>';
+
+  document.getElementById("chalkDashboardBody").innerHTML =
+    attendanceHTML + milestoneHTML + adHTML + buyHTML;
+}
+
+function checkAttendance(){
+  if (chalkState.attendanceChecked) return;
+  chalkState.attendanceChecked = true;
+  addChalk(1);
+  renderChalkDashboard();
+}
+
+function claimMilestone(m){
+  var info = chalkState.milestones[m];
+  if (!info || info.claimed || chalkState.recordCount < m) return;
+  info.claimed = true;
+  addChalk(info.reward);
+  renderChalkDashboard();
+}
+
+function watchAd(){
+  if (chalkState.adWatchCount >= chalkState.adWatchLimit) return;
+  // TODO: 실제 광고 SDK 연동 지점
+  chalkState.adWatchCount += 1;
+  addChalk(1);
+  renderChalkDashboard();
+}
+
+function buyChalk(i){
+  var p = CHALK_PRODUCTS[i];
+  // TODO: 실제 인앱결제(IAP) 연동 지점
+  alert(p.label + " 상품 결제 기능은 준비 중이에요! (" + fmtWon(p.price) + ")");
+}
+
+function openChalkHistory(){
+  var list = document.getElementById("chalkLogList");
+  list.innerHTML = CHALK_LOG.map(function(item) {
+    var amtColor = item.amt > 0 ? "#2a9d8f" : "#e63946";
+    var amtText  = item.amt > 0 ? "+" + item.amt + "꼬집" : item.amt + "꼬집";
+    return (
+      "<div style=\"display:flex;align-items:center;gap:12px;" +
+      "padding:11px 0;border-bottom:1.5px solid #f0f0f0;\">" +
+        "<div style=\"width:36px;height:36px;background:#f5f5f5;" +
+        "border:2px solid #eee;display:flex;align-items:center;" +
+        "justify-content:center;font-size:18px;flex-shrink:0\">" +
+          item.icon +
+        "</div>" +
+        "<div style=\"flex:1\">" +
+          "<div class=\"px\" style=\"font-size:15px;color:#111\">" + item.type + "</div>" +
+          "<div class=\"px\" style=\"font-size:12px;color:#888;margin-top:5px;line-height:1.6\">" + item.desc + "</div>" +
+          "<div class=\"px\" style=\"font-size:10px;color:#bbb;margin-top:4px\">" + item.date + "</div>" +
+        "</div>" +
+        "<div class=\"px\" style=\"font-size:15px;font-weight:700;color:" + amtColor + ";flex-shrink:0\">" +
+          amtText +
+        "</div>" +
+      "</div>"
+    );
+  }).join("");
+  document.getElementById("chalkHistoryBackdrop").style.display = "flex";
+}
+
+function closeChalkHistory(e){
+  if (e && e.target !== document.getElementById("chalkHistoryBackdrop")) return;
+  document.getElementById("chalkHistoryBackdrop").style.display = "none";
+}
+
+// ── 페이지 진입 시 초기화 ─────────────
+updateChalkDisplay();
+renderChalkDashboard();
+</script>
+
+</body>
+</html>
