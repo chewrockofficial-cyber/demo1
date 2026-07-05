@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chew Rock — Shop</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+    .px { font-family: 'Press Start 2P', monospace; }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      background: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    /* 폰 프레임 (예진님 스타일) */
+    .phone {
+      width: 360px;
+      height: 740px;
+      background: #fff;
+      border: 2px solid #ddd;
+      border-radius: 32px;
+      margin: 1rem auto;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* 상단 헤더 */
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 30px 20px 8px;
+      flex-shrink: 0;
+    }
+    .topbar-title {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 12px;
+      color: #111;
+      letter-spacing: 1px;
+    }
+    .balance {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #f8f8f8;
+      border: 1.5px solid #ddd;
+      padding: 6px 10px;
+      border-radius: 8px;
+    }
+    .balance img {
+      width: 22px;
+      height: auto;
+      image-rendering: pixelated;
+      display: block;
+    }
+    .balance-text {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 10px;
+      color: #111;
+    }
+
+    /* 나비 미리보기 (스크롤 밖, 고정 영역) */
+    .preview {
+      background: #fafafa;
+      margin: 8px 20px 4px;
+      border: 1.5px solid #eee;
+      border-radius: 12px;
+      padding: 12px;
+      display: flex;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .nabi-canvas {
+      position: relative;
+      width: 128px;
+      height: 128px;
+    }
+    .nabi-canvas img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      image-rendering: pixelated;
+    }
+    /* 레이어 우선순위 (fitting.html과 동일) */
+    .layer-base    { z-index: 1; }
+    .layer-bottom  { z-index: 2; }
+    .layer-shoes   { z-index: 3; }
+    .layer-top     { z-index: 4; }
+    .layer-bag     { z-index: 5; }
+    .layer-hand    { z-index: 6; }
+
+    /* 스크롤 영역 */
+    .scroll-area {
+      flex: 1;
+      overflow-y: auto;
+      padding: 4px 16px 12px;
+    }
+    .scroll-area::-webkit-scrollbar { width: 4px; }
+    .scroll-area::-webkit-scrollbar-thumb { background: #ddd; border-radius: 4px; }
+
+    /* 카테고리 탭 (예진님 pills 스타일) */
+    .pills {
+      display: flex;
+      gap: 5px;
+      justify-content: center;
+      padding: 8px 0 12px;
+      flex-wrap: wrap;
+    }
+    .pill {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 6px;
+      padding: 5px 8px;
+      border-radius: 4px;
+      border: 1.5px solid #ddd;
+      color: #bbb;
+      background: #f8f8f8;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .pill.active {
+      border-color: #222;
+      color: #111;
+      background: #fff;
+    }
+
+    /* 아이템 그리드 */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+    .item {
+      background: #fff;
+      border: 1.5px solid #ddd;
+      border-radius: 10px;
+      padding: 8px;
+      cursor: pointer;
+      transition: transform 0.1s, border-color 0.15s;
+      position: relative;
+    }
+    .item:hover {
+      border-color: #222;
+      transform: translateY(-1px);
+    }
+    .item.owned {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .item.owned:hover {
+      border-color: #ddd;
+      transform: none;
+    }
+
+    .badge-new {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      background: #ff4444;
+      color: #fff;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 5px;
+      padding: 3px 5px;
+      border-radius: 3px;
+      letter-spacing: 0.5px;
+      z-index: 2;
+    }
+
+    .item-image {
+      background: #fafafa;
+      border-radius: 6px;
+      padding: 8px;
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 6px;
+      position: relative;
+    }
+    .item-image img {
+      width: 90%;
+      height: 90%;
+      object-fit: contain;
+      image-rendering: pixelated;
+    }
+    .owned-check {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      background: #111;
+      color: #fff;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+    }
+
+    .item-name {
+      font-size: 11px;
+      color: #333;
+      margin-bottom: 6px;
+      line-height: 1.3;
+      min-height: 30px;
+    }
+    .item-price {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      background: #f8f8f8;
+      border: 1.5px solid #eee;
+      padding: 4px 6px;
+      border-radius: 5px;
+    }
+    .item-price img {
+      width: 14px;
+      height: auto;
+      image-rendering: pixelated;
+    }
+    .item-price-text {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 8px;
+      color: #111;
+    }
+    .price-owned {
+      background: #f0f0f0;
+      color: #999;
+    }
+    .price-owned .item-price-text { color: #999; }
+
+    /* 하단 네비 (예진님과 완전 동일) */
+    .bottomnav {
+      background: #fff;
+      border-top: 1.5px solid #eee;
+      display: flex;
+      padding: 14px 0 20px;
+      flex-shrink: 0;
+    }
+    .nav-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      padding: 4px 0;
+      color: #bbb;
+    }
+    .nav-label {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 8px;
+    }
+    .nav-item.active { color: #111; }
+    .nav-item.active .nav-label { color: #111; }
+  </style>
+</head>
+<body>
+  <div class="phone">
+    <!-- 상단 -->
+    <div class="topbar">
+      <div class="topbar-title">SHOP</div>
+      <div class="balance">
+        <img id="balance-icon" src="/images/chalk_piece.png" alt="쵸크">
+        <span class="balance-text">×<span id="balance-count">128</span></span>
+      </div>
+    </div>
+
+    <!-- 나비 미리보기 (스크롤 밖에 고정) -->
+    <div class="preview">
+      <div class="nabi-canvas" id="nabi-canvas">
+        <img class="layer-base" id="nabi-base" src="/images/nabi_front_01.png" alt="나비">
+        <!-- 착용중인 아이템 레이어가 JS로 여기에 추가됨 -->
+      </div>
+    </div>
+
+    <!-- 스크롤 영역 -->
+    <div class="scroll-area">
+      <div class="pills" id="pills">
+        <div class="pill active" data-category="all">ALL</div>
+        <div class="pill" data-category="top">TOP</div>
+        <div class="pill" data-category="bottom">BOTTOM</div>
+        <div class="pill" data-category="shoes">SHOES</div>
+        <div class="pill" data-category="head">HEAD</div>
+        <div class="pill" data-category="etc">ETC</div>
+      </div>
+
+      <div class="grid" id="grid"></div>
+    </div>
+
+      <!-- 메뉴바 -->
+  <div class="bottomnav">
+    <div class="nav-item" onclick="window.location.href='/'">
+      <img src="data:image/png;base64,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" style="width:36px;height:36px;image-rendering:pixelated;opacity:0.4"/>
+      <div class="nav-label">메인</div>
+    </div>
+    <div class="nav-item" onclick="window.location.href='record.html'">
+      <img src="data:image/png;base64,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" style="width:36px;height:36px;image-rendering:pixelated;opacity:0.4"/>
+      <div class="nav-label">기록</div>
+    </div>
+    <div class="nav-item" onclick="window.location.href='gym.html'">
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAOtElEQVR42l2Ze5BV1ZXGf2vtc+7tF2Aj0ITuvt10IzSgRpPUTM1MaubPmKpoolN5aWJQYx6T0SSVzPgABYyYxJD4IFqS6PiIhgQRQhwzE6cmTqIMkMk40cRHQ7+hFRpRGmi6771n7zV/7HMvJF11q7tPnbPP3uvxfd/6rgwMDGAYpc4SACLG6OgBADpLnagoZoGxsXhNVens7MRnGY1NTUb+45xDRNi9e4/Mnj0LgMWLF+drwujoGCEEzIyuri5UHAcOjgFgFiiVSpjV7h0FhLa2NqSaVTEzRoaHCCFuoLu7G4DBwUFUFeccnaVOzAxBGB0ZYemyPhMxntrzIC5Rdj6zl6xq7P35r+l/aR/lckWGhwdI0wIhBEpdMQAYjI6M4IOnp6cXVa2/yzmHmVEqlRARjhw5ggYfsGCIOpI0yU9khBAQMUQk/o2AQbVaZfnK88yl8MTue5nW40z7k0xnZcqhzIUf+iukCM3Njabq8N5jZlgwgg+oKqJCmqaYGd57Qgj1DIAgIjEYYmgtRVj8mFmeFqmfKD4Yf5+cmsZnFbbsug9VUHMEjJAFQDGFT950DaixdNlSMzPMDHUxE94bwQwzqFbL+avtjE3FPagqIYDs2zeASKwLkbj74eFhQgj0Lumtb3BwYBARIcsyfn/0v0yKlXhahIzAzu2/RdIGEqcYgZAFtm54lIsvvpif7dwpxULBvAVC5mNAVGhqaOTll18WgPb2dpxzAIyOjSII8+bNQ0WsXrzx4+vRy6qVegpUlaamFs5937mmzmOE+uk1wAXnzscJhODzkhGuWf15nvnFL1AR82ngyd2b+PGue/jx7nv4xNc/RblcZuPGjetqQahFsFZWQExxLYXxBsfpa4rPMnzmCcHT1d1hP3jy20hiYIrl940MjSJO8tQJIUDIPFOuwsdWf4ZP3LyKx57bSJUqkgYkCVjRccXqq9m8+YdrYwCkXv9Y7f0glUoFM2NsbCzfJHR1dZGmKYUkNS8ePBjC95+8g9ZSIyqxYWrwMtA/QGax0F9+dTJmQgKal8CHP/RevGaIwfTJU0xMvAVW4KU/HuL1XS/zh+dfZHBwWHxWJXijq7sbEWFiYoIkdqvkYa3DGgWXWCgaW57fzI6du5Hg2fXKa1xSei8ew+Wb7O/fj5qQaB5BnyEuQYKCGB3ts0mdESxjoH8Uh6IqBH8K84Hlf3Mef9jzfyzp6bFXXn1NaqmuZVFrYa1dNDO2/GTLOkvgJy/cSzXLwAdIEkJV2LHzeVJxEVRV8sOBN5BgtC1oJAKq4Ktl/uIvexkYGGJ030FEBG9GlmUYxvnnLkBS4aP/9BmCQV9fn0W0iOsDyP79+4GYVoBKpULLrBbbvvuHVNw0FozfvzTC6MHjkEVMu/SyvybYFEP9I6gqZhDEAOWto9McemsaNc8ll1zAqZMVDr8xAUAgYDRj3qOJIH6aw++c4tCbZSTAT7/9I0LmZWhkGDOLXcyf/eza9cK6pef3MqMnCOJBA0YF8VOEMIUkCVWfklVjaVgIgBFbJhB8oFgInLfybHwmHBo/nK8sTJdTfvcfr7P32df5n18N4qXIvNYGVAJaUBrnN3PL2luNENdSVWRgYIAQAj09PYgISers4We/SzpHUITMw+j+EUxBDWZ8I/39b7By+RxSJ+RNx7e+8iA33X0NFhJwgpNA5j1OHWae8fEpHrr9CSonKhyeOMzChQsozmnk7m1rODT2Dq8Nv02C8vT929j7wh5JXML8+fPRjs4OOjs7GRwcpNhYMEmEwqy4aPABkZS3jlXylhUKSRnzM7zS/06dgm5ZtYmpt6ZZfcUmksSQ4Mm8J3GOYAFBMUkonyhz4sQJJo8d49VX+5k+Nk3qHGla5YLl86lmHh8y+pb1WUdHB5OTk2fioJJlga3/vQlVRUnJgGd+8SJpIUFNsMzQ4Dl/ZRtihkeYU1iIeKlDzgO3P4kPHq1zOCCgzlAV5syeReY9K5YvByBVBwJZ9RQrl83jA1d/GC0qNXTRGt8uW3aOYUY1VAFjqH+Ip3f8DsummNMcIyUaWytJlfOXn42WU6772Jq4gxwBRl4Zp9G3oprDRQALRntbM1v23oPHWLF8BcECP/nt9xgbGSP4WCdOZmhq9uCMlpYWS9M01qCI0Nvba0/suQucx1FgeN8of3j9DVYsnU+QWH+I1RGe6QbWXLsRs8CZ2AWCS5T1938daZ7JrxtOo1JqX9yJ5LeODo5BTq2GgHicJpgZt3xqExMTE5IA7N27d51IlDvBjKGBQSwoK/vm4QNYCKz90n18Y/N1YIIRODA8zhdv+gwP3PUI//DPqyIHIxwaOUJ3dxfjB96ks68VUSF4COa59fObuC1fIx40Hg6JQhkiTTa0NPLBKy+hra3NktbWVhobG3nujzuYmBnjtVcGSNQR+U1QhbtvfRR/wljz2U0UmhPW3PUFOvrm4qQBFO7f+AiWxahcdf3HWNQ7l2paJJhHUVRh9dWbsLJx19rHmDo+RXkq47bNX4pyQAwjRnHp0iXsfPo3NC6YhbeANjYWueyyy9ZOzhyJ9aUOzCLVCrhKI28PT8Uam4aZI1X8VIq6CENWNawMVEC8IQ58Fv5E7az57CakGqP29tAxKu94wlSMGLl6EUBNqPoKuAZcGntDzcAM9g8MMbRvGFGJgwGGVRw3X30nZ8ohgNu+cDf4lMzn8KMghZieLMtIipqLTmH4pQlshjOoVPDVuHmnLr8Wl6lmFX757IuEegmAtrTMsitWf5yKn8HwkRVUaSrMZs1Vd51eOFe9IoIXY/WV38MlKbc9/GW0AW574GsgsPzCxZT1OCJCGmbxLxu38ed8LyKIE1ZfdTdp0lBft++8C6lUHJYJqCIKama8532LIWQED4S48xu+8E2a5xdBoDDL0TS3QPPcIi3zG8AMbYDVn9uIGqy//zrWXPUd1j90PY/c8xSEFIAbP3cHOE/j3ALNC4o0tRZpPKtAy9kNmDdQ4dkdL6BA4lKyquazh4+CQxTRxNlD/3kH42Pj+VgpBAQRw+G4+dq7mLOgga+uuxZJIITA+mvu4/aHvoxJLnIV/LFG1t90J5d/9lLe/Z4VzHAcERh48RCLV3Sy/qvfwwJc+7XL6V1a4oYrvsmGJ76CEejsLlEsNrD96f9FAph4rCxs/fajKEEoFotIPr8aBuYhgOBwCfgyiCi3fupeNly3OZbon2PfnBn8cWP5+0rc8MUNeAtRdTklUYc/LlhF6O6bTyVMgUq9tp1Ttm/fgyKQCCIJW+98NDatmWfrT5/nwncvxCVRA6soIPgsdtqN3/kcwTw55iIFAZMI3CZxBhFBilLPEBL1jZmRpinfeOxL+aQWcInWu/esuXPZufN3iESAFtO8R5WRkSFRMyNJG1h+7rl1/rMQU+dDhmVGsHyASSMyWNVwKrnrYPjMWH3lPWx4+PpYwgLOwAL0XLCQqp7MdaNhPs7Hdzz+ZXwInDgF4gqYOiw/tFNFVUldQgLQ4FJ27NjDRy79Wwb3vxxP7sHUc+sD/5gDtrLh0a/WJ8Cqr+Kc46ykjeu/uJrbHs7vw6IYFSEh5BCSRyVvgYDhM0/fyveyffuvEXX5UB4IVeHxOx+kkBRoammMTbKwZyF/94kPIM4xuynQs/hsZk7ORDWh0TARheCJURPPPTc/Dmb8/dUX0bFkQR2Yx14/zFmz5tNaSvFVH5+V026Bpgnz2uax6zevMZOlmMU52RTEK7/a8gxHhg4zsH9A5s2bRzKwb78sWXaONaQFyr7KO5Oe45MV0jROZaiCERUHDiNy6obv34DHI4UKFsA5xXtj+njG4p7ZeJtGXYIFT6jxLsLkiYwXf/8SIgU0oT7mklsdJ48e57nnnltfm8W11FXiZ09tX//YNzbn/ouxb+Aor/cfY8ny3tijWlNUGbes2sTt996AL8wQ0jI+l2E1ZyqEALnncs7KpZyzYindS7rYufM1nv63fez97TCSNiCJYmS5jPOIGi1pA9PHpnn/+9+/rquri8nJd0h85rnoog+uc8haNx3wqSCqmBo/+/mLDA1OcN7KRZQ6G1l75X00nJ1SLUzlgG44JDatBUwEdcqirnYmjh/kye27Y+dWAot7FzE6djR2PwFMEYm1GTJIiwmPfPdhNm/evN5n1TyyipTLZUSEbdu2rbv8isvXfnz1qhwnUkQNEWXy2Elmn9UAGZEnkwBBMQ2YuXgfAsGicAwaQdzH8dOJYrkyeuPAUdo6WqPQMMEkIN7YesdjKMK+wf3S2dGOmXD48OE4dqoqCxcupLm52VxR+eiNn47Whhl4ZV//AZat7IijYwBcFEdR9WjdS3FyhllmAiEXo6IxakEYGz1MqfddiJ2GtK3feoSQQXlmRpxzjIzEcXbu3LmoquK9xznHzMyMiIdf/ejfQQ0JefGqEWWwoTldhpAXXY1L8i49LQpiyk2IhhQgDhYsao1KJX/8yOCbhKoxM30qVnlWBU6zlNbAuWbvTk+X5eiBI7T4BsCjzjN33hwG903UJb/lGi2YRUbIzR45Y8M167e2bqjhYGaY94gEUu/49bZnGRkZqT8qonmaIgslpVK0ZsfHx+tM8tS27esv/cilaz9546eRVFnY3sqJqen4UDCUOCSbKWpRP0otcjWlK5bX5OlomHjGRyZY2tfOljseRURYtWrV+vb29ronaBYodXdhZkxMTER3C4julkRLctGid9HU1GxmhhSEi666mGPTnu7utjjnWgBxf+qMKrFZKjkr5JZxFB/Rx0mThMc3PETwkY3efvuotLS0YJa/Py+Vzs5OAI4cORKpTt3pQo8vVU6dOiWH3niTHz704LqfP/+va4NrYPjEDD0rSjiXojXxGsBnVcyg2FDkkQ0PRmxzkfa8P8OpShyljhK/fPaXggSKxQbMQs2mzJuw9n/uug0ODta/GjAzqtUq4+PjOCfRFtaE45OTtLa2nvGVg+Q4FeKhgmAYLk3IKlUZGNiPWWDx4p5ojZgxMjIS5VOS0NXVRQiBg+MHo0gm1KMGxoGDB+sW8P8DduIbTrRKdcQAAAAASUVORK5CYII=" style="width:36px;height:36px;image-rendering:pixelated;opacity:0.4"/>
+      <div class="nav-label">마을</div>
+    </div>
+    <div class="nav-item active" onclick="window.location.href='shop.html'">
+      <img src="data:image/png;base64,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" style="width:36px;height:36px;image-rendering:pixelated;opacity:1"/>
+      <div class="nav-label">상점</div>
+    </div>
+  </div>
+</div>
+
+  <script>
+    // ── 잔액 ──────────────────────
+    let balance = 128
+    function updateBalance() {
+      document.getElementById('balance-count').textContent = balance
+      const icon = document.getElementById('balance-icon')
+      icon.src = balance >= 100 ? '/images/chalk_bag.png' : '/images/chalk_piece.png'
+    }
+
+    // ── 나비 캐릭터 (fitting.html과 동일한 방식) ──────
+    // 레벨(1~5)에 따라 베이스 이미지가 바뀜. 나중에 서버 연동 전까지 localStorage로 임시 관리
+    const userLevel = parseInt(localStorage.getItem('userLevel') || '1')
+    // 착용 상태도 fitting.html에서 저장한 것을 그대로 읽어와 보여줌
+    // 예: { top: 1, shoes: 12, etc: [3, 8] }
+    let outfit = JSON.parse(localStorage.getItem('outfit') || '{}')
+
+    // ── 아이템 ────────────────────
+    // overlay: 나비에게 입혔을 때 겹쳐 보여줄 이미지 (fitting.html과 동일한 네이밍 규칙: {아이템명}_on_nabi.png)
+    const items = [
+      { id: 1,  category: 'top',    image: '/images/top_white_tshirt.png',           overlay: '/images/top_white_tshirt_on_nabi.png',           name: '화이트 티셔츠',       price: 12, owned: false, isNew: false },
+      { id: 2,  category: 'top',    image: '/images/top_navy_crop.png',              overlay: '/images/top_navy_crop_on_nabi.png',              name: '네이비 크롭탑',       price: 15, owned: false, isNew: true  },
+      { id: 3,  category: 'etc',    image: '/images/chalkbag_square_white.png',      overlay: '/images/chalkbag_square_white_on_nabi.png',      name: '스퀘어 초크백 화이트', price: 20, owned: false, isNew: false },
+      { id: 4,  category: 'etc',    image: '/images/chalkbag_square_yellow.png',     overlay: '/images/chalkbag_square_yellow_on_nabi.png',     name: '스퀘어 초크백 옐로우', price: 22, owned: false, isNew: false },
+      { id: 5,  category: 'etc',    image: '/images/chalkbag_round_black.png',       overlay: '/images/chalkbag_round_black_on_nabi.png',       name: '라운드 초크백 블랙',   price: 18, owned: false, isNew: true  },
+      { id: 6,  category: 'etc',    image: '/images/chalkbag_round_khaki.png',       overlay: '/images/chalkbag_round_khaki_on_nabi.png',       name: '라운드 초크백 카키',   price: 18, owned: false, isNew: false },
+      { id: 7,  category: 'etc',    image: '/images/chalkbag_round_pink.png',        overlay: '/images/chalkbag_round_pink_on_nabi.png',        name: '라운드 초크백 핑크',   price: 20, owned: false, isNew: true  },
+      { id: 8,  category: 'etc',    image: '/images/item_brush_short.png',           overlay: '/images/item_brush_short_on_nabi.png',           name: '숏 브러시',           price: 8,  owned: false, isNew: false },
+      { id: 9,  category: 'etc',    image: '/images/item_brush_long.png',            overlay: '/images/item_brush_long_on_nabi.png',            name: '롱 브러시',           price: 10, owned: false, isNew: false },
+      { id: 10, category: 'etc',    image: '/images/item_tripod.png',                overlay: '/images/item_tripod_on_nabi.png',                name: '기록용 삼각대',       price: 30, owned: false, isNew: false },
+      { id: 11, category: 'etc',    image: '/images/item_americano.png',             overlay: '/images/item_americano_on_nabi.png',             name: '아이스 아메리카노',   price: 5,  owned: false, isNew: false },
+      { id: 12, category: 'shoes',  image: '/images/climbingshoes_black_gray.png',   overlay: '/images/climbingshoes_black_gray_on_nabi.png',   name: '클라이밍화 블랙',     price: 35, owned: false, isNew: false },
+      { id: 13, category: 'shoes',  image: '/images/climbingshoes_gray_blue.png',    overlay: '/images/climbingshoes_gray_blue_on_nabi.png',    name: '클라이밍화 블루',     price: 35, owned: false, isNew: true  },
+      { id: 14, category: 'shoes',  image: '/images/climbingshoes_white_pink.png',   overlay: '/images/climbingshoes_white_pink_on_nabi.png',   name: '클라이밍화 핑크',     price: 38, owned: false, isNew: true  },
+      { id: 15, category: 'shoes',  image: '/images/climbingshoes_yellow_brown.png', overlay: '/images/climbingshoes_yellow_brown_on_nabi.png', name: '클라이밍화 브라운',   price: 32, owned: false, isNew: false },
+      { id: 16, category: 'shoes',  image: '/images/climbingshoes_yellow_green.png', overlay: '/images/climbingshoes_yellow_green_on_nabi.png', name: '클라이밍화 그린',     price: 32, owned: false, isNew: false },
+      { id: 17, category: 'head',   image: '/images/head_accessory_blue_beret.png',  overlay: '/images/head_accessory_blue_beret_on_nabi.png',  name: '블루 베레',           price: 12, owned: false, isNew: true  },
+      { id: 18, category: 'head',   image: '/images/head_accessory_crown.png',       overlay: '/images/head_accessory_crown_on_nabi.png',       name: '왕관',               price: 50, owned: false, isNew: true  },
+      { id: 19, category: 'head',   image: '/images/head_accessory_party_cone.png',  overlay: '/images/head_accessory_party_cone_on_nabi.png',  name: '파티 콘',            price: 8,  owned: false, isNew: true  },
+    ]
+
+    let currentCategory = 'all'
+
+    function render() {
+      const grid = document.getElementById('grid')
+      const filtered = currentCategory === 'all' ? items : items.filter(i => i.category === currentCategory)
+      grid.innerHTML = filtered.map(item => `
+        <div class="item ${item.owned ? 'owned' : ''}" onclick="buyItem(${item.id})">
+          ${item.isNew && !item.owned ? '<div class="badge-new">NEW</div>' : ''}
+          <div class="item-image">
+            <img src="${item.image}" alt="${item.name}">
+            ${item.owned ? '<div class="owned-check">✓</div>' : ''}
+          </div>
+          <div class="item-name">${item.name}</div>
+          <div class="item-price ${item.owned ? 'price-owned' : ''}">
+            ${item.owned
+              ? '<span class="item-price-text">보유중</span>'
+              : `<img src="/images/chalk_piece.png" alt=""><span class="item-price-text">×${item.price}</span>`}
+          </div>
+        </div>
+      `).join('')
+    }
+
+    document.getElementById('pills').addEventListener('click', (e) => {
+      if (!e.target.classList.contains('pill')) return
+      document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'))
+      e.target.classList.add('active')
+      currentCategory = e.target.dataset.category
+      render()
+    })
+
+    function buyItem(id) {
+      const item = items.find(i => i.id === id)
+      if (!item || item.owned) return
+      if (balance < item.price) {
+        alert(`쵸크가 부족해요!\n필요: ${item.price} / 보유: ${balance}`)
+        return
+      }
+      if (confirm(`"${item.name}"을(를) 쵸크 ${item.price}개로 구매할까요?`)) {
+        balance -= item.price
+        item.owned = true
+        updateBalance()
+        render()
+      }
+    }
+
+    // ── 나비 미리보기 렌더링 (fitting.html의 updateNabiPreview와 동일 로직) ──
+    // 지금은 저장된 코디(outfit)를 그대로 보여주기만 함.
+    // 다음 단계에서: 아이템 클릭 시 이 함수를 호출해 임시로 겹쳐 보여주고,
+    // 한번 더 클릭하면 outfit에서 제거 후 다시 그리는 토글 로직을 붙이면 됨.
+    function renderNabiPreview() {
+      const canvas = document.getElementById('nabi-canvas')
+      document.getElementById('nabi-base').src = `/images/nabi_front_0${userLevel}.png`
+
+      // 베이스만 남기고 기존 레이어 제거
+      canvas.querySelectorAll('img:not(.layer-base)').forEach(el => el.remove())
+
+      const layerMap = { bottom: 'layer-bottom', shoes: 'layer-shoes', top: 'layer-top', etc: 'layer-bag', head: 'layer-hand' }
+
+      for (const [cat, value] of Object.entries(outfit)) {
+        const ids = Array.isArray(value) ? value : [value]
+        ids.forEach(id => {
+          const item = items.find(i => i.id === id)
+          if (!item || !item.overlay) return
+          const img = document.createElement('img')
+          img.src = item.overlay
+          img.alt = item.name
+          img.className = layerMap[cat] || 'layer-hand'
+          img.onerror = () => { img.style.display = 'none' } // overlay 이미지가 아직 없으면 숨김
+          canvas.appendChild(img)
+        })
+      }
+    }
+
+    updateBalance()
+    renderNabiPreview()
+    render()
+  </script>
+</body>
+</html>
