@@ -91,12 +91,14 @@
       image-rendering: pixelated;
     }
     /* 레이어 우선순위 (fitting.html과 동일) */
-    .layer-base    { z-index: 1; }
-    .layer-bottom  { z-index: 2; }
-    .layer-shoes   { z-index: 3; }
-    .layer-top     { z-index: 4; }
-    .layer-bag     { z-index: 5; }
-    .layer-hand    { z-index: 6; }
+    .layer-base     { z-index: 1; }
+    .layer-bottom   { z-index: 2; }
+    .layer-shoes    { z-index: 3; transform: translateY(5px); }
+    .layer-top      { z-index: 4; }
+    .layer-chalkbag { z-index: 5; }
+    .layer-brush    { z-index: 6; }
+    .layer-head     { z-index: 7; }
+    .layer-hand     { z-index: 8; }
 
     /* 스크롤 영역 */
     .scroll-area {
@@ -313,7 +315,7 @@
     <!-- 나비 미리보기 (스크롤 밖에 고정) -->
     <div class="preview">
       <div class="nabi-canvas" id="nabi-canvas">
-        <img class="layer-base" id="nabi-base" src="/images/nabi_front_01.png" alt="나비">
+        <img class="layer-base" id="nabi-base" src="/images/nabi_front_01_basic.png" alt="나비">
         <!-- 착용중인 아이템 레이어가 JS로 여기에 추가됨 -->
       </div>
     </div>
@@ -335,8 +337,9 @@
     <!-- 미리보기 중일 때만 뜨는 구매 버튼 (하단 네비 위) -->
     <div class="buy-bar" id="buy-bar">
       <button class="buy-btn" id="buy-btn" onclick="confirmPurchase()">
+        <span id="buy-btn-label">구매하기</span>
         <img src="/images/chalk_piece.png" alt="">
-        <span id="buy-btn-text">구매하기</span>
+        <span id="buy-btn-price"></span>
       </button>
     </div>
 
@@ -397,36 +400,41 @@
     // ── 아이템 ────────────────────
     // overlay: 나비에게 입혔을 때 겹쳐 보여줄 이미지 (fitting.html과 동일한 네이밍 규칙: {아이템명}_on_nabi.png)
     const items = [
-      { id: 1,  category: 'top',    image: '/images/top_white_tshirt.png',           overlay: '/images/top_white_tshirt_on_nabi.png',           name: '화이트 티셔츠',       price: 12, owned: false, isNew: false },
-      { id: 2,  category: 'top',    image: '/images/top_navy_crop.png',              overlay: '/images/top_navy_crop_on_nabi.png',              name: '네이비 크롭탑',       price: 15, owned: false, isNew: true  },
-      { id: 3,  category: 'etc',    image: '/images/chalkbag_square_white.png',      overlay: '/images/chalkbag_square_white_on_nabi.png',      name: '스퀘어 초크백 화이트', price: 20, owned: false, isNew: false },
-      { id: 4,  category: 'etc',    image: '/images/chalkbag_square_yellow.png',     overlay: '/images/chalkbag_square_yellow_on_nabi.png',     name: '스퀘어 초크백 옐로우', price: 22, owned: false, isNew: false },
-      { id: 5,  category: 'etc',    image: '/images/chalkbag_round_black.png',       overlay: '/images/chalkbag_round_black_on_nabi.png',       name: '라운드 초크백 블랙',   price: 18, owned: false, isNew: true  },
-      { id: 6,  category: 'etc',    image: '/images/chalkbag_round_khaki.png',       overlay: '/images/chalkbag_round_khaki_on_nabi.png',       name: '라운드 초크백 카키',   price: 18, owned: false, isNew: false },
-      { id: 7,  category: 'etc',    image: '/images/chalkbag_round_pink.png',        overlay: '/images/chalkbag_round_pink_on_nabi.png',        name: '라운드 초크백 핑크',   price: 20, owned: false, isNew: true  },
-      { id: 8,  category: 'etc',    image: '/images/item_brush_short.png',           overlay: '/images/item_brush_short_on_nabi.png',           name: '숏 브러시',           price: 8,  owned: false, isNew: false },
-      { id: 9,  category: 'etc',    image: '/images/item_brush_long.png',            overlay: '/images/item_brush_long_on_nabi.png',            name: '롱 브러시',           price: 10, owned: false, isNew: false },
-      { id: 10, category: 'etc',    image: '/images/item_tripod.png',                overlay: '/images/item_tripod_on_nabi.png',                name: '기록용 삼각대',       price: 30, owned: false, isNew: false },
-      { id: 11, category: 'etc',    image: '/images/item_americano.png',             overlay: '/images/item_americano_on_nabi.png',             name: '아이스 아메리카노',   price: 5,  owned: false, isNew: false },
-      { id: 12, category: 'shoes',  image: '/images/climbingshoes_black_gray.png',   overlay: '/images/climbingshoes_black_gray_on_nabi.png',   name: '클라이밍화 블랙',     price: 35, owned: false, isNew: false },
-      { id: 13, category: 'shoes',  image: '/images/climbingshoes_gray_blue.png',    overlay: '/images/climbingshoes_gray_blue_on_nabi.png',    name: '클라이밍화 블루',     price: 35, owned: false, isNew: true  },
-      { id: 14, category: 'shoes',  image: '/images/climbingshoes_white_pink.png',   overlay: '/images/climbingshoes_white_pink_on_nabi.png',   name: '클라이밍화 핑크',     price: 38, owned: false, isNew: true  },
-      { id: 15, category: 'shoes',  image: '/images/climbingshoes_yellow_brown.png', overlay: '/images/climbingshoes_yellow_brown_on_nabi.png', name: '클라이밍화 브라운',   price: 32, owned: false, isNew: false },
-      { id: 16, category: 'shoes',  image: '/images/climbingshoes_yellow_green.png', overlay: '/images/climbingshoes_yellow_green_on_nabi.png', name: '클라이밍화 그린',     price: 32, owned: false, isNew: false },
-      { id: 17, category: 'head',   image: '/images/head_accessory_blue_beret.png',  overlay: '/images/head_accessory_blue_beret_on_nabi.png',  name: '블루 베레',           price: 12, owned: false, isNew: true  },
-      { id: 18, category: 'head',   image: '/images/head_accessory_crown.png',       overlay: '/images/head_accessory_crown_on_nabi.png',       name: '왕관',               price: 50, owned: false, isNew: true  },
-      { id: 19, category: 'head',   image: '/images/head_accessory_party_cone.png',  overlay: '/images/head_accessory_party_cone_on_nabi.png',  name: '파티 콘',            price: 8,  owned: false, isNew: true  },
+      { id: 1,  category: 'top',    slot: 'top', image: '/images/top_white_tshirt.png',           overlay: '/images/top_white_tshirt_on_nabi.png',           name: '화이트 티셔츠',       price: 12, owned: false, isNew: false },
+      { id: 2,  category: 'top',    slot: 'top', image: '/images/top_navy_crop.png',              overlay: '/images/top_navy_crop_on_nabi.png',              name: '네이비 크롭탑',       price: 15, owned: false, isNew: true  },
+      { id: 3,  category: 'etc',    slot: 'chalkbag', image: '/images/chalkbag_square_white.png',      overlay: '/images/chalkbag_square_white_on_nabi.png',      name: '스퀘어 초크백 화이트', price: 20, owned: false, isNew: false },
+      { id: 4,  category: 'etc',    slot: 'chalkbag', image: '/images/chalkbag_square_yellow.png',     overlay: '/images/chalkbag_square_yellow_on_nabi.png',     name: '스퀘어 초크백 옐로우', price: 22, owned: false, isNew: false },
+      { id: 5,  category: 'etc',    slot: 'chalkbag', image: '/images/chalkbag_round_black.png',       overlay: '/images/chalkbag_round_black_on_nabi.png',       name: '라운드 초크백 블랙',   price: 18, owned: false, isNew: true  },
+      { id: 6,  category: 'etc',    slot: 'chalkbag', image: '/images/chalkbag_round_khaki.png',       overlay: '/images/chalkbag_round_khaki_on_nabi.png',       name: '라운드 초크백 카키',   price: 18, owned: false, isNew: false },
+      { id: 7,  category: 'etc',    slot: 'chalkbag', image: '/images/chalkbag_round_pink.png',        overlay: '/images/chalkbag_round_pink_on_nabi.png',        name: '라운드 초크백 핑크',   price: 20, owned: false, isNew: true  },
+      { id: 8,  category: 'etc',    slot: 'brush', image: '/images/item_brush_short.png',           overlay: '/images/item_brush_short_on_nabi.png',           name: '숏 브러시',           price: 8,  owned: false, isNew: false },
+      { id: 9,  category: 'etc',    slot: 'brush', image: '/images/item_brush_long.png',            overlay: '/images/item_brush_long_on_nabi.png',            name: '롱 브러시',           price: 10, owned: false, isNew: false },
+      { id: 10, category: 'etc',    slot: 'hand', image: '/images/item_tripod.png',                overlay: '/images/item_tripod_on_nabi.png',                name: '기록용 삼각대',       price: 30, owned: false, isNew: false },
+      { id: 11, category: 'etc',    slot: 'hand', image: '/images/item_americano.png',             overlay: '/images/item_americano_on_nabi.png',             name: '아이스 아메리카노',   price: 5,  owned: false, isNew: false },
+      { id: 12, category: 'shoes',  slot: 'shoes', image: '/images/climbingshoes_black_gray.png',   overlay: '/images/climbingshoes_black_gray_on_nabi.png',   name: '클라이밍화 블랙',     price: 35, owned: false, isNew: false },
+      { id: 13, category: 'shoes',  slot: 'shoes', image: '/images/climbingshoes_gray_blue.png',    overlay: '/images/climbingshoes_gray_blue_on_nabi.png',    name: '클라이밍화 블루',     price: 35, owned: false, isNew: true  },
+      { id: 14, category: 'shoes',  slot: 'shoes', image: '/images/climbingshoes_white_pink.png',   overlay: '/images/climbingshoes_white_pink_on_nabi.png',   name: '클라이밍화 핑크',     price: 38, owned: false, isNew: true  },
+      { id: 15, category: 'shoes',  slot: 'shoes', image: '/images/climbingshoes_yellow_brown.png', overlay: '/images/climbingshoes_yellow_brown_on_nabi.png', name: '클라이밍화 브라운',   price: 32, owned: false, isNew: false },
+      { id: 16, category: 'shoes',  slot: 'shoes', image: '/images/climbingshoes_yellow_green.png', overlay: '/images/climbingshoes_yellow_green_on_nabi.png', name: '클라이밍화 그린',     price: 32, owned: false, isNew: false },
+      { id: 17, category: 'head',   slot: 'head', image: '/images/head_accessory_blue_beret.png',  overlay: '/images/head_accessory_blue_beret_on_nabi.png',  name: '블루 베레',           price: 12, owned: false, isNew: true  },
+      { id: 18, category: 'head',   slot: 'head', image: '/images/head_accessory_crown.png',       overlay: '/images/head_accessory_crown_on_nabi.png',       name: '왕관',               price: 50, owned: false, isNew: true  },
+      { id: 19, category: 'head',   slot: 'head', image: '/images/head_accessory_party_cone.png',  overlay: '/images/head_accessory_party_cone_on_nabi.png',  name: '파티 콘',            price: 8,  owned: false, isNew: true  },
     ]
 
     let currentCategory = 'all'
     // 지금 미리 입어보고 있는(구매 확정 전) 아이템 id. 한 번에 1개만 유지.
-    let previewId = null
+    // 미리보기(구매 확정 전) 중인 아이템들. 슬롯별로 하나씩 → 여러 슬롯 동시 미리보기 가능
+    // 예: { top: 2, shoes: 14 }
+    let previewBySlot = {}
 
-    // 특정 카테고리(슬롯)에서 실제로 착용중인지 확인
+    // 미리보기 중인 아이템 id 목록
+    function previewIds() {
+      return Object.values(previewBySlot)
+    }
+
+    // 해당 아이템이 자기 슬롯에 실제로 착용중인지 확인
     function isWorn(item) {
-      const val = outfit[item.category]
-      if (Array.isArray(val)) return val.includes(item.id)
-      return val === item.id
+      return outfit[item.slot] === item.id
     }
 
     function render() {
@@ -434,7 +442,7 @@
       const filtered = currentCategory === 'all' ? items : items.filter(i => i.category === currentCategory)
       grid.innerHTML = filtered.map(item => {
         const worn = item.owned && isWorn(item)
-        const previewing = previewId === item.id
+        const previewing = previewBySlot[item.slot] === item.id
         return `
         <div class="item ${item.owned ? 'owned' : ''} ${worn ? 'worn' : ''} ${previewing ? 'previewing' : ''}" onclick="onItemClick(${item.id})">
           ${item.isNew && !item.owned ? '<div class="badge-new">NEW</div>' : ''}
@@ -472,38 +480,27 @@
         return
       }
 
-      previewId = (previewId === id) ? null : id
+      // 같은 아이템 재클릭 → 그 슬롯의 미리보기 해제 / 다른 아이템 → 그 슬롯을 교체
+      if (previewBySlot[item.slot] === id) delete previewBySlot[item.slot]
+      else previewBySlot[item.slot] = id
       renderNabiPreview()
       renderBuyBar()
       render()
     }
 
-    // 보유 아이템의 실제 착용 상태를 토글하고 저장
+    // 보유 아이템의 실제 착용 상태를 토글하고 저장 (모든 슬롯은 하나만, 교체식)
     function toggleWorn(item) {
-      const cat = item.category
-      if (cat === 'etc') {
-        if (!Array.isArray(outfit.etc)) outfit.etc = []
-        const idx = outfit.etc.indexOf(item.id)
-        if (idx > -1) outfit.etc.splice(idx, 1)
-        else outfit.etc.push(item.id)
-      } else {
-        if (outfit[cat] === item.id) delete outfit[cat]
-        else outfit[cat] = item.id // 같은 슬롯의 다른 아이템은 자동 교체
-      }
+      const slot = item.slot
+      if (outfit[slot] === item.id) delete outfit[slot] // 같은 걸 다시 누르면 벗기
+      else outfit[slot] = item.id                       // 같은 슬롯의 다른 아이템은 자동 교체
       saveOutfit()
       renderNabiPreview()
       render()
     }
 
-    // 구매 확정 시 해당 아이템을 바로 착용 상태로 반영
+    // 구매 확정 시 해당 아이템을 바로 착용 상태로 반영 (슬롯 교체식)
     function equipAfterPurchase(item) {
-      const cat = item.category
-      if (cat === 'etc') {
-        if (!Array.isArray(outfit.etc)) outfit.etc = []
-        if (!outfit.etc.includes(item.id)) outfit.etc.push(item.id)
-      } else {
-        outfit[cat] = item.id
-      }
+      outfit[item.slot] = item.id
       saveOutfit()
     }
 
@@ -514,28 +511,44 @@
     }
 
     // ── 구매바 표시/숨김 ────────────────────────────
+    // 미리보기 중인 아이템이 여러 개면 총액을 보여주고, 누르면 한꺼번에 구매
     function renderBuyBar() {
       const bar = document.getElementById('buy-bar')
-      if (previewId == null) {
+      const ids = previewIds()
+      if (ids.length === 0) {
         bar.classList.remove('show')
         return
       }
-      const item = items.find(i => i.id === previewId)
-      document.getElementById('buy-btn-text').textContent = `구매하기 ×${item.price}`
+      const total = ids.reduce((sum, id) => {
+        const it = items.find(i => i.id === id)
+        return sum + (it ? it.price : 0)
+      }, 0)
+      const label = ids.length > 1 ? `${ids.length}개 구매하기` : `구매하기`
+      document.getElementById('buy-btn-label').textContent = label
+      document.getElementById('buy-btn-price').textContent = `×${total}`
       bar.classList.add('show')
     }
 
+    // 미리보기 중인 아이템들을 한꺼번에 구매 + 착용
     function confirmPurchase() {
-      const item = items.find(i => i.id === previewId)
-      if (!item) return
-      if (balance < item.price) {
-        alert(`쵸크가 부족해요!\n필요: ${item.price} / 보유: ${balance}`)
+      const ids = previewIds()
+      if (ids.length === 0) return
+
+      const targets = ids.map(id => items.find(i => i.id === id)).filter(Boolean)
+      const total = targets.reduce((sum, it) => sum + it.price, 0)
+
+      if (balance < total) {
+        alert(`쵸크가 부족해요!\n필요: ${total} / 보유: ${balance}`)
         return
       }
-      balance -= item.price
-      item.owned = true
-      equipAfterPurchase(item)
-      previewId = null
+
+      balance -= total
+      targets.forEach(item => {
+        item.owned = true
+        equipAfterPurchase(item)
+      })
+      previewBySlot = {} // 구매 완료 → 미리보기 비우기 (이제 실제 착용 상태로 반영됨)
+
       updateBalance()
       renderBuyBar()
       renderNabiPreview()
@@ -546,43 +559,37 @@
     // 실제 outfit은 건드리지 않고, 미리보기 중인 아이템을 얹은 임시 버전만 만든다
     function getDisplayOutfit() {
       const display = JSON.parse(JSON.stringify(outfit))
-      if (previewId != null) {
-        const item = items.find(i => i.id === previewId)
-        if (item) {
-          if (item.category === 'etc') {
-            const list = Array.isArray(display.etc) ? display.etc.slice() : []
-            if (!list.includes(item.id)) list.push(item.id)
-            display.etc = list
-          } else {
-            display[item.category] = item.id // 단일 슬롯은 미리보기 아이템으로 교체
-          }
-        }
+      // 미리보기 중인 슬롯들을 실제 착용 위에 덮어씌워 보여줌
+      for (const [slot, id] of Object.entries(previewBySlot)) {
+        display[slot] = id
       }
       return display
     }
 
-    // ── 나비 미리보기 렌더링 (fitting.html의 updateNabiPreview와 동일 로직) ──
+    // ── 나비 미리보기 렌더링 ──────────────────────────
     function renderNabiPreview() {
       const canvas = document.getElementById('nabi-canvas')
-      document.getElementById('nabi-base').src = `/images/nabi_front_0${userLevel}.png`
+      document.getElementById('nabi-base').src = `/images/nabi_front_0${userLevel}_basic.png`
 
       canvas.querySelectorAll('img:not(.layer-base)').forEach(el => el.remove())
 
-      const layerMap = { bottom: 'layer-bottom', shoes: 'layer-shoes', top: 'layer-top', etc: 'layer-bag', head: 'layer-hand' }
+      // 슬롯 → 겹침 레이어 클래스 (z-index는 CSS에서 정의)
+      const layerMap = {
+        bottom: 'layer-bottom', shoes: 'layer-shoes', top: 'layer-top',
+        chalkbag: 'layer-chalkbag', brush: 'layer-brush', head: 'layer-head', hand: 'layer-hand'
+      }
       const displayOutfit = getDisplayOutfit()
 
-      for (const [cat, value] of Object.entries(displayOutfit)) {
-        const ids = Array.isArray(value) ? value : [value]
-        ids.forEach(id => {
-          const item = items.find(i => i.id === id)
-          if (!item || !item.overlay) return
-          const img = document.createElement('img')
-          img.src = item.overlay
-          img.alt = item.name
-          img.className = layerMap[cat] || 'layer-hand'
-          img.onerror = () => { img.style.display = 'none' } // overlay 이미지가 아직 없으면 조용히 숨김
-          canvas.appendChild(img)
-        })
+      // 각 슬롯에 하나씩만 착용 → 값이 곧 아이템 id
+      for (const [slot, id] of Object.entries(displayOutfit)) {
+        const item = items.find(i => i.id === id)
+        if (!item || !item.overlay) continue
+        const img = document.createElement('img')
+        img.src = item.overlay
+        img.alt = item.name
+        img.className = layerMap[slot] || 'layer-hand'
+        img.onerror = () => { img.style.display = 'none' } // overlay 이미지가 아직 없으면 조용히 숨김
+        canvas.appendChild(img)
       }
     }
 
