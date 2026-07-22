@@ -17,8 +17,8 @@
   font-weight: 700;
   font-display: swap;
 }
-* { font-family: 'Galmuri11', 'Press Start 2P', monospace !important; }
-.phone { border-radius: 32px !important; overflow: hidden !important; }
+* { font-family: 'Galmuri11', 'Galmuri11', monospace !important; }
+.phone { border-radius:0!important; overflow: hidden !important; }
 img { image-rendering: pixelated; }
 </style>
 <style>
@@ -33,20 +33,20 @@ html, body {
 </head>
 <body>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-.px{font-family:'Press Start 2P',monospace}
+.px{font-family:'Galmuri11', monospace}
+.px-title{font-family:'Galmuri11',monospace;font-weight:700 !important;letter-spacing:0.5px}
 *{box-sizing:border-box;margin:0;padding:0}
 .phone{
   width:360px;height:740px;background:#fff;
-  border:2px solid #ddd;border-radius:32px;
+  border:2px solid #ddd;border-radius:0;
   margin:1rem auto;display:flex;flex-direction:column;overflow:hidden
 }
 .page-header{display:flex;align-items:center;gap:12px;padding:18px;border-bottom:2px solid #eee;flex-shrink:0}
 .page-header-title{flex:1;min-width:0}
-.page-header-title .px{font-size:15px;color:#111}
+.page-header-title .px{font-size:15px;color:#111;font-weight:700;letter-spacing:0.5px}
 .chalk-balance-pill{
   display:flex;align-items:center;gap:6px;
-  background:#fff;border:1px solid #eee;border-radius:20px;
+  background:#fff;border:1px solid #eee;border-radius:0;
   padding:7px 14px 7px 8px;
   box-shadow:0 2px 6px rgba(0,0,0,0.08);
   flex-shrink:0;
@@ -57,22 +57,21 @@ html, body {
 </head>
 <body>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-.px{font-family:'Press Start 2P',monospace}
+.px{font-family:'Galmuri11', monospace}
 *{box-sizing:border-box;margin:0;padding:0}
 .phone{
   width:360px;height:740px;background:#fff;
-  border:2px solid #ddd;border-radius:32px;
+  border:2px solid #ddd;border-radius:0;
   margin:1rem auto;display:flex;flex-direction:column;overflow:hidden
 }
 .topbar{display:flex;justify-content:flex-end;align-items:center;padding:38px 38px 4px}
 .notif-wrap{position:relative;display:inline-block}
-.notif-dot{width:9px;height:9px;background:#ff4444;border:2px solid #fff;border-radius:50%;position:absolute;top:-2px;right:-2px}
+.notif-dot{width:9px;height:9px;background:#ff4444;border:2px solid #fff;border-radius:0;position:absolute;top:-2px;right:-2px}
 .stage-area{text-align:center;padding:44px 0 2px}
 .stage-text{font-size:13.5px;color:#111;letter-spacing:1px}
 .stage-sub{font-size:7px;color:#888;margin-top:6px}
 .pills{display:flex;gap:5px;justify-content:center;padding:10px 16px 4px;flex-wrap:wrap}
-.pill{font-size:6px;padding:4px 7px;border-radius:4px;border:1.5px solid #ddd;color:#bbb;background:#f8f8f8;font-family:'Press Start 2P',monospace}
+.pill{font-size:6px;padding:4px 7px;border-radius:0;border:1.5px solid #ddd;color:#bbb;background:#f8f8f8;font-family:'Galmuri11', monospace}
 .pill.active{border-color:#222;color:#111;background:#fff}
 .char-area{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0}
 .nabi-img{width:130px;height:auto;image-rendering:pixelated;display:block}
@@ -83,7 +82,7 @@ html, body {
 .chalk-unit{font-size:8px;color:#999}
 .bottomnav{background:#fff;border-top:1.5px solid #eee;display:flex;padding:14px 0 20px}
 .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;padding:4px 0}
-.nav-label{font-size:8px;color:#bbb;font-family:'Press Start 2P',monospace}
+.nav-label{font-size:8px;color:#bbb;font-family:'Galmuri11', monospace}
 .nav-item.active .nav-label{color:#111}
 .nav-item.active svg{color:#111}
 svg{color:#bbb}
@@ -106,9 +105,9 @@ svg{color:#bbb}
   padding:13px 22px;
   background:#fff;
   border:var(--pxb-border) solid var(--pxb-ink);
-  border-radius:var(--pxb-radius);
+  border-radius:0;
   box-shadow:var(--pxb-shadow) var(--pxb-shadow) 0 0 var(--pxb-ink);
-  font-family:'Galmuri11','Press Start 2P',monospace;
+  font-family:'Galmuri11','Galmuri11', monospace;
   font-weight:700;font-size:14px;color:var(--pxb-ink);
   cursor:pointer;user-select:none;
   transition:transform .06s ease, box-shadow .06s ease;
@@ -143,7 +142,7 @@ svg{color:#bbb}
   width:38px;height:38px;
   display:inline-flex;align-items:center;justify-content:center;
   background:#fff;border:var(--pxb-border) solid var(--pxb-ink);
-  border-radius:var(--pxb-radius);
+  border-radius:0;
   box-shadow:4px 4px 0 0 var(--pxb-ink);
   font-size:16px;font-weight:900;color:var(--pxb-ink);line-height:1;
   cursor:pointer;transition:transform .06s ease, box-shadow .06s ease;
@@ -166,7 +165,7 @@ svg{color:#bbb}
   display:inline-flex;align-items:center;gap:8px;
   padding:6px 16px 6px 6px;
   background:#dcdde0;border:var(--pxb-border) solid var(--pxb-ink);
-  border-radius:var(--pxb-radius);
+  border-radius:0;
   box-shadow:4px 4px 0 0 var(--pxb-ink);
   cursor:pointer;transition:transform .06s ease, box-shadow .06s ease;
 }
@@ -182,7 +181,7 @@ svg{color:#bbb}
 /* 패널/모달 컨테이너 (통일된 테두리) */
 .card-px{
   background:#fff;border:var(--pxb-border) solid var(--pxb-ink);
-  border-radius:var(--pxb-radius);
+  border-radius:0;
   box-shadow:var(--pxb-shadow) var(--pxb-shadow) 0 0 var(--pxb-ink);
 }
 
@@ -199,7 +198,7 @@ svg{color:#bbb}
 .dash-card-info{flex:1;min-width:0}
 .dash-card-title{font-size:14px;color:#111}
 .dash-card-desc{font-size:11px;color:#999;margin-top:4px;line-height:1.5}
-.dash-progress-bar{height:6px;background:#eee;border-radius:3px;overflow:hidden;margin-top:6px}
+.dash-progress-bar{height:6px;background:#eee;border-radius:0;overflow:hidden;margin-top:6px}
 .dash-progress-fill{height:100%;background:#2a9d8f;transition:width .2s}
 </style>
 
@@ -237,11 +236,11 @@ svg{color:#bbb}
     background:#fff;width:360px;
     border:var(--pxb-border) solid var(--pxb-ink);
     border-bottom:none;
-    border-radius:20px 20px 0 0;
+    border-radius:0;
     max-height:70vh;display:flex;flex-direction:column;
   ">
     <div style="width:40px;height:4px;background:#ddd;border:1px solid #ccc;
-      border-radius:2px;margin:12px auto 0;flex-shrink:0"></div>
+      border-radius:0;margin:12px auto 0;flex-shrink:0"></div>
     <div style="display:flex;align-items:center;justify-content:space-between;
       padding:14px 18px 12px;border-bottom:2px solid #eee;flex-shrink:0">
       <div class="px" style="font-size:15px;color:#111">🧾 쵸크 사용 히스토리</div>

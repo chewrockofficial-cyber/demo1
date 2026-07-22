@@ -23,8 +23,8 @@
 *, *::before, *::after {
   font-family: 'Galmuri11', 'Press Start 2P', monospace !important;
 }
-.px { font-family: 'Galmuri11', monospace !important; font-weight: 700 !important; }
-button { border-radius: 0 !important; font-family: 'Galmuri11', monospace !important; font-weight: 700 !important; }
+.px { font-family: 'Galmuri11', monospace !important; font-weight: 400 !important; }
+button { border-radius: 0 !important; font-family: 'Galmuri11', monospace !important; font-weight: 400 !important; }
 input, textarea { border-radius: 0 !important; font-family: 'Galmuri11', monospace !important; border: 2px solid #111 !important; }
 input:focus, textarea:focus { outline: none !important; box-shadow: inset 2px 2px 0 #E0E0E0 !important; }
 /* 각진 border-radius 제거 */
@@ -36,7 +36,7 @@ input:focus, textarea:focus { outline: none !important; box-shadow: inset 2px 2p
 /* 메뉴바 굵은 선 */
 .bottomnav { border-top: 1px solid #e5e0d3 !important; }
 /* 토스트 픽셀 */
-.toast { border-radius: 0 !important; border: 3px solid #333 !important; font-weight: 700 !important; box-shadow: 4px 4px 0 #555 !important; }
+.toast { border-radius: 0 !important; border: 3px solid #333 !important; font-weight: 400 !important; box-shadow: 4px 4px 0 #555 !important; }
 /* 진행바 각진 */
 .chalk-bar-bg,[class*="-bar-bg"],[class*="-track"] { border-radius: 0 !important; border: 2px solid #111 !important; }
 .chalk-bar,[class*="-bar"],[class*="-fill"] { border-radius: 0 !important; }
@@ -44,7 +44,7 @@ input:focus, textarea:focus { outline: none !important; box-shadow: inset 2px 2p
 .btn-record,.btn-enter-gym,.btn-find,.btn-join-gym,[class*="btn-record"],[class*="btn-enter"] {
   border-radius: 0 !important;
   box-shadow: 4px 4px 0 #555 !important;
-  font-weight: 700 !important;
+  font-weight: 400 !important;
 }
 /* 기록 탭 버튼들 */
 button[onclick], .tab-btn { border-radius: 0 !important; }
@@ -70,16 +70,17 @@ input[type=text], input[type=number], textarea, select {
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Nabi — 마을</title>
 <style>
-.px{font-family:'Galmuri11',monospace;font-weight:700}
+.px{font-family:'Galmuri11',monospace;font-weight:400}
+.px-title{font-family:'Galmuri11',monospace;font-weight:700 !important;letter-spacing:0.5px}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100vh}
-.phone{width:360px;height:740px;border:2px solid #ddd;border-radius:32px;margin:1rem auto;overflow:hidden;position:relative;background:#fff;display:flex;flex-direction:column}
+.phone{width:360px;height:740px;border:2px solid #ddd;border-radius:0;margin:1rem auto;overflow:hidden;position:relative;background:#fff;display:flex;flex-direction:column}
 
 /* 마을 화면 = 상단 헤더 + 가로 스크롤 암장 + 구분선 + 세로 스크롤 친구 그리드 */
 .world-wrap{position:relative;flex:1;display:flex;flex-direction:column;overflow:hidden;background:#fff}
 
 .village-header{padding:20px 16px 12px;flex-shrink:0}
-.village-title{font-size:20px;color:#111}
+.village-title{font-size:20px;color:#111;font-weight:700;letter-spacing:0.5px}
 .village-sub{font-size:11px;color:#888;margin-top:6px}
 
 /* 상단 - 소속 암장 가로 스크롤 */
@@ -91,7 +92,7 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
 .gym-card-img-wrap img{position:relative;z-index:1}
 .gym-card-star{position:absolute;top:-2px;right:6px;font-size:15px;z-index:2}
 .gym-card.bounce img{animation:bldgBounce 0.32s ease}
-.gym-card-name{margin-top:38px;color:#111;font-size:12px;font-weight:700;white-space:nowrap;max-width:122px;overflow:hidden;text-overflow:ellipsis}
+.gym-card-name{margin-top:38px;color:#111;font-size:12px;font-weight:400;white-space:nowrap;max-width:122px;overflow:hidden;text-overflow:ellipsis}
 
 /* 구분선 */
 .section-divider{display:none}
@@ -104,13 +105,13 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
 .friend-cell:active{transform:scale(0.94)}
 .friend-cell img{width:56px;height:auto;image-rendering:auto}
 .friend-cell.bounce img{animation:bldgBounce 0.32s ease}
-.friend-cell-name{margin-top:7px;color:#111;font-size:11px;font-weight:700;white-space:nowrap;max-width:96px;overflow:hidden;text-overflow:ellipsis}
+.friend-cell-name{margin-top:7px;color:#111;font-size:11px;font-weight:400;white-space:nowrap;max-width:96px;overflow:hidden;text-overflow:ellipsis}
 
 /* 빈 상태 */
 .empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:20px;width:100%}
 .empty-state-icon{font-size:32px;opacity:0.4}
 .empty-state-text{font-size:12px;color:#999}
-.empty-state-btn{background:#222;color:#fff;border:none;font-size:12px;padding:8px 16px;cursor:pointer;margin-top:2px}
+.empty-state-btn{background:#222;color:#fff;border:2px solid #000;font-size:12px;padding:8px 16px;cursor:pointer;margin-top:2px;box-shadow:3px 3px 0 #999}
 
 @keyframes bldgBounce{
   0%{transform:scale(1)}
@@ -120,11 +121,11 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
 }
 
 /* 암장 패널 */
-.gym-panel{position:absolute;bottom:0;left:0;right:0;z-index:80;background:#fff;border-radius:20px 20px 0 0;border-top:3px solid #222;transform:translateY(100%);transition:transform 0.32s cubic-bezier(0.34,1.1,0.64,1);height:86%;display:flex;flex-direction:column}
+.gym-panel{position:absolute;bottom:0;left:0;right:0;z-index:80;background:#fff;border-radius:0;border-top:3px solid #222;transform:translateY(100%);transition:transform 0.32s cubic-bezier(0.34,1.1,0.64,1);height:86%;display:flex;flex-direction:column}
 .gym-panel.show{transform:translateY(0)}
-.panel-handle{width:40px;height:4px;background:#ddd;border:1px solid #ccc;border-radius:2px;margin:12px auto 0;flex-shrink:0;cursor:pointer}
+.panel-handle{width:40px;height:4px;background:#ddd;border:1px solid #ccc;border-radius:0;margin:12px auto 0;flex-shrink:0;cursor:pointer}
 .panel-header{display:flex;align-items:center;padding:10px 16px;border-bottom:2px solid #eee;flex-shrink:0;gap:8px}
-.panel-name{font-size:14px;color:#111}
+.panel-name{font-size:14px;color:#111;font-weight:700;letter-spacing:0.5px}
 .panel-area{font-size:10px;color:#888;margin-top:2px}
 .panel-lv{background:#fff;border:2px solid #222;padding:2px 8px;font-size:11px;color:#111;box-shadow:1px 1px 0 #222;margin-left:auto;flex-shrink:0}
 .panel-close{background:none;border:none;cursor:pointer;font-size:22px;color:#999;line-height:1;margin-left:6px}
@@ -147,17 +148,17 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
 .notice-board:hover{border-color:#222}
 .notice-board-title{font-size:9px;color:#666;margin-bottom:5px}
 .notice-stickers{display:flex;flex-wrap:wrap;gap:3px}
-.sticker{width:18px;height:18px;border-radius:1px;box-shadow:1px 1px 0 rgba(0,0,0,0.12)}
-.group-tee{background:#e4f0ff;border:1.5px solid #90caf9;border-radius:18px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-size:14px;margin-left:auto;cursor:pointer}
+.sticker{width:18px;height:18px;border-radius:0;box-shadow:1px 1px 0 rgba(0,0,0,0.12)}
+.group-tee{background:#e4f0ff;border:1.5px solid #90caf9;border-radius:0;width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-size:14px;margin-left:auto;cursor:pointer}
 .ladder-area{display:flex;align-items:center;justify-content:center;padding:2px 0}
 .floor-bottom{background:#fff;border-top:2px solid #222;padding:7px 14px 10px;display:flex;gap:8px}
-.mat{flex:1;background:#a8a8a8;border:2px solid #222;border-radius:2px;height:12px;box-shadow:0 3px 0 #888}
+.mat{flex:1;background:#a8a8a8;border:2px solid #222;border-radius:0;height:12px;box-shadow:0 3px 0 #888}
 .floor-items{padding:10px 14px;background:#fff;border-top:1.5px solid #d4d0ca;display:flex;gap:10px;align-items:flex-start}
 .chalk-bucket{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer}
 .chalk-bucket:hover{transform:scale(1.05)}
 .chalk-bucket-icon{font-size:24px}
 .chalk-bucket-label{font-size:9px;color:#666;text-align:center;line-height:1.4}
-.chalk-bucket-count{font-size:11px;color:#111;font-family:'Galmuri11',monospace;font-weight:700}
+.chalk-bucket-count{font-size:11px;color:#111;font-family:'Galmuri11',monospace;font-weight:400}
 .item-box{flex:1;background:#fff;border:2px solid #222;box-shadow:2px 2px 0 #222;padding:7px;cursor:pointer}
 .item-box:hover{border-color:#000}
 .item-box-header{display:flex;align-items:center;gap:5px;margin-bottom:5px}
@@ -170,18 +171,18 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
 /* 서브 모달 */
 .sub-modal-backdrop{display:none;position:absolute;inset:0;z-index:200;background:rgba(0,0,0,0.45);align-items:flex-end;justify-content:center}
 .sub-modal-backdrop.show{display:flex}
-.sub-modal{background:#fff;border-radius:20px 20px 0 0;border-top:3px solid #222;width:100%;height:62%;display:flex;flex-direction:column}
-.sub-modal-handle{width:40px;height:4px;background:#ddd;border-radius:2px;margin:12px auto 0;flex-shrink:0}
+.sub-modal{background:#fff;border-radius:0;border-top:3px solid #222;width:100%;height:62%;display:flex;flex-direction:column}
+.sub-modal-handle{width:40px;height:4px;background:#ddd;border-radius:0;margin:12px auto 0;flex-shrink:0}
 .sub-modal-header{padding:10px 18px;border-bottom:1px solid #eee;flex-shrink:0;display:flex;justify-content:space-between;align-items:center}
-.sub-modal-title{font-size:13px;color:#111}
+.sub-modal-title{font-size:13px;color:#111;font-weight:700;letter-spacing:0.5px}
 .sub-modal-close{background:none;border:none;cursor:pointer;font-size:20px;color:#bbb}
 .sub-modal-body{overflow-y:auto;padding:12px 18px 24px;flex:1}
 .route-list,.note-list,.chalk-log,.item-list{display:flex;flex-direction:column;gap:7px}
 .route-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border:2px solid #222;box-shadow:2px 2px 0 #222;background:#fff}
-.route-color{width:14px;height:14px;border-radius:50%;border:2px solid #222;flex-shrink:0}
+.route-color{width:14px;height:14px;border-radius:0;border:2px solid #222;flex-shrink:0}
 .route-name{font-size:13px;color:#111}
 .route-grade{font-size:11px;color:#888;margin-top:2px}
-.route-status{margin-left:auto;font-size:11px;padding:3px 8px;border-radius:5px}
+.route-status{margin-left:auto;font-size:11px;padding:3px 8px;border-radius:0}
 .route-status.done{background:#e8f5e9;color:#2e7d32}
 .route-status.try{background:#fff;border:1.5px solid #222;color:#111}
 .note-item{background:#fff;border:2px solid #222;box-shadow:2px 2px 0 #222;padding:10px 12px}
@@ -197,7 +198,7 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
 .friend-profile-stat-val{font-size:14px;color:#111;line-height:1.3}
 .friend-profile-stat-val--stage{font-size:12px;white-space:nowrap}
 .friend-profile-stat-label{font-size:10px;color:#666;white-space:nowrap}
-.feed-section-title{font-size:16px;color:#111;font-weight:700;margin-bottom:10px}
+.feed-section-title{font-size:16px;color:#111;font-weight:700;letter-spacing:0.5px;margin-bottom:10px}
 .feed-item{display:flex;flex-direction:column;gap:4px;padding:10px 12px;background:#fff;border:2px solid #222;box-shadow:2px 2px 0 #222;border-radius:0;margin-bottom:10px}
 .feed-item-top{display:flex;justify-content:space-between;align-items:center}
 .feed-item-gym{font-size:12px;color:#111}
@@ -210,12 +211,12 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
 .chalk-log-emoji{font-size:18px}
 .chalk-log-name{font-size:13px;color:#111}
 .chalk-log-detail{font-size:11px;color:#888;margin-top:2px}
-.chalk-log-amt{margin-left:auto;font-size:12px;color:#111;font-family:'Galmuri11',monospace;font-weight:700}
+.chalk-log-amt{margin-left:auto;font-size:12px;color:#111;font-family:'Galmuri11',monospace;font-weight:400}
 .item-item{display:flex;align-items:center;gap:10px;padding:9px 12px;background:#fff;border:2px solid #222;box-shadow:2px 2px 0 #222}
 .item-icon-big{font-size:22px}
 .item-name{font-size:13px;color:#111}
 .item-donor{font-size:11px;color:#888;margin-top:2px}
-.item-qty{margin-left:auto;font-size:11px;color:#555;font-family:'Galmuri11',monospace;font-weight:700}
+.item-qty{margin-left:auto;font-size:11px;color:#555;font-family:'Galmuri11',monospace;font-weight:400}
 
 /* 메뉴바 */
 .bottomnav{flex-shrink:0;background:#fff;border-top:1px solid #e5e0d3;box-shadow:0 -6px 10px -6px rgba(0,0,0,0.06);display:flex;padding:12px 0 18px;position:relative;z-index:200}
@@ -232,7 +233,7 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
   <div class="world-wrap" id="worldWrap">
     <!-- 헤더 -->
     <div class="village-header">
-      <div class="px village-title">마을</div>
+      <div class="px-title village-title">마을</div>
       <div class="px village-sub">암장과 친구 나비를 둘러보세요</div>
     </div>
     <!-- 상단: 소속 암장 가로 스크롤 -->
@@ -264,7 +265,7 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
     <div class="sub-modal" onclick="event.stopPropagation()">
       <div class="sub-modal-handle"></div>
       <div class="sub-modal-header">
-        <div class="px sub-modal-title" id="subTitle"></div>
+        <div class="px-title sub-modal-title" id="subTitle"></div>
         <button class="sub-modal-close" onclick="closeSubModal()">×</button>
       </div>
       <div class="sub-modal-body" id="subBody"></div>
@@ -492,7 +493,7 @@ function openGym(idx){
   const ch=document.createElement('div');
   ch.className='chalk-header';
   const pct=Math.min(g.chalkPool/g.chalkGoal*100,100);
-  ch.innerHTML=`<div style="flex:1"><div class="px" style="font-size:10px;color:#111;margin-bottom:4px">🤍 공동 쵸크 ${g.chalkPool}꼬집</div><div style="background:#f0f0f0;height:7px;border-radius:3px;overflow:hidden"><div style="width:${pct}%;height:100%;background:#222"></div></div></div><div class="px" style="font-size:10px;color:#bbb">/${g.chalkGoal}</div>`;
+  ch.innerHTML=`<div style="flex:1"><div class="px" style="font-size:10px;color:#111;margin-bottom:4px">🤍 공동 쵸크 ${g.chalkPool}꼬집</div><div style="background:#f0f0f0;height:7px;border-radius:0;border:1.5px solid #222;overflow:hidden"><div style="width:${pct}%;height:100%;background:#222"></div></div></div><div class="px" style="font-size:10px;color:#bbb">/${g.chalkGoal}</div>`;
   scroll.appendChild(ch);
 
   g.floors.forEach((floor,fi)=>{
@@ -580,7 +581,7 @@ function openFriendProfile(fr){
         <div class="friend-profile-stat"><div class="px friend-profile-stat-label">소속 암장</div><div class="px friend-profile-stat-val">${fr.gymCount||0}곳</div></div>
       </div>
     </div>
-    <div class="px feed-section-title">🧗 친구의 클라이밍 기록 몰래 보기</div>
+    <div class="px-title feed-section-title">🧗 친구의 클라이밍 기록 몰래 보기</div>
     ${feedHtml}
   `;
   openSubModal(`🐾 ${fr.name}`, html);
