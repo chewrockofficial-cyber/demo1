@@ -124,6 +124,21 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
 .route-counter{display:flex;align-items:center;border:1.5px solid #eee;border-radius:0;overflow:hidden}
 .route-btn{width:44px;height:44px;background:#f8f8f8;border:none;cursor:pointer;font-size:18px;color:#555}
 .route-num{flex:1;text-align:center;font-size:14px;color:#111;font-family:'Galmuri11', monospace}
+/* 난이도(색깔)별 완등 개수 */
+.grade-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.grade-row{display:flex;align-items:center;gap:8px;border:1.5px solid #eee;border-radius:12px;padding:6px 8px}
+.grade-row.on{border-color:#111;background:#fafafa}
+.grade-dot{width:22px;height:22px;border-radius:50%;border:1.5px solid #ccc;flex-shrink:0}
+.grade-name{font-size:11px;color:#555;flex:1;white-space:nowrap}
+.grade-count-box{display:flex;align-items:center;gap:2px}
+.grade-btn{width:26px;height:26px;background:#f2f2f2;border:none;cursor:pointer;font-size:15px;color:#555;border-radius:6px;line-height:1;padding:0}
+.grade-count{min-width:18px;text-align:center;font-size:12px;color:#111;font-family:'Galmuri11', monospace}
+.grade-total{margin-top:10px;font-size:12px;color:#111;text-align:right}
+.grade-total b{font-family:'Galmuri11', monospace;font-size:13px}
+.grade-chips{display:inline-flex;flex-wrap:wrap;gap:8px;align-items:center;background:#f8f8f8;border-radius:8px !important;padding:5px 8px}
+.grade-chip{display:flex;align-items:center;gap:3px;border-radius:0 !important}
+.grade-chip-dot{width:11px;height:11px;border-radius:50% !important;border:1px solid #ccc;flex-shrink:0}
+.grade-chip-num{font-size:8px;color:#333;font-family:'Galmuri11', monospace}
 .optional-toggle{display:flex;align-items:center;gap:6px;padding:10px 0;cursor:pointer;color:#bbb;font-size:9px;border:none;background:none;width:100%}
 .optional-section{display:none}
 .optional-section.show{display:block}
@@ -232,12 +247,9 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
         <input class="form-input" id="inputDate" type="date">
       </div>
       <div class="form-section">
-        <div class="px form-label">완등한 루트 수</div>
-        <div class="route-counter">
-          <button class="route-btn" onclick="changeRoute(-1)">−</button>
-          <div class="px route-num" id="routeNum">0</div>
-          <button class="route-btn" onclick="changeRoute(1)">+</button>
-        </div>
+        <div class="px form-label">완등한 난이도 (색깔별 개수)</div>
+        <div class="grade-grid" id="gradeGrid"></div>
+        <div class="grade-total">합계 <b id="gradeTotal">0</b> 개 루트</div>
       </div>
       <div class="form-section">
         <div class="px form-label">메모</div>
@@ -248,10 +260,6 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
       </button>
       <div class="optional-section" id="optionalSection">
         <div class="form-section" style="margin-top:12px">
-          <div class="px form-label">난이도</div>
-          <select class="form-select" id="inputDiff"><option value="">선택 안함</option><option>초급</option><option>중급</option><option>상급</option><option>최상급</option></select>
-        </div>
-        <div class="form-section">
           <div class="px form-label">컨디션</div>
           <select class="form-select" id="inputCond"><option value="">선택 안함</option><option>😊 최고</option><option>🙂 좋음</option><option>😐 보통</option><option>😪 피곤</option></select>
         </div>
@@ -291,8 +299,23 @@ function applyChalkIcon(count, imgEl) {
   if (!imgEl) return;
   imgEl.src = count >= 100 ? CHALK_ICON_BAG : CHALK_ICON_CLOUD;
 }
-let state={nabiStage:3,chalkCount:12,streakDays:3,todayRecorded:false,totalRecordCount:4,rewardHistory:[],records:[{id:1,date:'2026-06-29',gym:'더클라임 강남',routes:5,memo:'오랜만에 오버행 성공! 손이 많이 까졌지만 뿌듯하다',diff:'중급',cond:'😊 최고',duration:90,chalkReward:1,nabiGrew:true},{id:2,date:'2026-06-27',gym:'볼더링 클럽 홍대',routes:3,memo:'처음 와봤는데 홀드가 신선해서 좋았음',diff:'초급',cond:'🙂 좋음',duration:60,chalkReward:0,nabiGrew:true},{id:3,date:'2026-06-25',gym:'클라이밍 파크 강남',routes:8,memo:'친구랑 같이 와서 더 재밌었다. 5번 루트 드디어 완등!',diff:'상급',cond:'😊 최고',duration:120,chalkReward:1,nabiGrew:false}]}
-let routeCount=0,currentView='feed',selectedCalDate=null,calYear=2026,calMonth=7
+let state={nabiStage:3,chalkCount:12,streakDays:3,todayRecorded:false,totalRecordCount:4,rewardHistory:[],records:[{id:1,date:'2026-06-29',gym:'더클라임 강남',routes:5,grades:{blue:3,red:2},memo:'오랜만에 오버행 성공! 손이 많이 까졌지만 뿌듯하다',cond:'😊 최고',duration:90,chalkReward:1,nabiGrew:true},{id:2,date:'2026-06-27',gym:'볼더링 클럽 홍대',routes:3,grades:{yellow:2,green:1},memo:'처음 와봤는데 홀드가 신선해서 좋았음',cond:'🙂 좋음',duration:60,chalkReward:0,nabiGrew:true},{id:3,date:'2026-06-25',gym:'클라이밍 파크 강남',routes:8,grades:{red:5,black:3},memo:'친구랑 같이 와서 더 재밌었다. 5번 루트 드디어 완등!',cond:'😊 최고',duration:120,chalkReward:1,nabiGrew:false}]}
+// 난이도 색 정의 (암장마다 체계가 달라 최대한 많은 색 포함. 나중에 자유롭게 추가/수정 가능)
+const GRADE_COLORS=[
+  {key:'red',   name:'빨강', hex:'#e23b3b'},
+  {key:'orange',name:'주황', hex:'#f08a24'},
+  {key:'yellow',name:'노랑', hex:'#f5c518'},
+  {key:'green', name:'초록', hex:'#3aa957'},
+  {key:'blue',  name:'파랑', hex:'#3b7de2'},
+  {key:'navy',  name:'남색', hex:'#27408b'},
+  {key:'purple',name:'보라', hex:'#8b3ba9'},
+  {key:'gray',  name:'회색', hex:'#9aa0a6'},
+  {key:'white', name:'흰색', hex:'#ffffff'},
+  {key:'black', name:'검정', hex:'#222222'},
+  {key:'pink',  name:'핑크', hex:'#f06fae'},
+  {key:'brown', name:'갈색', hex:'#8a5a34'},
+]
+let gradeCounts={},currentView='feed',selectedCalDate=null,calYear=2026,calMonth=7
 
 function init(){
   document.getElementById('inputDate').value=todayStr()
@@ -328,8 +351,8 @@ function renderFeed(){
       </div>
       <div class="card-photo"><div class="card-photo-empty">📷</div></div>
       <div class="card-stats">
-        <div class="card-stat"><span>🪨</span><span class="px card-stat-text">${r.routes}개 루트</span></div>
-        ${r.diff?`<div class="card-stat"><span>📊</span><span class="px card-stat-text">${r.diff}</span></div>`:''}
+        ${gradeChipsHtml(r.grades)||(r.diff?`<div class="card-stat"><span>📊</span><span class="px card-stat-text">${r.diff}</span></div>`:'')}
+        ${r.cond?`<div class="card-stat"><span class="px card-stat-text">${r.cond}</span></div>`:''}
         ${r.duration?`<div class="card-stat"><span>⏱</span><span class="px card-stat-text">${r.duration}분</span></div>`:''}
       </div>
       ${r.memo?`<div class="card-memo">${r.memo}</div>`:''}
@@ -354,7 +377,7 @@ function renderCalendar(){
   if(selectedCalDate){
     const dr=state.records.filter(r=>r.date===selectedCalDate)
     sel=dr.length
-      ?`<div class="cal-selected-records"><div class="px cal-selected-title">${selectedCalDate} 기록 ${dr.length}개</div>${dr.map(r=>`<div class="cal-record-item" onclick="openDetailModal(${r.id})"><span style="font-size:20px">🧗</span><div><div class="cal-record-gym">${r.gym}</div><div class="px cal-record-sub">${r.routes}개 루트 · ${r.diff||'난이도 미입력'}</div></div></div>`).join('')}</div>`
+      ?`<div class="cal-selected-records"><div class="px cal-selected-title">${selectedCalDate} 기록 ${dr.length}개</div>${dr.map(r=>`<div class="cal-record-item" onclick="openDetailModal(${r.id})"><span style="font-size:20px">🧗</span><div><div class="cal-record-gym">${r.gym}</div>${gradeChipsHtml(r.grades)||(r.diff?`<div class="px cal-record-sub">${r.diff}</div>`:'')}</div></div>`).join('')}</div>`
       :`<div class="cal-selected-records"><div class="px cal-empty">이 날은 기록이 없어요</div></div>`
   }
   el.innerHTML=`<div class="calendar-wrap"><div class="cal-header"><button class="px cal-nav" onclick="changeMonth(-1)">◀</button><div class="px cal-month">${calYear}. ${monthNames[calMonth-1]}</div><button class="px cal-nav" onclick="changeMonth(1)">▶</button></div><div class="cal-grid">${dayLabels.map(d=>`<div class="px cal-day-label">${d}</div>`).join('')}${days}</div>${sel}</div>`
@@ -362,30 +385,60 @@ function renderCalendar(){
 function selectCalDate(d){selectedCalDate=selectedCalDate===d?null:d;renderCalendar()}
 function changeMonth(dir){calMonth+=dir;if(calMonth>12){calMonth=1;calYear++}if(calMonth<1){calMonth=12;calYear--}renderCalendar()}
 function openWriteModal(){
-  routeCount=0
-  document.getElementById('routeNum').textContent='0'
+  gradeCounts={}
+  renderGradeGrid()
   document.getElementById('inputGym').value=''
   document.getElementById('inputMemo').value=''
   document.getElementById('inputDate').value=todayStr()
   document.getElementById('writeModalBackdrop').classList.add('show')
 }
 function closeWriteModal(e){if(e&&e.target!==document.getElementById('writeModalBackdrop'))return;document.getElementById('writeModalBackdrop').classList.remove('show')}
-function changeRoute(d){routeCount=Math.max(0,routeCount+d);document.getElementById('routeNum').textContent=routeCount}
+// 색깔별 개수 그리드 렌더링
+function renderGradeGrid(){
+  const grid=document.getElementById('gradeGrid')
+  grid.innerHTML=GRADE_COLORS.map(c=>{
+    const n=gradeCounts[c.key]||0
+    return `<div class="grade-row ${n>0?'on':''}">
+      <div class="grade-dot" style="background:${c.hex}"></div>
+      <div class="grade-name">${c.name}</div>
+      <div class="grade-count-box">
+        <button class="grade-btn" onclick="changeGrade('${c.key}',-1)">−</button>
+        <div class="px grade-count">${n}</div>
+        <button class="grade-btn" onclick="changeGrade('${c.key}',1)">+</button>
+      </div>
+    </div>`
+  }).join('')
+  document.getElementById('gradeTotal').textContent=gradeTotalCount()
+}
+function changeGrade(key,d){
+  const n=Math.max(0,(gradeCounts[key]||0)+d)
+  if(n===0) delete gradeCounts[key]; else gradeCounts[key]=n
+  renderGradeGrid()
+}
+function gradeTotalCount(){return Object.values(gradeCounts).reduce((a,b)=>a+b,0)}
+// 저장된 grades 객체 → 색 점 칩 HTML (카드/상세/캘린더 공용)
+function gradeChipsHtml(grades){
+  if(!grades) return ''
+  const entries=GRADE_COLORS.filter(c=>grades[c.key]>0)
+  if(entries.length===0) return ''
+  return `<div class="grade-chips">${entries.map(c=>`<div class="grade-chip"><div class="grade-chip-dot" style="background:${c.hex}"></div><span class="grade-chip-num">${grades[c.key]}</span></div>`).join('')}</div>`
+}
 function toggleOptional(){const s=document.getElementById('optionalSection');const show=!s.classList.contains('show');s.classList.toggle('show',show);document.getElementById('optToggleIcon').textContent=show?'▼':'▶'}
 function saveRecord(){
   const gym=document.getElementById('inputGym').value.trim()
   const date=document.getElementById('inputDate').value
   const memo=document.getElementById('inputMemo').value.trim()
-  const diff=document.getElementById('inputDiff').value
   const cond=document.getElementById('inputCond').value
   const dur=parseInt(document.getElementById('inputDur').value)||0
   if(!gym){alert('클라이밍장 이름을 입력해주세요!');return}
   if(!date){alert('날짜를 입력해주세요!');return}
+  const grades={...gradeCounts}
+  const routes=gradeTotalCount()
   const isToday=date===todayStr()
   let nabiGrew=false
   if(isToday&&!state.todayRecorded&&state.nabiStage<5){state.nabiStage++;state.todayRecorded=true;nabiGrew=true}
   state.totalRecordCount++
-  const r={id:Date.now(),date,gym,routes:routeCount,memo,diff,cond,duration:dur,chalkReward:0,nabiGrew}
+  const r={id:Date.now(),date,gym,routes,grades,memo,cond,duration:dur,chalkReward:0,nabiGrew}
   for(const m of[5,10,20]){if(state.totalRecordCount===m&&!state.rewardHistory.includes('total_record_'+m)){state.chalkCount++;r.chalkReward=1;state.rewardHistory.push('total_record_'+m);break}}
   state.records.unshift(r)
   document.getElementById('writeModalBackdrop').classList.remove('show')
@@ -398,7 +451,7 @@ function openDetailModal(id){
   const r=state.records.find(r=>r.id===id);if(!r)return
   document.getElementById('detailGym').textContent=r.gym
   document.getElementById('detailDate').textContent=r.date
-  document.getElementById('detailStats').innerHTML=`<div class="detail-stat"><span>🪨</span><span class="px detail-stat-text">${r.routes}개 루트</span></div>${r.diff?`<div class="detail-stat"><span>📊</span><span class="px detail-stat-text">${r.diff}</span></div>`:''} ${r.cond?`<div class="detail-stat"><span>${r.cond}</span></div>`:''} ${r.duration?`<div class="detail-stat"><span>⏱</span><span class="px detail-stat-text">${r.duration}분</span></div>`:''}`
+  document.getElementById('detailStats').innerHTML=`${gradeChipsHtml(r.grades)||(r.diff?`<div class="detail-stat"><span>📊</span><span class="px detail-stat-text">${r.diff}</span></div>`:'')} ${r.cond?`<div class="detail-stat"><span>${r.cond}</span></div>`:''} ${r.duration?`<div class="detail-stat"><span>⏱</span><span class="px detail-stat-text">${r.duration}분</span></div>`:''}`
   document.getElementById('detailMemo').textContent=r.memo||'메모 없음'
   document.getElementById('detailRewards').innerHTML=`${r.chalkReward>0?`<div class="detail-reward chalk">🤍 +${r.chalkReward}꼬집 획득</div>`:''}${r.nabiGrew?`<div class="detail-reward nabi">🐱 나비 성장!</div>`:''}`
   document.getElementById('detailModalBackdrop').classList.add('show')
