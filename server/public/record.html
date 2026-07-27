@@ -12,7 +12,7 @@
 @font-face {
   font-family: 'Galmuri11';
   src: url('https://cdn.jsdelivr.net/gh/quiple/galmuri/dist/Galmuri11-Bold.woff2') format('woff2');
-  font-weight: 700;
+  font-weight: 400;
   font-display: swap;
 }
 
@@ -45,12 +45,12 @@ img { image-rendering: pixelated; }
 <title>Nabi — 기록</title>
 <style>
 .px{font-family:'Galmuri11', monospace}
-.px-title{font-family:'Galmuri11',monospace;font-weight:700 !important;letter-spacing:0.5px}
+.px-title{font-family:'Galmuri11',monospace;font-weight:400 !important;letter-spacing:0.5px}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100vh}
 .phone{width:360px;height:740px;background:#fff;border:2px solid #ddd;border-radius:0;margin:1rem auto;display:flex;flex-direction:column;overflow:hidden}
 .header{display:flex;justify-content:space-between;align-items:center;padding:30px 20px 12px;flex-shrink:0}
-.header-title{font-size:12px;color:#111;font-weight:700;letter-spacing:1px}
+.header-title{font-size:12px;color:#111;font-weight:400;letter-spacing:1px}
 .header-right{display:flex;align-items:center;gap:8px}
 .streak-badge{display:flex;align-items:center;gap:4px;background:#fff8f0;border:1.5px solid #ffd180;border-radius:0;padding:5px 9px}
 .streak-text{font-size:8px;color:#e65100}
@@ -109,7 +109,7 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
 .modal{background:#fff;border-radius:0;width:360px;max-width:100vw;max-height:90vh;display:flex;flex-direction:column}
 .modal-handle{width:40px;height:4px;background:#e0e0e0;border-radius:0;margin:16px auto 0}
 .modal-header{display:flex;justify-content:space-between;align-items:center;padding:16px 20px 12px;border-bottom:1px solid #f0f0f0;flex-shrink:0}
-.modal-title{font-size:10px;color:#111;font-weight:700;letter-spacing:1px}
+.modal-title{font-size:10px;color:#111;font-weight:400;letter-spacing:1px}
 .modal-close{background:none;border:none;cursor:pointer;font-size:18px;color:#bbb}
 .modal-body{overflow-y:auto;padding:16px 20px;flex:1}
 .modal-footer{padding:12px 20px 32px;border-top:1px solid #f0f0f0;flex-shrink:0}
@@ -161,7 +161,7 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
     </div>
   </div>
   <div class="today-card">
-    <div class="today-status" id="todayStatus">오늘 아직 클라이밍 기록이 없어요<br><strong>기록하면 나비가 한 단계 성장해요 🐱</strong></div>
+    <div class="today-status" id="todayStatus">오늘 아직 클라이밍 기록이 없어요<br><span>기록하면 나비가 한 단계 성장해요 🐱</span></div>
     <button class="px btn-record" onclick="openWriteModal()">오늘 기록하기</button>
   </div>
   <div class="view-tabs">
@@ -304,8 +304,8 @@ function updateHeader(){
   document.getElementById('chalkText').textContent=state.chalkCount+'꼬집'
   applyChalkIcon(state.chalkCount, document.getElementById('chalkIcon'))
   document.getElementById('todayStatus').innerHTML=state.todayRecorded
-    ?'오늘 클라이밍 기록을 남겼어요 🎉<br><strong>나비가 잘 자라고 있어요!</strong>'
-    :'오늘 아직 클라이밍 기록이 없어요<br><strong>기록하면 나비가 한 단계 성장해요 🐱</strong>'
+    ?'오늘 클라이밍 기록을 남겼어요 🎉<br><span>나비가 잘 자라고 있어요!</span>'
+    :'오늘 아직 클라이밍 기록이 없어요<br><span>기록하면 나비가 한 단계 성장해요 🐱</span>'
 }
 function switchView(v){
   currentView=v

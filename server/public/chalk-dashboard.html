@@ -14,7 +14,7 @@
 @font-face {
   font-family: 'Galmuri11';
   src: url('https://cdn.jsdelivr.net/gh/quiple/galmuri/dist/Galmuri11-Bold.woff2') format('woff2');
-  font-weight: 700;
+  font-weight: 400;
   font-display: swap;
 }
 * { font-family: 'Galmuri11', 'Galmuri11', monospace !important; }
@@ -34,7 +34,7 @@ html, body {
 <body>
 <style>
 .px{font-family:'Galmuri11', monospace}
-.px-title{font-family:'Galmuri11',monospace;font-weight:700 !important;letter-spacing:0.5px}
+.px-title{font-family:'Galmuri11',monospace;font-weight:400 !important;letter-spacing:0.5px}
 *{box-sizing:border-box;margin:0;padding:0}
 .phone{
   width:360px;height:740px;background:#fff;
@@ -43,7 +43,7 @@ html, body {
 }
 .page-header{display:flex;align-items:center;gap:12px;padding:18px;border-bottom:2px solid #eee;flex-shrink:0}
 .page-header-title{flex:1;min-width:0}
-.page-header-title .px{font-size:15px;color:#111;font-weight:700;letter-spacing:0.5px}
+.page-header-title .px{font-size:15px;color:#111;font-weight:400;letter-spacing:0.5px}
 .chalk-balance-pill{
   display:flex;align-items:center;gap:6px;
   background:#fff;border:1px solid #eee;border-radius:0;
@@ -52,7 +52,7 @@ html, body {
   flex-shrink:0;
 }
 .chalk-balance-pill img{width:22px;height:auto;image-rendering:pixelated}
-.chalk-balance-pill .px{font-size:14px;color:#111;font-weight:700}
+.chalk-balance-pill .px{font-size:14px;color:#111;font-weight:400}
 
 </head>
 <body>
@@ -81,8 +81,8 @@ html, body {
 .chalk-count{font-size:15px;color:#111}
 .chalk-unit{font-size:8px;color:#999}
 .bottomnav{background:#fff;border-top:1.5px solid #eee;display:flex;padding:14px 0 20px}
-.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;padding:4px 0}
-.nav-label{font-size:8px;color:#bbb;font-family:'Galmuri11', monospace}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;padding:4px 0}
+.nav-label{font-size:11px;color:#bbb;font-family:'Galmuri11', monospace}
 .nav-item.active .nav-label{color:#111}
 .nav-item.active svg{color:#111}
 svg{color:#bbb}
@@ -108,7 +108,7 @@ svg{color:#bbb}
   border-radius:0;
   box-shadow:var(--pxb-shadow) var(--pxb-shadow) 0 0 var(--pxb-ink);
   font-family:'Galmuri11','Galmuri11', monospace;
-  font-weight:700;font-size:14px;color:var(--pxb-ink);
+  font-weight:400;font-size:14px;color:var(--pxb-ink);
   cursor:pointer;user-select:none;
   transition:transform .06s ease, box-shadow .06s ease;
 }
@@ -144,7 +144,7 @@ svg{color:#bbb}
   background:#fff;border:var(--pxb-border) solid var(--pxb-ink);
   border-radius:0;
   box-shadow:4px 4px 0 0 var(--pxb-ink);
-  font-size:16px;font-weight:900;color:var(--pxb-ink);line-height:1;
+  font-size:16px;font-weight:400;color:var(--pxb-ink);line-height:1;
   cursor:pointer;transition:transform .06s ease, box-shadow .06s ease;
 }
 .icon-btn-px:active{transform:translate(4px,4px);box-shadow:0 0 0 0 var(--pxb-ink)}
@@ -176,7 +176,7 @@ svg{color:#bbb}
   display:flex;align-items:center;justify-content:center;overflow:hidden;
 }
 .chip-px-icon img{width:22px;height:auto;object-fit:contain;image-rendering:pixelated}
-.chip-px-text{font-family:'Galmuri11',monospace;font-weight:700;font-size:14px;color:var(--pxb-ink);white-space:nowrap}
+.chip-px-text{font-family:'Galmuri11',monospace;font-weight:400;font-size:14px;color:var(--pxb-ink);white-space:nowrap}
 
 /* 패널/모달 컨테이너 (통일된 테두리) */
 .card-px{
@@ -435,7 +435,7 @@ function openChalkHistory(){
           "<div class=\"px\" style=\"font-size:12px;color:#888;margin-top:5px;line-height:1.6\">" + item.desc + "</div>" +
           "<div class=\"px\" style=\"font-size:10px;color:#bbb;margin-top:4px\">" + item.date + "</div>" +
         "</div>" +
-        "<div class=\"px\" style=\"font-size:15px;font-weight:700;color:" + amtColor + ";flex-shrink:0\">" +
+        "<div class=\"px\" style=\"font-size:15px;font-weight:400;color:" + amtColor + ";flex-shrink:0\">" +
           amtText +
         "</div>" +
       "</div>"

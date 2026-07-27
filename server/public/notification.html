@@ -12,7 +12,7 @@
 @font-face {
   font-family: 'Galmuri11';
   src: url('https://cdn.jsdelivr.net/gh/quiple/galmuri/dist/Galmuri11-Bold.woff2') format('woff2');
-  font-weight: 700;
+  font-weight: 400;
   font-display: swap;
 }
 
@@ -45,13 +45,13 @@ img { image-rendering: pixelated; }
 <title>Nabi — 알림</title>
 <style>
 .px{font-family:'Galmuri11', monospace}
-.px-title{font-family:'Galmuri11',monospace;font-weight:700 !important;letter-spacing:0.5px}
+.px-title{font-family:'Galmuri11',monospace;font-weight:400 !important;letter-spacing:0.5px}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100vh}
 .phone{width:360px;height:740px;background:#fff;border:2px solid #ddd;border-radius:0;margin:1rem auto;display:flex;flex-direction:column;overflow:hidden}
 .header{display:flex;align-items:center;padding:30px 20px 12px;border-bottom:1.5px solid #eee;gap:12px;flex-shrink:0}
 .back-btn{background:none;border:none;cursor:pointer;padding:4px;display:flex;align-items:center}
-.header-title{font-size:12px;color:#111;font-weight:700;letter-spacing:1px}
+.header-title{font-size:12px;color:#111;font-weight:400;letter-spacing:1px}
 .notif-list{flex:1;overflow-y:auto;padding:4px 0}
 .notif-list::-webkit-scrollbar{width:4px}
 .notif-list::-webkit-scrollbar-thumb{background:#ddd;border-radius:0}
@@ -80,7 +80,7 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
 .modal-backdrop.show{display:flex}
 .modal{background:#fff;border-radius:0;padding:24px 20px 36px;width:360px;max-width:100vw}
 .modal-handle{width:40px;height:4px;background:#e0e0e0;border-radius:0;margin:0 auto 18px}
-.modal-title{font-size:10px;color:#111;font-weight:700;letter-spacing:1px;margin-bottom:8px}
+.modal-title{font-size:10px;color:#111;font-weight:400;letter-spacing:1px;margin-bottom:8px}
 .modal-sub{font-size:9px;color:#999;margin-bottom:16px;line-height:1.6}
 .gym-list{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
 .gym-item{display:flex;align-items:center;gap:10px;padding:12px 14px;border:1.5px solid #eee;border-radius:0;cursor:pointer;transition:border-color 0.15s}
@@ -158,7 +158,7 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
   <div class="modal" onclick="event.stopPropagation()">
     <div class="modal-handle"></div>
     <div class="px modal-title">🪨 홀드를 배치할 암장을 선택해줘!</div>
-    <div class="modal-sub">획득한 홀드: <span id="modal-hold-name" style="color:#E65100;font-weight:700"></span></div>
+    <div class="modal-sub">획득한 홀드: <span id="modal-hold-name" style="color:#E65100;font-weight:400"></span></div>
     <div class="gym-list">
       <div class="gym-item" onclick="selectGym(this,'클라이밍 파크 홍대점')">
         <div class="gym-icon">🧗</div>
@@ -182,15 +182,15 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
 
 <script>
 const notifications=[
-  {id:1,type:'hold',icon:'🪨',iconClass:'hold',msg:'줍줍 성공! 마을에서 <strong>저그 홀드</strong>를 주웠습니다.',holdName:'저그 홀드',time:'방금 전',unread:true},
-  {id:2,type:'friend',icon:'👋',iconClass:'friend',msg:'<strong>까만나비</strong>님이 친구 요청을 보냈습니다.',time:'5분 전',unread:true},
-  {id:3,type:'gym_join_me',icon:'🧗',iconClass:'gym',msg:'<strong>볼더링 클럽 강남</strong>에 가입했습니다. (함께 쓸 쵸크를 기부해보세요!)',time:'1시간 전',unread:false},
-  {id:4,type:'chalk',icon:'🤍',iconClass:'chalk',msg:'<strong>5쵸크</strong>를 획득했습니다!',time:'2시간 전',unread:false},
-  {id:5,type:'gym_join_other',icon:'🧗',iconClass:'gym',msg:'<strong>하얀나비</strong> 나비가 <strong>볼더링 클럽 강남</strong> 암장에 가입했습니다.',time:'3시간 전',unread:false},
-  {id:6,type:'chalk_donate',icon:'🤍',iconClass:'chalk',msg:'<strong>회색나비</strong> 나비가 <strong>볼더링 클럽 강남</strong>암장에 <strong>10쵸크</strong>를 기부했습니다.',time:'어제',unread:false},
-  {id:7,type:'upgrade',icon:'⬆️',iconClass:'upgrade',msg:'<strong>볼더링 클럽 강남</strong> 암장이 <strong>암장 2단계</strong>로 업그레이드 됐습니다.',time:'어제',unread:false},
+  {id:1,type:'hold',icon:'🪨',iconClass:'hold',msg:'줍줍 성공! 마을에서 <span>저그 홀드</span>를 주웠습니다.',holdName:'저그 홀드',time:'방금 전',unread:true},
+  {id:2,type:'friend',icon:'👋',iconClass:'friend',msg:'<span>까만나비</span>님이 친구 요청을 보냈습니다.',time:'5분 전',unread:true},
+  {id:3,type:'gym_join_me',icon:'🧗',iconClass:'gym',msg:'<span>볼더링 클럽 강남</span>에 가입했습니다. (함께 쓸 쵸크를 기부해보세요!)',time:'1시간 전',unread:false},
+  {id:4,type:'chalk',icon:'🤍',iconClass:'chalk',msg:'<span>5쵸크</span>를 획득했습니다!',time:'2시간 전',unread:false},
+  {id:5,type:'gym_join_other',icon:'🧗',iconClass:'gym',msg:'<span>하얀나비</span> 나비가 <span>볼더링 클럽 강남</span> 암장에 가입했습니다.',time:'3시간 전',unread:false},
+  {id:6,type:'chalk_donate',icon:'🤍',iconClass:'chalk',msg:'<span>회색나비</span> 나비가 <span>볼더링 클럽 강남</span>암장에 <span>10쵸크</span>를 기부했습니다.',time:'어제',unread:false},
+  {id:7,type:'upgrade',icon:'⬆️',iconClass:'upgrade',msg:'<span>볼더링 클럽 강남</span> 암장이 <span>암장 2단계</span>로 업그레이드 됐습니다.',time:'어제',unread:false},
   {id:8,type:'group',icon:'👕',iconClass:'group',msg:'나비가 모여 단체가 되었습니다. 단체티를 선물해 드립니다!',time:'3일 전',unread:false},
-  {id:9,type:'gym_create',icon:'🏔️',iconClass:'gym',msg:'<strong>락 스튜디오 합정</strong> 암장을 개업했습니다. (다른 나비를 초대해보세요!)',time:'7일 전',unread:false}
+  {id:9,type:'gym_create',icon:'🏔️',iconClass:'gym',msg:'<span>락 스튜디오 합정</span> 암장을 개업했습니다. (다른 나비를 초대해보세요!)',time:'7일 전',unread:false}
 ]
 function render(){
   const list=document.getElementById('notif-list')
@@ -206,7 +206,7 @@ function render(){
 }
 function acceptFriend(id,e){
   e.stopPropagation()
-  document.querySelector(`[data-id="${id}"]`).querySelector('.notif-content').innerHTML='<div class="notif-msg">친구 요청을 <strong>수락</strong>했습니다. 🎉</div><div class="notif-time">방금 전</div>'
+  document.querySelector(`[data-id="${id}"]`).querySelector('.notif-content').innerHTML='<div class="notif-msg">친구 요청을 <span>수락</span>했습니다. 🎉</div><div class="notif-time">방금 전</div>'
 }
 function rejectFriend(id,e){
   e.stopPropagation()

@@ -12,7 +12,7 @@
 @font-face {
   font-family: 'Galmuri11';
   src: url('https://cdn.jsdelivr.net/gh/quiple/galmuri/dist/Galmuri11-Bold.woff2') format('woff2');
-  font-weight: 700;
+  font-weight: 400;
   font-display: swap;
 }
 
@@ -71,7 +71,7 @@ input[type=text], input[type=number], textarea, select {
 <title>Nabi — 마을</title>
 <style>
 .px{font-family:'Galmuri11',monospace;font-weight:400}
-.px-title{font-family:'Galmuri11',monospace;font-weight:700 !important;letter-spacing:0.5px}
+.px-title{font-family:'Galmuri11',monospace;font-weight:400 !important;letter-spacing:0.5px}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100vh}
 .phone{width:360px;height:740px;border:2px solid #ddd;border-radius:0;margin:1rem auto;overflow:hidden;position:relative;background:#fff;display:flex;flex-direction:column}
@@ -84,7 +84,7 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
 .village-action-btn{width:38px;height:38px;background:#fff;border:2px solid #222;box-shadow:2px 2px 0 #222;display:flex;align-items:center;justify-content:center;cursor:pointer}
 .village-action-btn:active{transform:translate(1px,1px);box-shadow:1px 1px 0 #222}
 .village-action-btn img{width:100%;height:100%;object-fit:contain;image-rendering:pixelated}
-.village-title{font-size:20px;color:#111;font-weight:700;letter-spacing:0.5px}
+.village-title{font-size:20px;color:#111;font-weight:400;letter-spacing:0.5px}
 .village-sub{font-size:11px;color:#888;margin-top:6px}
 
 /* 상단 - 소속 암장 가로 스크롤 */
@@ -129,7 +129,7 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
 .gym-panel.show{transform:translateY(0)}
 .panel-handle{width:40px;height:4px;background:#ddd;border:1px solid #ccc;border-radius:0;margin:12px auto 0;flex-shrink:0;cursor:pointer}
 .panel-header{display:flex;align-items:center;padding:10px 16px;border-bottom:2px solid #eee;flex-shrink:0;gap:8px}
-.panel-name{font-size:14px;color:#111;font-weight:700;letter-spacing:0.5px}
+.panel-name{font-size:14px;color:#111;font-weight:400;letter-spacing:0.5px}
 .panel-lv{background:#fff;border:2px solid #222;padding:2px 8px;font-size:11px;color:#111;box-shadow:1px 1px 0 #222;margin-left:auto;flex-shrink:0}
 .panel-close{background:none;border:none;cursor:pointer;font-size:22px;color:#999;line-height:1;margin-left:6px}
 .panel-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
@@ -186,7 +186,7 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
 .sub-modal{background:#fff;border-radius:0;border-top:3px solid #222;width:100%;height:78%;display:flex;flex-direction:column}
 .sub-modal-handle{width:40px;height:4px;background:#ddd;border-radius:0;margin:12px auto 0;flex-shrink:0}
 .sub-modal-header{padding:10px 18px;border-bottom:1px solid #eee;flex-shrink:0;display:flex;justify-content:space-between;align-items:center}
-.sub-modal-title{font-size:13px;color:#111;font-weight:700;letter-spacing:0.5px}
+.sub-modal-title{font-size:13px;color:#111;font-weight:400;letter-spacing:0.5px}
 .sub-modal-close{background:none;border:none;cursor:pointer;font-size:20px;color:#bbb}
 .sub-modal-body{overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px 18px 40px;flex:1}
 .route-list,.note-list,.chalk-log,.item-list{display:flex;flex-direction:column;gap:7px}
@@ -210,7 +210,7 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
 .friend-profile-stat-val{font-size:14px;color:#111;line-height:1.3}
 .friend-profile-stat-val--stage{font-size:12px;white-space:nowrap}
 .friend-profile-stat-label{font-size:10px;color:#666;white-space:nowrap}
-.feed-section-title{font-size:16px;color:#111;font-weight:700;letter-spacing:0.5px;margin-bottom:10px}
+.feed-section-title{font-size:16px;color:#111;font-weight:400;letter-spacing:0.5px;margin-bottom:10px}
 .feed-item{display:flex;flex-direction:column;gap:4px;padding:10px 12px;background:#fff;border:2px solid #222;box-shadow:2px 2px 0 #222;border-radius:0;margin-bottom:10px}
 .feed-item-top{display:flex;justify-content:space-between;align-items:center}
 .feed-item-gym{font-size:12px;color:#111}
@@ -247,14 +247,14 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
 .hold-detail-backdrop.show{display:flex}
 .hold-detail-card{background:#fff;border:2.5px solid #222;box-shadow:4px 4px 0 #222;width:78%;max-width:260px;padding:18px 16px;text-align:center}
 .hold-detail-icon{width:52px;height:auto;image-rendering:pixelated;margin:0 auto 10px}
-.hold-detail-name{font-size:13px;font-weight:700;color:#111;margin-bottom:10px}
+.hold-detail-name{font-size:13px;font-weight:400;color:#111;margin-bottom:10px}
 .hold-detail-row{display:flex;justify-content:space-between;font-size:10px;color:#555;padding:5px 0;border-top:1px solid #eee}
 .hold-detail-row span:first-child{color:#999}
 .hold-detail-close{margin-top:12px;width:100%;padding:8px;border:2px solid #222;background:#fff;cursor:pointer;font-size:10px}
 .mini-modal-backdrop{display:none;position:absolute;inset:0;z-index:300;background:rgba(0,0,0,0.5);align-items:center;justify-content:center}
 .mini-modal-backdrop.show{display:flex}
 .mini-modal-card{background:#fff;border:2.5px solid #222;box-shadow:4px 4px 0 #222;width:82%;max-width:280px;padding:20px 18px}
-.mini-modal-title{font-size:14px;font-weight:700;color:#111;margin-bottom:4px;text-align:center}
+.mini-modal-title{font-size:14px;font-weight:400;color:#111;margin-bottom:4px;text-align:center}
 .mini-modal-sub{font-size:10px;color:#999;text-align:center;margin-bottom:14px}
 .mini-modal-input{width:100%;border:2px solid #222;padding:10px 12px;font-size:13px;font-family:'Galmuri11',monospace;outline:none;margin-bottom:12px}
 .mini-modal-btn{width:100%;padding:10px;background:#222;color:#fff;border:2px solid #000;box-shadow:2px 2px 0 #999;font-size:12px;cursor:pointer}
