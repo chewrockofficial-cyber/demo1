@@ -81,8 +81,8 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
 
 .village-header{padding:20px 16px 12px;flex-shrink:0;display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
 .village-header-actions{display:flex;gap:8px;flex-shrink:0;margin-top:2px}
-.village-action-btn{width:38px;height:38px;background:#fff;border:2px solid #222;box-shadow:2px 2px 0 #222;display:flex;align-items:center;justify-content:center;cursor:pointer}
-.village-action-btn:active{transform:translate(1px,1px);box-shadow:1px 1px 0 #222}
+.village-action-btn{width:38px;height:38px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.village-action-btn:active{transform:scale(0.92)}
 .village-action-btn img{width:100%;height:100%;object-fit:contain;image-rendering:pixelated}
 .village-title{font-size:20px;color:#111;font-weight:400;letter-spacing:0.5px}
 .village-sub{font-size:11px;color:#888;margin-top:6px}
@@ -125,7 +125,7 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
 }
 
 /* 암장 패널 */
-.gym-panel{position:absolute;bottom:0;left:0;right:0;z-index:80;background:#fff;border-radius:0;border-top:3px solid #222;transform:translateY(100%);transition:transform 0.32s cubic-bezier(0.34,1.1,0.64,1);height:86%;display:flex;flex-direction:column}
+.gym-panel{position:absolute;bottom:0;left:0;right:0;z-index:210;background:#fff;border-radius:0;border-top:3px solid #222;transform:translateY(100%);transition:transform 0.32s cubic-bezier(0.34,1.1,0.64,1);height:86%;display:flex;flex-direction:column}
 .gym-panel.show{transform:translateY(0)}
 .panel-handle{width:40px;height:4px;background:#ddd;border:1px solid #ccc;border-radius:0;margin:12px auto 0;flex-shrink:0;cursor:pointer}
 .panel-header{display:flex;align-items:center;padding:10px 16px;border-bottom:2px solid #eee;flex-shrink:0;gap:8px}
@@ -145,14 +145,28 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
 .chalk-header-itembtn img{width:100%;height:100%;object-fit:contain;image-rendering:pixelated}
 
 /* 층 섹션 */
-.floor-section{border-bottom:3px solid #222;background:#fff}
-.floor-bg{background:#fff;padding:14px 0 0;position:relative}
-.floor-label{position:absolute;top:10px;left:14px;background:#222;color:#fff;font-size:10px;padding:3px 8px}
-.wall-area{display:flex}
-.wall-img-wrap{width:62%;position:relative;cursor:pointer;border-right:2px solid #222}
-.wall-img-wrap:hover::after{content:'👆 루트 보기';position:absolute;bottom:6px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.7);color:#fff;font-size:9px;padding:4px 8px;white-space:nowrap;font-family:'Galmuri11',monospace}
-.wall-img{width:100%;image-rendering:pixelated;display:block}
-.wall-side{width:38%;display:flex;flex-direction:column;padding:14px 10px 10px;gap:8px}
+.panel-fixed{flex-shrink:0}
+.floor-view{background:#fff;border-bottom:3px solid #222}
+.floor-view-wall-wrap{position:relative;cursor:pointer;max-width:300px;margin:12px auto 0;border:2px solid #222;box-shadow:3px 3px 0 #ddd}
+.floor-view-img{width:100%;image-rendering:pixelated;display:block}
+.floor-view-label{position:absolute;top:8px;left:8px;background:#222;color:#fff;font-size:10px;padding:3px 8px;z-index:2}
+.floor-presence-row{position:absolute;inset:0;pointer-events:none}
+.floor-presence-avatar-wrap{position:absolute}
+.floor-presence-avatar{width:36px;height:auto;image-rendering:pixelated;filter:drop-shadow(0 2px 0 rgba(0,0,0,0.25))}
+.floor-presence-me-tag{position:absolute;top:-6px;left:50%;transform:translateX(-50%);background:#222;color:#fff;font-size:7px;padding:1px 4px;white-space:nowrap}
+.floor-items{padding:12px 14px;display:flex;justify-content:center}
+.chalk-bucket{display:flex;align-items:center;gap:8px;cursor:pointer;background:#fff;border:2px solid #222;box-shadow:2px 2px 0 #222;padding:8px 14px}
+.chalk-bucket:hover{border-color:#000}
+.chalk-bucket-icon{font-size:20px}
+.chalk-bucket-count{font-size:13px;color:#111;font-family:'Galmuri11',monospace}
+.chalk-info-box{background:#fff;border:2px solid #222;box-shadow:2px 2px 0 #222;padding:10px 12px;font-size:11px;color:#111;line-height:1.5}
+.stair-nav{position:relative;display:flex;align-items:center;justify-content:center;height:52px;overflow:hidden;border-top:2px solid #222;border-bottom:2px solid #222;cursor:pointer}
+.stair-nav img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 30%;image-rendering:pixelated;filter:grayscale(35%) contrast(1.05)}
+.stair-nav-label{position:relative;z-index:1;background:rgba(0,0,0,0.72);color:#fff;font-size:10px;padding:5px 10px}
+.wall-modal-scroll{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin:8px -18px 0}
+.wall-modal-scroll::-webkit-scrollbar{display:none}
+.wall-modal-page{min-width:100%;flex-shrink:0;scroll-snap-align:start}
+.wall-modal-hint{text-align:center;font-size:9px;color:#bbb;padding:6px 0;background:#fafafa;border-bottom:1px solid #eee}
 .group-tee{position:relative;flex-shrink:0;background:#fff;border:2px solid #222;box-shadow:2px 2px 0 #222;padding:6px;display:flex;align-items:center;justify-content:center;cursor:pointer;width:40px;height:40px}
 .group-tee:hover{border-color:#000}
 .group-tee img{width:100%;height:100%;object-fit:contain;image-rendering:pixelated}
@@ -175,8 +189,8 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
 .stair-sep img{width:100%;height:100%;object-fit:cover;object-position:center 30%;display:block;image-rendering:pixelated;filter:grayscale(35%) contrast(1.05)}
 
 /* 2D 평면 벽 스케마틱 (홀드 아이템 부착 기능 대비) */
-.wall-detail-wrap{position:relative;border-bottom:2px solid #222;background:#f7f7f5}
-.wall-detail-img{width:100%;display:block}
+.wall-detail-wrap{position:relative;border-bottom:2px solid #222;background:#f7f7f5;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.wall-detail-img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;display:block}
 .wall-detail-hint{position:absolute;bottom:8px;left:8px;right:8px;background:rgba(0,0,0,0.72);color:#fff;font-size:10px;padding:6px 9px;text-align:center}
 
 
@@ -317,6 +331,7 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
         <div class="px panel-lv" id="pLv">1층</div>
         <button class="panel-close" onclick="closePanel()">×</button>
       </div>
+      <div class="panel-fixed" id="panelFixed"></div>
       <div class="panel-scroll" id="panelScroll"></div>
     </div>
 
@@ -458,7 +473,7 @@ const USER={
           installs:[{icon:'purple',name:'퍼플 스타',installer:'회색나비',time:'2일 전'},{icon:'black',name:'블랙그레이 저그',installer:'초크나비',time:'5일 전'},{icon:'pink',name:'핑크 하트',installer:'관리자',time:'일주일 전'}],
           chalkLog:[{emoji:'😺',name:'나',amt:5,time:'어제'},{emoji:'🐈',name:'회색나비',amt:12,time:'3일 전'}]}
       ],
-      members:[{name:'까만나비',stage:1,streak:3},{name:'회색나비',stage:2,streak:7},{name:'나',stage:3,streak:3,isMe:true}]},
+      members:[{name:'까만나비',stage:1,streak:3,floor:'1F'},{name:'회색나비',stage:2,streak:7,floor:'3F'},{name:'나',stage:3,streak:3,isMe:true,floor:'3F'}]},
     {id:'g2',name:'클라밍고 성수',area:'서울 성수',level:5,chalkPool:380,chalkGoal:400,groupTeeAcquired:true,
       // Lv.5 건물 우측 영역
       hotspot:{l:214,t:10,w:146,h:260},
@@ -469,14 +484,14 @@ const USER={
         {label:'2F',wallType:'slant',routes:[{color:'#457b9d',name:'블루 루트',grade:'V2',done:true}],notes:[{text:'연습하기 좋아요',author:'관리자',time:'2일 전'}],items:[{icon:'👟',name:'클라이밍화',donor:'초크나비',time:'일주일 전',qty:1}]},
         {label:'1F',wallType:'flat',routes:[{color:'#06d6a0',name:'민트 루트',grade:'V1',done:true}],notes:[{text:'환영합니다! 🐱',author:'관리자',time:'일주일 전'}],items:[{icon:'🧴',name:'핸드크림',donor:'관리자',time:'3일 전',qty:3},{icon:'🪣',name:'초크통',donor:'분홍나비',time:'2일 전',qty:6}],installs:[{icon:'blue',name:'블루 저그',installer:'분홍나비',time:'오늘'},{icon:'orange',name:'오렌지 포켓',installer:'초크나비',time:'어제'}],chalkLog:[{emoji:'😺',name:'나',amt:3,time:'오늘'},{emoji:'🌟',name:'분홍나비',amt:20,time:'어제'}]}
       ],
-      members:[{name:'나',stage:3,streak:3,isMe:true},{name:'초크나비',stage:2,streak:1},{name:'분홍나비',stage:4,streak:8}]},
+      members:[{name:'나',stage:3,streak:3,isMe:true,floor:'1F'},{name:'초크나비',stage:2,streak:1,floor:'3F'},{name:'분홍나비',stage:4,streak:8,floor:'1F'}]},
     {id:'g3',name:'비스킷 홍대',area:'서울 홍대',level:1,chalkPool:89,chalkGoal:400,groupTeeAcquired:false,
       // Lv.1 컨테이너 좌하단
       hotspot:{l:2,t:305,w:125,h:110},
       floors:[
         {label:'1F',wallType:'flat',routes:[{color:'#ef476f',name:'핑크 루트',grade:'V1',done:true},{color:'#06d6a0',name:'민트 루트',grade:'V1',done:false}],notes:[{text:'환영해요! 🐱',author:'관리자',time:'일주일 전'},{text:'초보 대환영',author:'민트나비',time:'3일 전'}],items:[{icon:'🧴',name:'핸드크림',donor:'민트나비',time:'어제',qty:1},{icon:'🪣',name:'초크통',donor:'관리자',time:'일주일 전',qty:2}],installs:[{icon:'pink',name:'핑크 하트',installer:'민트나비',time:'3일 전'}],chalkLog:[{emoji:'🐈',name:'민트나비',amt:10,time:'어제'},{emoji:'😺',name:'나',amt:5,time:'3일 전'}]}
       ],
-      members:[{name:'나',stage:3,streak:3,isMe:true},{name:'민트나비',stage:1,streak:2}]},
+      members:[{name:'나',stage:3,streak:3,isMe:true,floor:'1F'},{name:'민트나비',stage:1,streak:2,floor:'1F'}]},
   ]
 };
 
@@ -587,87 +602,96 @@ function init(){
   }
 }
 
+let CURRENT_GYM=null;
+let CURRENT_FLOOR_IDX=0;
+
 function openGym(idx){
   selIdx=idx;
   const g=USER.gyms[idx];
+  CURRENT_GYM=g;
   document.getElementById('pName').textContent=g.name;
   document.getElementById('pLv').textContent=`${g.level}층`;
 
-  const scroll=document.getElementById('panelScroll');
-  scroll.innerHTML=''; scroll.scrollTop=0;
-
-  // 쵸크 헤더 (공동 쵸크 진행바 + 공동 아이템함 버튼)
+  // 쵸크 헤더 (공동 쵸크 진행바 + 멤버/아이템함/단체티) - 고정 영역, 층 이동해도 안 바뀜
+  const fixed=document.getElementById('panelFixed');
+  fixed.innerHTML='';
   const ch=document.createElement('div');
   ch.className='chalk-header';
   const pct=Math.min(g.chalkPool/g.chalkGoal*100,100);
   const allItems = g.floors.flatMap(f=>f.items||[]);
   ch.innerHTML=`<div class="chalk-header-info" style="flex:0 1 96px;min-width:0"><div class="px chalk-header-count" style="font-size:10px;color:#111;margin-bottom:4px;white-space:nowrap"><img src="${ICON_CHALK}" alt="쵸크" class="chalk-piece-icon">${g.chalkPool}꼬집</div><div style="background:#f0f0f0;height:7px;border-radius:0;border:1.5px solid #222;overflow:hidden"><div style="width:${pct}%;height:100%;background:#222"></div></div></div><div class="px" style="font-size:10px;color:#bbb">/${g.chalkGoal}</div><div class="chalk-header-itembtn" style="margin-left:auto"><img src="${ICON_FRIENDS}" alt="암장 친구"></div><div class="chalk-header-itembtn"><img src="${ICON_ITEMBOX}" alt="아이템함"></div><div class="group-tee${g.groupTeeAcquired?' acquired':''}">${g.groupTeeAcquired?'<div class="group-tee-check">✓</div>':''}<img src="${ICON_GROUPTEE}" alt="단체티"></div>`;
-  ch.querySelector('.chalk-header-info').onclick=()=>toast2(`공동 쵸크 ${g.chalkGoal}꼬집을 채우면 한 층을 더 올려 세울 수 있어요!`);
+  ch.querySelector('.chalk-header-info').onclick=()=>openChalkInfo(g);
   const chBtns = ch.querySelectorAll('.chalk-header-itembtn');
   chBtns[0].onclick=()=>openGymMembers(g);
   chBtns[1].onclick=()=>openItems(allItems);
   ch.querySelector('.group-tee').onclick=()=>toast2(g.groupTeeAcquired ? '이미 받은 단체티예요!' : '단체티 기능 준비 중!');
-  scroll.appendChild(ch);
+  fixed.appendChild(ch);
 
-  g.floors.forEach((floor,fi)=>{
-    if(fi>0){
-      const sep=document.createElement('div');
-      sep.className='stair-sep';
-      sep.innerHTML=`<img src="${GYM_STAIRS_IMG}" alt="계단">`;
-      scroll.appendChild(sep);
-    }
-
-    const sec=document.createElement('div'); sec.className='floor-section';
-    const bg=document.createElement('div'); bg.className='floor-bg';
-    const lbl=document.createElement('div'); lbl.className='px floor-label'; lbl.textContent=floor.label;
-    bg.appendChild(lbl);
-
-    const wa=document.createElement('div'); wa.className='wall-area';
-    const ww=document.createElement('div'); ww.className='wall-img-wrap';
-    const wi=document.createElement('img'); wi.className='wall-img';
-    wi.src=WALLS[floor.wallType]||WALLS.flat; wi.alt='클라이밍 벽';
-    ww.appendChild(wi); ww.onclick=()=>openWallPlan(floor);
-    const side=document.createElement('div'); side.className='wall-side';
-
-    // 게시판 - 클릭 없이 바로 보이는 실시간 스레드 + 한마디 남기기
-    const board=document.createElement('div'); board.className='board-thread';
-    const renderThreadList=()=>floor.notes.slice(0,5).map(n=>`<div class="board-thread-item"><div class="px board-thread-text">${n.text}</div><div class="px board-thread-meta">${n.author} · ${n.time}</div></div>`).join('');
-    board.innerHTML=`<div class="px board-thread-title">📋 게시판</div><div class="board-thread-list">${renderThreadList()}</div><div class="board-thread-input-row"><input type="text" class="board-thread-input" placeholder="한마디 남기기..." maxlength="60"><button class="board-thread-send">➤</button></div>`;
-    const listEl=board.querySelector('.board-thread-list');
-    const inputEl=board.querySelector('.board-thread-input');
-    const submitNote=()=>{
-      const val=inputEl.value.trim();
-      if(!val) return;
-      floor.notes.unshift({text:val, author:'나', time:'방금'});
-      if(floor.notes.length>5) floor.notes.length=5;
-      listEl.innerHTML=renderThreadList();
-      inputEl.value='';
-      listEl.scrollTop=0;
-    };
-    board.querySelector('.board-thread-send').onclick=submitNote;
-    inputEl.addEventListener('keydown', e=>{
-      if(e.key==='Enter' && !e.isComposing && e.keyCode!==229){
-        e.preventDefault();
-        submitNote();
-      }
-    });
-    side.appendChild(board);
-
-
-    wa.appendChild(ww); wa.appendChild(side); bg.appendChild(wa);
-    sec.appendChild(bg);
-
-    if(fi===g.floors.length-1 && g.floors.length>1){
-      const fi2=document.createElement('div'); fi2.className='floor-items';
-      const bk=document.createElement('div'); bk.className='chalk-bucket';
-      bk.innerHTML=`<div class="chalk-bucket-icon">🪣</div><div class="chalk-bucket-count">${g.chalkPool}</div><div class="px chalk-bucket-label">공동<br>쵸크</div>`;
-      bk.onclick=()=>openChalkLog(floor.chalkLog||[]); fi2.appendChild(bk);
-      sec.appendChild(fi2);
-    }
-    scroll.appendChild(sec);
-  });
+  // 시작 층: 항상 1층(맨 아래)부터, 계단으로 위층으로 올라가는 흐름
+  CURRENT_FLOOR_IDX = g.floors.length-1;
+  renderFloorView();
 
   document.getElementById('gymPanel').classList.add('show');
+}
+
+function goFloor(newIdx){
+  CURRENT_FLOOR_IDX = newIdx;
+  renderFloorView();
+}
+
+function renderFloorView(){
+  const g = CURRENT_GYM;
+  const idx = CURRENT_FLOOR_IDX;
+  const floor = g.floors[idx];
+  const scroll=document.getElementById('panelScroll');
+  scroll.innerHTML=''; scroll.scrollTop=0;
+
+  // 윗층 계단 (index가 작을수록 높은 층)
+  if(idx>0){
+    const up=document.createElement('div'); up.className='stair-nav';
+    up.innerHTML=`<img src="${GYM_STAIRS_IMG}" alt="계단"><div class="px stair-nav-label">▲ ${g.floors[idx-1].label}로 올라가기</div>`;
+    up.onclick=()=>goFloor(idx-1);
+    scroll.appendChild(up);
+  }
+
+  const view=document.createElement('div'); view.className='floor-view';
+  const ww=document.createElement('div'); ww.className='floor-view-wall-wrap';
+  const lbl=document.createElement('div'); lbl.className='px floor-view-label'; lbl.textContent=floor.label;
+  const wi=document.createElement('img'); wi.className='floor-view-img';
+  wi.src=WALLS[floor.wallType]||WALLS.flat; wi.alt='클라이밍 벽';
+  ww.appendChild(wi); ww.appendChild(lbl);
+
+  // 이 층에 현재 있는 멤버들 (나 + 친구) 바닥 여기저기에 서있는 것처럼 표시 (미니홈피 느낌)
+  const PRESENCE_SLOTS = [
+    {left:'22%', top:'71%', scale:1.0, z:3},
+    {left:'55%', top:'80%', scale:0.85, z:2},
+    {left:'38%', top:'74%', scale:0.95, z:3},
+    {left:'66%', top:'83%', scale:0.8, z:2},
+    {left:'60%', top:'68%', scale:0.9, z:1},
+    {left:'28%', top:'85%', scale:0.78, z:2},
+  ];
+  const presentHere = (g.members||[]).filter(m=>m.isMe || m.floor===floor.label);
+  if(presentHere.length){
+    const row=document.createElement('div'); row.className='floor-presence-row';
+    row.innerHTML = presentHere.map((m,mi)=>{
+      const stageIdx = Math.min((m.stage||1)-1, 4);
+      const slot = PRESENCE_SLOTS[mi % PRESENCE_SLOTS.length];
+      return `<div class="floor-presence-avatar-wrap" style="left:${slot.left};top:${slot.top};transform:translate(-50%,-50%) scale(${slot.scale});z-index:${slot.z}">${m.isMe?'<div class="px floor-presence-me-tag">나</div>':''}<img class="floor-presence-avatar" src="${NABI[stageIdx]}" alt="${m.name}"></div>`;
+    }).join('');
+    ww.appendChild(row);
+  }
+
+  ww.onclick=()=>openWallPlan(floor);
+  view.appendChild(ww);
+  scroll.appendChild(view);
+
+  // 아래층 계단
+  if(idx<g.floors.length-1){
+    const down=document.createElement('div'); down.className='stair-nav';
+    down.innerHTML=`<img src="${GYM_STAIRS_IMG}" alt="계단"><div class="px stair-nav-label">▼ ${g.floors[idx+1].label}로 내려가기</div>`;
+    down.onclick=()=>goFloor(idx+1);
+    scroll.appendChild(down);
+  }
 }
 
 function closePanel(){ document.getElementById('gymPanel').classList.remove('show'); selIdx=null; }
@@ -745,19 +769,65 @@ function closeSubModal(e){ if(e&&e.target!==document.getElementById('subBackdrop
 
 function openWallPlan(floor){
   const detailImg = WALL_DETAIL[floor.wallType] || WALL_DETAIL.flat;
-  const wallCanvas = `<div class="wall-detail-wrap"><img class="wall-detail-img" src="${detailImg}" alt="클라이밍 벽 디테일"><div class="wall-detail-hint px">획득한 홀드를 여기에 설치할 수 있어요 (준비 중)</div></div>`;
+  const wallCanvas = `<div class="wall-detail-wrap" id="wallDetailWrap"><img class="wall-detail-img" src="${detailImg}" alt="클라이밍 벽 디테일"><div class="wall-detail-hint px">획득한 홀드를 여기에 설치할 수 있어요 (준비 중)</div></div>`;
   const installs = floor.installs||[];
   const installsHtml = installs.length
     ? installs.map(i=>`<div class="wall-install-item"><img class="wall-install-icon" src="${HOLD_ICONS[i.icon]}" alt="${i.name}"><div style="flex:1"><div class="px wall-install-name">${i.name}</div><div class="px wall-install-meta">${i.installer} · ${i.time} 설치</div></div></div>`).join('')
     : `<div class="px" style="text-align:center;color:#bbb;font-size:11px;padding:16px 0">아직 설치된 홀드가 없어요</div>`;
+
   openSubModal(`🧗 ${floor.label} 벽`,`
-    ${wallCanvas}
-    <div style="padding:14px">
-      <div class="px-title feed-section-title" style="margin-bottom:10px">🪨 누가 어떤 홀드를 설치했나요</div>
-      <div class="item-list">${installsHtml}</div>
-      <button class="px wall-share-btn" onclick="shareWall('${floor.label}')">📤 이 벽 자랑하기</button>
+    <div class="wall-modal-hint px" id="wallModalHint">← 오른쪽으로 스크롤하면 게시판이 보여요</div>
+    <div class="wall-modal-scroll" id="wallModalScroll">
+      <div class="wall-modal-page">
+        ${wallCanvas}
+        <div style="padding:14px">
+          <div class="px-title feed-section-title" style="margin-bottom:10px">🪨 누가 어떤 홀드를 설치했나요</div>
+          <div class="item-list">${installsHtml}</div>
+          <button class="px wall-share-btn" onclick="shareWall('${floor.label}')">📤 이 벽 자랑하기</button>
+        </div>
+      </div>
+      <div class="wall-modal-page" id="wallModalBoardPage"></div>
     </div>
   `);
+
+  // 게시판 페이지 (기존 게시판 컴포넌트를 위치만 옮겨서 재사용)
+  const boardPage = document.getElementById('wallModalBoardPage');
+  const board=document.createElement('div'); board.className='board-thread'; board.style.padding='14px';
+  const renderThreadList=()=>floor.notes.slice(0,10).map(n=>`<div class="board-thread-item"><div class="px board-thread-text">${n.text}</div><div class="px board-thread-meta">${n.author} · ${n.time}</div></div>`).join('');
+  board.innerHTML=`<div class="px board-thread-title">📋 ${floor.label} 게시판</div><div class="board-thread-list">${renderThreadList()}</div><div class="board-thread-input-row"><input type="text" class="board-thread-input" placeholder="한마디 남기기..." maxlength="60"><button class="board-thread-send">➤</button></div>`;
+  const listEl=board.querySelector('.board-thread-list');
+  const inputEl=board.querySelector('.board-thread-input');
+  const submitNote=()=>{
+    const val=inputEl.value.trim();
+    if(!val) return;
+    floor.notes.unshift({text:val, author:'나', time:'방금'});
+    if(floor.notes.length>10) floor.notes.length=10;
+    listEl.innerHTML=renderThreadList();
+    inputEl.value='';
+    listEl.scrollTop=0;
+  };
+  board.querySelector('.board-thread-send').onclick=submitNote;
+  inputEl.addEventListener('keydown', e=>{
+    if(e.key==='Enter' && !e.isComposing && e.keyCode!==229){
+      e.preventDefault();
+      submitNote();
+    }
+  });
+  boardPage.appendChild(board);
+
+  // 벽 이미지가 스크롤 없이 화면에 꽉 차게 - 실제 렌더링된 가용 높이를 측정해서 정확히 맞춤
+  requestAnimationFrame(()=>{
+    const bodyEl = document.getElementById('subBody');
+    const hintEl = document.getElementById('wallModalHint');
+    const wrapEl = document.getElementById('wallDetailWrap');
+    if(bodyEl && hintEl && wrapEl){
+      const style = getComputedStyle(bodyEl);
+      const padTop = parseFloat(style.paddingTop)||0;
+      const padBottom = parseFloat(style.paddingBottom)||0;
+      const available = bodyEl.clientHeight - padTop - padBottom - hintEl.offsetHeight;
+      wrapEl.style.height = Math.max(available, 280) + 'px';
+    }
+  });
 }
 function shareWall(label){
   const shareText = `내 클라이밍 암장의 ${label} 벽을 구경해보세요! 🧗`;
@@ -769,9 +839,14 @@ function shareWall(label){
     toast2('공유하기 준비 중이에요');
   }
 }
-function openChalkLog(logs){
-  if(!logs.length){toast2('아직 쵸크 기록이 없어요');return;}
-  openSubModal('🤍 쵸크 기부 내역',`<div class="chalk-log">${logs.map(l=>`<div class="chalk-log-item"><div class="chalk-log-emoji">${l.emoji}</div><div><div class="chalk-log-name">${l.name}</div><div class="px chalk-log-detail">${l.time} 기부</div></div><div class="chalk-log-amt">+${l.amt}꼬집</div></div>`).join('')}</div>`);
+function openChalkInfo(g){
+  const logs = g.floors.flatMap(f=>f.chalkLog||[]);
+  const remain = Math.max(g.chalkGoal - g.chalkPool, 0);
+  const infoHtml = `<div class="chalk-info-box px">${remain>0 ? `🤍 ${remain}꼬집 더 채우면 한 층을 더 올려 세울 수 있어요!` : '🎉 목표 꼬집을 다 채웠어요! 곧 새 층이 열려요'}</div>`;
+  const logHtml = logs.length
+    ? `<div class="chalk-log">${logs.map(l=>`<div class="chalk-log-item"><div class="chalk-log-emoji">${l.emoji}</div><div><div class="chalk-log-name">${l.name}</div><div class="px chalk-log-detail">${l.time} 기부</div></div><div class="chalk-log-amt">+${l.amt}꼬집</div></div>`).join('')}</div>`
+    : `<div class="px" style="text-align:center;color:#bbb;font-size:11px;padding:16px 0">아직 쵸크 기록이 없어요</div>`;
+  openSubModal('🤍 공동 쵸크', `<div style="padding:14px">${infoHtml}<div class="px-title feed-section-title" style="margin:14px 0 10px">기부 내역</div>${logHtml}</div>`);
 }
 function openMiniModal(html){ document.getElementById('miniModalCard').innerHTML=html; document.getElementById('miniModalBackdrop').classList.add('show'); }
 function closeMiniModal(e){ if(e&&e.target!==document.getElementById('miniModalBackdrop'))return; document.getElementById('miniModalBackdrop').classList.remove('show'); }
@@ -796,7 +871,7 @@ function joinGym(){
     id:'g'+Date.now(), name, area:'', level:1, chalkPool:0, chalkGoal:400, groupTeeAcquired:false,
     hotspot:{l:0,t:0,w:100,h:100},
     floors:[{label:'1F', wallType:'flat', routes:[], notes:[], items:[]}],
-    members:[{name:'나', stage:USER.nabiStage, streak:0, isMe:true}],
+    members:[{name:'나', stage:USER.nabiStage, streak:0, isMe:true, floor:'1F'}],
   });
   closeMiniModal();
   toast2(`${name}에 가입했어요!`);
