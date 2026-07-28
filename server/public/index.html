@@ -47,10 +47,10 @@ html, body {
 .notif-wrap{position:relative;display:inline-block}
 .notif-dot{width:9px;height:9px;background:#ff4444;border:2px solid #fff;border-radius:0;position:absolute;top:-2px;right:-2px}
 .stage-area{text-align:center;padding:44px 0 2px}
-.stage-text{font-size:13.5px;color:#111;letter-spacing:1px}
-.stage-sub{font-size:7px;color:#888;margin-top:6px}
+.stage-text{font-size:18px;color:#111;letter-spacing:1px}
+.stage-sub{font-size:10px;color:#888;margin-top:6px}
 .pills{display:flex;gap:5px;justify-content:center;padding:10px 16px 4px;flex-wrap:wrap}
-.pill{font-size:6px;padding:4px 7px;border-radius:0;border:1.5px solid #ddd;color:#bbb;background:#f8f8f8;font-family:'Galmuri11', monospace}
+.pill{font-size:8px;padding:5px 8px;border-radius:0;border:1.5px solid #ddd;color:#bbb;background:#f8f8f8;font-family:'Galmuri11', monospace}
 .pill.active{border-color:#222;color:#111;background:#fff}
 .char-area{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0}
 .nabi-img{width:130px;height:auto;image-rendering:pixelated;display:block}
@@ -141,12 +141,9 @@ html, body {
   position:relative;
   display:inline-flex;align-items:center;gap:8px;
   padding:6px 16px 6px 6px;
-  background:#dcdde0;border:var(--pxb-border) solid var(--pxb-ink);
-  border-radius:0;
-  box-shadow:4px 4px 0 0 var(--pxb-ink);
-  cursor:pointer;transition:transform .06s ease, box-shadow .06s ease;
+  cursor:pointer;transition:transform .06s ease;
 }
-.chip-px:active{transform:translate(4px,4px);box-shadow:0 0 0 0 var(--pxb-ink)}
+.chip-px:active{transform:scale(0.96)}
 .chip-px-icon{
   width:42px;height:42px;flex-shrink:0;
   display:flex;align-items:center;justify-content:center;overflow:hidden;
