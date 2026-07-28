@@ -451,7 +451,7 @@ function openDetailModal(id){
   const r=state.records.find(r=>r.id===id);if(!r)return
   document.getElementById('detailGym').textContent=r.gym
   document.getElementById('detailDate').textContent=r.date
-  document.getElementById('detailStats').innerHTML=`${gradeChipsHtml(r.grades)||(r.diff?`<div class="detail-stat"><span>📊</span><span class="px detail-stat-text">${r.diff}</span></div>`:'')} ${r.cond?`<div class="detail-stat"><span>${r.cond}</span></div>`:''} ${r.duration?`<div class="detail-stat"><span>⏱</span><span class="px detail-stat-text">${r.duration}분</span></div>`:''}`
+  document.getElementById('detailStats').innerHTML=`${gradeChipsHtml(r.grades)||(r.diff?`<div class="detail-stat"><span>📊</span><span class="px detail-stat-text">${r.diff}</span></div>`:'')} ${r.cond?`<div class="detail-stat"><span class="px detail-stat-text">${r.cond}</span></div>`:''} ${r.duration?`<div class="detail-stat"><span>⏱</span><span class="px detail-stat-text">${r.duration}분</span></div>`:''}`
   document.getElementById('detailMemo').textContent=r.memo||'메모 없음'
   document.getElementById('detailRewards').innerHTML=`${r.chalkReward>0?`<div class="detail-reward chalk"><img src="/images/chalk_piece.png" style="width:15px;height:auto;image-rendering:pixelated;vertical-align:middle"> +${r.chalkReward}꼬집 획득</div>`:''}${r.nabiGrew?`<div class="detail-reward nabi">🐱 나비 성장!</div>`:''}`
   document.getElementById('detailModalBackdrop').classList.add('show')
