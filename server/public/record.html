@@ -347,7 +347,7 @@ function renderFeed(){
     <div class="record-card" onclick="openDetailModal(${r.id})">
       <div class="card-header">
         <div><div class="px card-date">${r.date}</div><div class="card-gym">${r.gym}</div></div>
-        ${r.chalkReward>0?`<div class="card-reward"><span>🤍</span><span class="px card-reward-text">+${r.chalkReward}꼬집</span></div>`:''}
+        ${r.chalkReward>0?`<div class="card-reward"><img src="/images/chalk_piece.png" style="width:15px;height:auto;image-rendering:pixelated;vertical-align:middle"><span class="px card-reward-text">+${r.chalkReward}꼬집</span></div>`:''}
       </div>
       <div class="card-photo"><div class="card-photo-empty">📷</div></div>
       <div class="card-stats">
@@ -444,7 +444,7 @@ function saveRecord(){
   document.getElementById('writeModalBackdrop').classList.remove('show')
   let msg='🎉 오늘의 클라이밍이 저장됐어요!'
   if(nabiGrew) msg='🐱 나비가 한 단계 성장했어요!'
-  if(r.chalkReward>0) msg='🤍 +1꼬집을 획득했어요!'
+  if(r.chalkReward>0) msg='<img src="/images/chalk_piece.png" style="width:16px;height:auto;image-rendering:pixelated;vertical-align:middle"> +1꼬집을 획득했어요!'
   showToast(msg);updateHeader();renderFeed();renderCalendar()
 }
 function openDetailModal(id){
@@ -453,11 +453,11 @@ function openDetailModal(id){
   document.getElementById('detailDate').textContent=r.date
   document.getElementById('detailStats').innerHTML=`${gradeChipsHtml(r.grades)||(r.diff?`<div class="detail-stat"><span>📊</span><span class="px detail-stat-text">${r.diff}</span></div>`:'')} ${r.cond?`<div class="detail-stat"><span>${r.cond}</span></div>`:''} ${r.duration?`<div class="detail-stat"><span>⏱</span><span class="px detail-stat-text">${r.duration}분</span></div>`:''}`
   document.getElementById('detailMemo').textContent=r.memo||'메모 없음'
-  document.getElementById('detailRewards').innerHTML=`${r.chalkReward>0?`<div class="detail-reward chalk">🤍 +${r.chalkReward}꼬집 획득</div>`:''}${r.nabiGrew?`<div class="detail-reward nabi">🐱 나비 성장!</div>`:''}`
+  document.getElementById('detailRewards').innerHTML=`${r.chalkReward>0?`<div class="detail-reward chalk"><img src="/images/chalk_piece.png" style="width:15px;height:auto;image-rendering:pixelated;vertical-align:middle"> +${r.chalkReward}꼬집 획득</div>`:''}${r.nabiGrew?`<div class="detail-reward nabi">🐱 나비 성장!</div>`:''}`
   document.getElementById('detailModalBackdrop').classList.add('show')
 }
 function closeDetailModal(e){if(e&&e.target!==document.getElementById('detailModalBackdrop'))return;document.getElementById('detailModalBackdrop').classList.remove('show')}
-function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800)}
+function showToast(msg){const t=document.getElementById('toast');t.innerHTML=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800)}
 init()
 </script>
 </body>
