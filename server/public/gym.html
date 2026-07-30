@@ -178,7 +178,11 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
 .board-thread-title{font-size:9px;color:#666;margin-bottom:5px;flex-shrink:0}
 .board-thread-list{display:flex;flex-direction:column;gap:5px;overflow-y:auto;scrollbar-width:none}
 .board-thread-list::-webkit-scrollbar{display:none}
-.board-thread-item{border-left:3px solid #222;padding-left:6px}
+.board-thread-item{border-left:3px solid #222;padding-left:6px;display:flex;align-items:flex-start;gap:4px}
+.board-thread-item-main{flex:1;min-width:0}
+.board-thread-item-actions{display:flex;gap:2px;flex-shrink:0}
+.board-thread-icon-btn{background:none;border:none;cursor:pointer;font-size:10px;padding:2px;opacity:0.55;line-height:1}
+.board-thread-icon-btn:hover{opacity:1}
 .board-thread-text{font-size:10px;color:#111;line-height:1.4}
 .board-thread-meta{font-size:8px;color:#999;margin-top:1px}
 .board-thread-input-row{display:flex;gap:4px;margin-top:6px;flex-shrink:0}
@@ -274,6 +278,9 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
 .mini-modal-btn{width:100%;padding:10px;background:#222;color:#fff;border:2px solid #000;box-shadow:2px 2px 0 #999;font-size:12px;cursor:pointer}
 .mini-modal-btn:active{transform:translate(1px,1px);box-shadow:1px 1px 0 #999}
 .mini-modal-cancel{width:100%;padding:8px;margin-top:8px;background:#fff;border:2px solid #222;font-size:11px;cursor:pointer;color:#555}
+.report-reason-list{display:flex;flex-direction:column;gap:8px;margin-bottom:4px}
+.report-reason-item{display:flex;align-items:center;gap:8px;font-size:12px;color:#111;cursor:pointer}
+.report-reason-item input{accent-color:#222;width:14px;height:14px;flex-shrink:0}
 .note-text{font-size:13px;color:#333;line-height:1.7}
 .note-meta{font-size:11px;color:#bbb;margin-top:3px}
 .chalk-log-item{display:flex;align-items:center;gap:10px;padding:9px 12px;background:#fff;border:2px solid #222;box-shadow:2px 2px 0 #222}
@@ -603,6 +610,12 @@ function init(){
 }
 
 let CURRENT_GYM=null;
+// TODO: 실제 서비스 연동 시 로그인된 사용자의 관리자 권한 여부로 교체
+const IS_ADMIN = true;
+let CURRENT_BOARD_FLOOR = null;
+let CURRENT_BOARD_RENDER = null;
+let CURRENT_BOARD_LIST_EL = null;
+let CURRENT_REPORT_NOTE_ID = null;
 let CURRENT_FLOOR_IDX=0;
 
 function openGym(idx){
@@ -793,7 +806,20 @@ function openWallPlan(floor){
   // 게시판 페이지 (기존 게시판 컴포넌트를 위치만 옮겨서 재사용)
   const boardPage = document.getElementById('wallModalBoardPage');
   const board=document.createElement('div'); board.className='board-thread'; board.style.padding='14px';
-  const renderThreadList=()=>floor.notes.slice(0,10).map(n=>`<div class="board-thread-item"><div class="px board-thread-text">${n.text}</div><div class="px board-thread-meta">${n.author} · ${n.time}</div></div>`).join('');
+  const renderThreadList=()=>floor.notes.slice(0,10).map(n=>{
+    n.id = n.id || ('n'+Math.random().toString(36).slice(2));
+    const delBtn = IS_ADMIN ? `<button class="board-thread-icon-btn" title="제거" onclick="adminDeleteNote('${n.id}')">🗑️</button>` : '';
+    return `<div class="board-thread-item" data-id="${n.id}">
+      <div class="board-thread-item-main">
+        <div class="px board-thread-text">${n.text}</div>
+        <div class="px board-thread-meta">${n.author} · ${n.time}</div>
+      </div>
+      <div class="board-thread-item-actions">
+        <button class="board-thread-icon-btn" title="신고" onclick="openReportModal('${n.id}')">🚩</button>
+        ${delBtn}
+      </div>
+    </div>`;
+  }).join('');
   board.innerHTML=`<div class="px board-thread-title">📋 ${floor.label} 게시판</div><div class="board-thread-list">${renderThreadList()}</div><div class="board-thread-input-row"><input type="text" class="board-thread-input" placeholder="한마디 남기기..." maxlength="60"><button class="board-thread-send">➤</button></div>`;
   const listEl=board.querySelector('.board-thread-list');
   const inputEl=board.querySelector('.board-thread-input');
@@ -814,6 +840,12 @@ function openWallPlan(floor){
     }
   });
   boardPage.appendChild(board);
+
+  // 신고/관리자 제거 버튼에서 현재 층의 게시판 목록을 다시 그릴 수 있도록 전역에서 접근 가능하게 저장
+  CURRENT_BOARD_FLOOR = floor;
+  CURRENT_BOARD_RENDER = renderThreadList;
+  CURRENT_BOARD_LIST_EL = listEl;
+
 
   // 벽 이미지가 스크롤 없이 화면에 꽉 차게 - 실제 렌더링된 가용 높이를 측정해서 정확히 맞춤
   requestAnimationFrame(()=>{
@@ -850,6 +882,48 @@ function openChalkInfo(g){
 }
 function openMiniModal(html){ document.getElementById('miniModalCard').innerHTML=html; document.getElementById('miniModalBackdrop').classList.add('show'); }
 function closeMiniModal(e){ if(e&&e.target!==document.getElementById('miniModalBackdrop'))return; document.getElementById('miniModalBackdrop').classList.remove('show'); }
+
+const REPORT_REASONS = ['비속어·욕설', '스팸·도배', '부적절한 내용', '개인정보 노출', '기타'];
+function openReportModal(noteId){
+  CURRENT_REPORT_NOTE_ID = noteId;
+  const optionsHtml = REPORT_REASONS.map((r,i)=>`
+    <label class="report-reason-item">
+      <input type="radio" name="reportReason" value="${r}" onchange="onReportReasonChange()">
+      <span class="px">${r}</span>
+    </label>`).join('');
+  openMiniModal(`
+    <div class="px mini-modal-title">🚩 신고하기</div>
+    <div class="px mini-modal-sub">신고 사유를 선택해주세요</div>
+    <div class="report-reason-list">${optionsHtml}</div>
+    <input type="text" class="mini-modal-input" id="reportEtcInput" placeholder="구체적인 사유를 적어주세요" style="display:none;margin-top:10px">
+    <button class="px mini-modal-btn" onclick="submitReport()">신고 제출</button>
+    <button class="px mini-modal-cancel" onclick="closeMiniModal()">취소</button>
+  `);
+}
+function onReportReasonChange(){
+  const checked = document.querySelector('input[name="reportReason"]:checked');
+  const etcInput = document.getElementById('reportEtcInput');
+  etcInput.style.display = (checked && checked.value === '기타') ? 'block' : 'none';
+}
+function submitReport(){
+  const checked = document.querySelector('input[name="reportReason"]:checked');
+  if(!checked){ toast2('신고 사유를 선택해주세요'); return; }
+  let reason = checked.value;
+  if(reason === '기타'){
+    const etc = document.getElementById('reportEtcInput').value.trim();
+    if(!etc){ toast2('신고 사유를 적어주세요'); return; }
+    reason = etc;
+  }
+  // TODO: 실제 서비스 연동 시 서버로 신고 내역(noteId, reason) 전송
+  closeMiniModal();
+  toast2('신고가 접수됐어요. 검토 후 조치할게요');
+}
+function adminDeleteNote(noteId){
+  if(!CURRENT_BOARD_FLOOR) return;
+  CURRENT_BOARD_FLOOR.notes = CURRENT_BOARD_FLOOR.notes.filter(n=>n.id!==noteId);
+  CURRENT_BOARD_LIST_EL.innerHTML = CURRENT_BOARD_RENDER();
+  toast2('게시글을 제거했어요');
+}
 
 function openJoinGym(){
   openMiniModal(`
