@@ -94,9 +94,9 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
 .gym-card:active{transform:scale(0.96)}
 .gym-card-img-wrap{width:122px;height:230px;display:flex;align-items:flex-end;justify-content:center;position:relative}
 .gym-card-img-wrap img{position:relative;z-index:1}
-.gym-card-star{position:absolute;top:-2px;right:6px;font-size:15px;z-index:2}
+.gym-card-name{margin-top:38px;color:#111;font-size:12px;font-weight:400;white-space:nowrap;max-width:122px;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:4px;justify-content:center}
+.gym-card-fav-badge{width:13px;height:13px;object-fit:contain;image-rendering:pixelated;flex-shrink:0}
 .gym-card.bounce img{animation:bldgBounce 0.32s ease}
-.gym-card-name{margin-top:38px;color:#111;font-size:12px;font-weight:400;white-space:nowrap;max-width:122px;overflow:hidden;text-overflow:ellipsis}
 
 /* 구분선 */
 .section-divider{display:none}
@@ -132,6 +132,7 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
 .panel-handle{width:40px;height:4px;background:#ddd;border:1px solid #ccc;border-radius:0;margin:12px auto 0;flex-shrink:0;cursor:pointer}
 .panel-header{display:flex;align-items:center;padding:10px 16px;border-bottom:2px solid #eee;flex-shrink:0;gap:8px}
 .panel-name{font-size:14px;color:#111;font-weight:400;letter-spacing:0.5px}
+.panel-name-fav-badge{width:16px;height:16px;object-fit:contain;image-rendering:pixelated;flex-shrink:0}
 .panel-lv{background:#fff;border:2px solid #222;padding:2px 8px;font-size:11px;color:#111;box-shadow:1px 1px 0 #222;flex-shrink:0}
 .panel-header-actions{display:flex;align-items:center;gap:10px;margin-left:auto;flex-shrink:0}
 .panel-icon-btn{background:none;border:none;cursor:pointer;font-size:20px;color:#bbb;line-height:1;padding:2px}
@@ -370,6 +371,7 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
       <div class="panel-handle" onclick="closePanel()"></div>
       <div class="panel-header">
         <div class="px panel-lv" id="pLv">1층</div>
+        <img class="panel-name-fav-badge" id="pNameFavBadge" src="" alt="즐겨찾기" style="display:none">
         <div class="panel-name" id="pName"></div>
         <div class="panel-header-actions">
           <button class="panel-icon-btn" id="panelFavBtn" onclick="toggleFavoriteGym()" title="즐겨찾기"><img id="panelFavIcon" src="" alt="즐겨찾기"></button>
@@ -620,10 +622,9 @@ function init(){
       };
       card.innerHTML = `
         <div class="gym-card-img-wrap">
-          ${gym.isPrimary ? '<span class="gym-card-star">⭐</span>' : ''}
           <img src="${GYM_BUILDING_IMG[gym.level]||GYM_BUILDING_IMG[1]}" style="width:${w}px;height:${h}px" />
         </div>
-        <div class="px gym-card-name">${gym.name}</div>`;
+        <div class="px gym-card-name">${gym.isPrimary ? `<img class="gym-card-fav-badge" src="${ICON_FAVORITE}" alt="즐겨찾기">` : ''}${gym.name}</div>`;
       gymRow.appendChild(card);
     });
   }
@@ -672,6 +673,9 @@ function openGym(idx){
   document.getElementById('panelFavIcon').src = ICON_FAVORITE;
   favBtn.classList.toggle('active', !!g.isPrimary);
   document.getElementById('panelFavIcon').classList.toggle('active', !!g.isPrimary);
+  const nameBadge = document.getElementById('pNameFavBadge');
+  nameBadge.src = ICON_FAVORITE;
+  nameBadge.style.display = g.isPrimary ? 'block' : 'none';
   document.getElementById('panelSettingsIcon').src = ICON_SETTINGS;
   document.getElementById('pLv').textContent=`${g.level}층`;
 
@@ -827,6 +831,7 @@ function toggleFavoriteGym(){
   CURRENT_GYM.isPrimary = !CURRENT_GYM.isPrimary;
   document.getElementById('panelFavBtn').classList.toggle('active', CURRENT_GYM.isPrimary);
   document.getElementById('panelFavIcon').classList.toggle('active', CURRENT_GYM.isPrimary);
+  document.getElementById('pNameFavBadge').style.display = CURRENT_GYM.isPrimary ? 'block' : 'none';
   toast2(CURRENT_GYM.isPrimary ? '즐겨찾기에 추가했어요' : '즐겨찾기를 해제했어요');
   init();
 }
