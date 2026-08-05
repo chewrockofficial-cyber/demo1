@@ -3,18 +3,7 @@
 <head>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <style>
-@font-face {
-  font-family: 'Galmuri11';
-  src: url('https://cdn.jsdelivr.net/gh/quiple/galmuri/dist/Galmuri11.woff2') format('woff2');
-  font-weight: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Galmuri11';
-  src: url('https://cdn.jsdelivr.net/gh/quiple/galmuri/dist/Galmuri11-Bold.woff2') format('woff2');
-  font-weight: 700;
-  font-display: swap;
-}
+@import url('https://cdn.jsdelivr.net/gh/neodgm/neodgm-pro-webfont@latest/neodgm_pro/style.css');
 
 /* 모달 각진 */
 .gym-panel { border-radius:0!important; border-top-width: 3px !important; }
@@ -22,7 +11,7 @@
 /* 인풋 각진 */
 input[type=text], input[type=number], textarea, select {
   border-radius:0!important; border: 2px solid #111 !important;
-  font-family: 'Galmuri11', monospace !important;
+  font-family: 'NeoDunggeunmo Pro', monospace !important;
 }
 /* 난이도/조건 칩들 */
 [class*="-chip"], [class*="-pill"], [class*="-tag"] { border-radius:0!important; }
@@ -32,8 +21,8 @@ input[type=text], input[type=number], textarea, select {
 [class*="item-card"], [class*="product"] { border-radius:0!important; }
 
 
-/* Chew Rock: Galmuri11 폰트만 적용 */
-* { font-family: 'Galmuri11', 'Galmuri11', monospace !important; }
+/* Chew Rock: NeoDunggeunmo Pro 폰트만 적용 */
+* { font-family: 'NeoDunggeunmo Pro', 'NeoDunggeunmo Pro', monospace !important; }
 .phone { border-radius:0!important; overflow: hidden !important; }
 .pill { border-radius:0!important; }
 .notif-dot { border-radius:0!important; }
@@ -44,8 +33,8 @@ img { image-rendering: pixelated; }
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Nabi — 알림</title>
 <style>
-.px{font-family:'Galmuri11', monospace}
-.px-title{font-family:'Galmuri11',monospace;font-weight:400 !important;letter-spacing:0.5px}
+.px{font-family:'NeoDunggeunmo Pro', monospace}
+.px-title{font-family:'NeoDunggeunmo Pro',monospace;font-weight:400 !important;letter-spacing:0.5px}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100vh}
 .phone{width:360px;height:740px;background:#fff;border:2px solid #ddd;border-radius:0;margin:1rem auto;display:flex;flex-direction:column;overflow:hidden}
@@ -68,7 +57,7 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
 .notif-msg strong{color:#111}
 .notif-time{font-size:9px;color:#bbb;margin-top:4px}
 .friend-btns{display:flex;gap:8px;margin-top:8px}
-.btn-accept,.btn-reject{padding:6px 12px;border-radius:0;font-size:8px;border:none;cursor:pointer;font-family:'Galmuri11', monospace}
+.btn-accept,.btn-reject{padding:6px 12px;border-radius:0;font-size:8px;border:none;cursor:pointer;font-family:'NeoDunggeunmo Pro', monospace}
 .btn-accept{background:#111;color:#fff}
 .btn-reject{background:#f0f0f0;color:#888}
 .modal-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:100;align-items:flex-end;justify-content:center}
@@ -85,12 +74,12 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
 .gym-name{font-size:10px;color:#222}
 .gym-members{font-size:9px;color:#bbb;margin-top:2px}
 .modal-btns{display:flex;gap:8px}
-.btn-confirm{flex:1;padding:12px;background:#111;color:#fff;border:none;border-radius:0;font-size:8px;cursor:pointer;font-family:'Galmuri11', monospace}
-.btn-close-modal{flex:1;padding:12px;background:#f5f5f5;color:#666;border:none;border-radius:0;font-size:8px;cursor:pointer;font-family:'Galmuri11', monospace}
+.btn-confirm{flex:1;padding:12px;background:#111;color:#fff;border:none;border-radius:0;font-size:8px;cursor:pointer;font-family:'NeoDunggeunmo Pro', monospace}
+.btn-close-modal{flex:1;padding:12px;background:#f5f5f5;color:#666;border:none;border-radius:0;font-size:8px;cursor:pointer;font-family:'NeoDunggeunmo Pro', monospace}
 .btn-confirm:disabled{opacity:0.4;cursor:not-allowed}
 .bottomnav{background:#fff;border-top:1.5px solid #eee;display:flex;padding:14px 0 20px;flex-shrink:0}
 .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;padding:4px 0;color:#bbb}
-.nav-label{font-family:'Galmuri11', monospace;font-size:11px}
+.nav-label{font-family:'NeoDunggeunmo Pro', monospace;font-size:11px}
 .nav-item.active{color:#111}
 .nav-item.active .nav-label{color:#111}
 </style>
