@@ -3,6 +3,7 @@
 <head>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700&display=swap');
 @import url('https://cdn.jsdelivr.net/gh/neodgm/neodgm-pro-webfont@latest/neodgm_pro/style.css');
 
 /* ══════════════════════════════════
@@ -10,11 +11,11 @@
    NeoDunggeunmo Pro + 픽셀 UI 통일
 ══════════════════════════════════ */
 *, *::before, *::after {
-  font-family: 'NeoDunggeunmo Pro', 'Press Start 2P', monospace !important;
+  font-family: 'Pixelify Sans', 'NeoDunggeunmo Pro', 'Press Start 2P', monospace !important;
 }
-.px { font-family: 'NeoDunggeunmo Pro', monospace !important; font-weight: 400 !important; }
-button { border-radius: 0 !important; font-family: 'NeoDunggeunmo Pro', monospace !important; font-weight: 400 !important; }
-input, textarea { border-radius: 0 !important; font-family: 'NeoDunggeunmo Pro', monospace !important; border: 2px solid #111 !important; }
+.px { font-family: 'Pixelify Sans', 'NeoDunggeunmo Pro', monospace !important; font-weight: 400 !important; }
+button { border-radius: 0 !important; font-family: 'Pixelify Sans', 'NeoDunggeunmo Pro', monospace !important; font-weight: 400 !important; }
+input, textarea { border-radius: 0 !important; font-family: 'Pixelify Sans', 'NeoDunggeunmo Pro', monospace !important; border: 2px solid #111 !important; }
 input:focus, textarea:focus { outline: none !important; box-shadow: inset 2px 2px 0 #E0E0E0 !important; }
 /* 각진 border-radius 제거 */
 [class*="card"],[class*="panel"],[class*="modal"],[class*="chip"],
@@ -45,7 +46,7 @@ img { image-rendering: pixelated; }
 /* 인풋 각진 */
 input[type=text], input[type=number], textarea, select {
   border-radius: 0 !important; border: 2px solid #111 !important;
-  font-family: 'NeoDunggeunmo Pro', monospace !important;
+  font-family: 'Pixelify Sans', 'NeoDunggeunmo Pro', monospace !important;
 }
 /* 난이도/조건 칩들 */
 [class*="-chip"], [class*="-pill"], [class*="-tag"] { border-radius: 0 !important; }
@@ -59,8 +60,8 @@ input[type=text], input[type=number], textarea, select {
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Nabi — 마을</title>
 <style>
-.px{font-family:'NeoDunggeunmo Pro',monospace;font-weight:400}
-.px-title{font-family:'NeoDunggeunmo Pro',monospace;font-weight:400 !important;letter-spacing:0.5px}
+.px{font-family:'Pixelify Sans', 'NeoDunggeunmo Pro',monospace;font-weight:400}
+.px-title{font-family:'Pixelify Sans', 'NeoDunggeunmo Pro',monospace;font-weight:400 !important;letter-spacing:0.5px}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100vh}
 .phone{width:360px;height:740px;border:2px solid #ddd;border-radius:0;margin:1rem auto;overflow:hidden;position:relative;background:#fff;display:flex;flex-direction:column}
@@ -155,7 +156,7 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
 .chalk-bucket{display:flex;align-items:center;gap:8px;cursor:pointer;background:#fff;border:2px solid #222;box-shadow:none;padding:8px 14px}
 .chalk-bucket:hover{border-color:#000}
 .chalk-bucket-icon{font-size:20px}
-.chalk-bucket-count{font-size:13px;color:#111;font-family:'NeoDunggeunmo Pro',monospace}
+.chalk-bucket-count{font-size:13px;color:#111;font-family:'Pixelify Sans', 'NeoDunggeunmo Pro',monospace}
 .chalk-info-box{background:#fff;border:2px solid #222;padding:10px 12px;font-size:11px;color:#111;line-height:1.5}
 .stair-nav{position:relative;display:flex;align-items:center;justify-content:center;height:52px;overflow:hidden;cursor:pointer}
 .stair-nav img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 30%;image-rendering:pixelated;filter:grayscale(35%) contrast(1.05)}
@@ -189,7 +190,7 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
 .board-thread-text{font-size:10px;color:#111;line-height:1.4}
 .board-thread-meta{font-size:8px;color:#999;margin-top:1px}
 .board-thread-input-row{display:flex;gap:4px;margin-top:6px;flex-shrink:0}
-.board-thread-input{flex:1;min-width:0;border:1.5px solid #222;padding:5px 6px;font-size:9px;font-family:'NeoDunggeunmo Pro',monospace;outline:none}
+.board-thread-input{flex:1;min-width:0;border:1.5px solid #222;padding:5px 6px;font-size:9px;font-family:'Pixelify Sans', 'NeoDunggeunmo Pro',monospace;outline:none}
 .board-thread-send{flex-shrink:0;border:1.5px solid #222;background:#222;color:#fff;width:24px;font-size:11px;cursor:pointer}
 
 .stair-sep{padding:0;line-height:0;height:56px;overflow:hidden;border-top:2px solid #222;border-bottom:2px solid #222}
@@ -279,7 +280,7 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
 .mini-modal-card{background:#fff;border:2.5px solid #222;box-shadow:none;width:82%;max-width:280px;padding:20px 18px;max-height:600px;overflow-y:auto}
 .mini-modal-title{font-size:14px;font-weight:400;color:#111;margin-bottom:4px;text-align:center}
 .mini-modal-sub{font-size:10px;color:#999;text-align:center;margin-bottom:14px}
-.mini-modal-input{width:100%;border:2px solid #222;padding:10px 12px;font-size:13px;font-family:'NeoDunggeunmo Pro',monospace;outline:none;margin-bottom:12px}
+.mini-modal-input{width:100%;border:2px solid #222;padding:10px 12px;font-size:13px;font-family:'Pixelify Sans', 'NeoDunggeunmo Pro',monospace;outline:none;margin-bottom:12px}
 .mini-modal-btn{width:100%;padding:10px;background:#222;color:#fff;border:2px solid #000;box-shadow:none;font-size:12px;cursor:pointer}
 .mini-modal-btn:disabled{background:#ccc;border-color:#bbb;box-shadow:none;cursor:not-allowed;color:#eee}
 .mini-modal-btn:active{transform:scale(0.97)}
@@ -313,17 +314,17 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
 .chalk-log-emoji{font-size:18px}
 .chalk-log-name{font-size:13px;color:#111}
 .chalk-log-detail{font-size:11px;color:#888;margin-top:2px}
-.chalk-log-amt{margin-left:auto;font-size:12px;color:#111;font-family:'NeoDunggeunmo Pro',monospace;font-weight:400}
+.chalk-log-amt{margin-left:auto;font-size:12px;color:#111;font-family:'Pixelify Sans', 'NeoDunggeunmo Pro',monospace;font-weight:400}
 .item-item{display:flex;align-items:center;gap:10px;padding:9px 12px;background:#fff;border:2px solid #222;box-shadow:none}
 .item-icon-big{font-size:22px}
 .item-name{font-size:13px;color:#111}
 .item-donor{font-size:11px;color:#888;margin-top:2px}
-.item-qty{margin-left:auto;font-size:11px;color:#555;font-family:'NeoDunggeunmo Pro',monospace;font-weight:400}
+.item-qty{margin-left:auto;font-size:11px;color:#555;font-family:'Pixelify Sans', 'NeoDunggeunmo Pro',monospace;font-weight:400}
 
 /* 메뉴바 */
 .bottomnav{flex-shrink:0;background:#fff;border-top:1px solid #e5e0d3;box-shadow:0 -6px 10px -6px rgba(0,0,0,0.06);display:flex;padding:12px 0 18px;position:relative;z-index:200}
 .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;padding:4px 0;color:#bbb}
-.nav-label{font-family:'NeoDunggeunmo Pro',monospace;font-size:11px}
+.nav-label{font-family:'Pixelify Sans', 'NeoDunggeunmo Pro',monospace;font-size:11px}
 .nav-item.active{color:#111}
 .nav-item.active .nav-label{color:#111}
 .toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:10px 18px;border:2px solid #222;font-size:11px;z-index:999;white-space:nowrap;display:none}
