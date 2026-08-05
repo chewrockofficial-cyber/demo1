@@ -263,10 +263,10 @@ html, body {
     </div>
   </div>
 
-  <div class="pills">
+  <div class="pills" id="pillsRow">
     <div class="pill">Fresh</div>
     <div class="pill">Dusted</div>
-    <div class="pill active">Powdered</div>
+    <div class="pill">Powdered</div>
     <div class="pill">Coated</div>
     <div class="pill">Caked</div>
   </div>
@@ -531,6 +531,10 @@ CURRENT_STAGE = getNabiStageFromRecords(MY_ACTIVITY_30D.records.value);
   document.querySelector('.stage-text').textContent = s.name;
   document.querySelector('.stage-sub').textContent = 'stage ' + CURRENT_STAGE + ' / 5';
   document.querySelector('.nabi-img').src = NABI_STAGE_IMGS[CURRENT_STAGE - 1];
+  var pills = document.querySelectorAll('#pillsRow .pill');
+  pills.forEach(function(p, i) {
+    p.classList.toggle('active', i === CURRENT_STAGE - 1);
+  });
 })();
 var STAT_ACTIONS = {
   records: function(){ window.location.href = 'record.html'; },
