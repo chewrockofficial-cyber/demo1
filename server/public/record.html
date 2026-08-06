@@ -4,9 +4,15 @@
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <style>
 @font-face {
-  font-family: 'Galmuri14';
-  src: url('https://cdn.jsdelivr.net/gh/quiple/galmuri/dist/Galmuri14.woff2') format('woff2');
+  font-family: 'Galmuri11';
+  src: url('https://cdn.jsdelivr.net/gh/quiple/galmuri/dist/Galmuri11.woff2') format('woff2');
   font-weight: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Galmuri11';
+  src: url('https://cdn.jsdelivr.net/gh/quiple/galmuri/dist/Galmuri11-Bold.woff2') format('woff2');
+  font-weight: 700;
   font-display: swap;
 }
 
@@ -16,7 +22,7 @@
 /* 인풋 각진 */
 input[type=text], input[type=number], textarea, select {
   border-radius:0!important; border: 2px solid #111 !important;
-  font-family: 'Galmuri14', monospace !important;
+  font-family: 'Galmuri11', monospace !important;
 }
 /* 난이도/조건 칩들 */
 [class*="-chip"], [class*="-pill"], [class*="-tag"] { border-radius:0!important; }
@@ -26,8 +32,8 @@ input[type=text], input[type=number], textarea, select {
 [class*="item-card"], [class*="product"] { border-radius:0!important; }
 
 
-/* Chew Rock: Galmuri14 폰트만 적용 */
-* { font-family: 'Galmuri14', 'Galmuri14', monospace !important; }
+/* Chew Rock: Galmuri11 폰트만 적용 */
+* { font-family: 'Galmuri11', 'Galmuri11', monospace !important; }
 .phone { border-radius:0!important; overflow: hidden !important; }
 .pill { border-radius:0!important; }
 .notif-dot { border-radius:0!important; }
@@ -38,13 +44,13 @@ img { image-rendering: pixelated; }
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Nabi — 기록</title>
 <style>
-.px{font-family:'Galmuri14', monospace}
-.px-title{font-family:'Galmuri14',monospace;font-weight:400 !important;letter-spacing:0.5px}
+.px{font-family:'Galmuri11', monospace}
+.px-title{font-family:'Galmuri11',monospace;font-weight:400 !important;letter-spacing:0.5px}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100vh}
 .phone{width:360px;height:740px;background:#fff;border:2px solid #ddd;border-radius:0;margin:1rem auto;display:flex;flex-direction:column;overflow:hidden}
-.header{display:flex;justify-content:space-between;align-items:center;padding:30px 20px 12px;flex-shrink:0}
-.header-title{font-size:12px;color:#111;font-weight:400;letter-spacing:1px}
+.header{display:flex;justify-content:space-between;align-items:center;padding:22px 18px 8px;flex-shrink:0}
+.header-title{font-size:20px;color:#111;font-weight:400;letter-spacing:1px}
 .header-right{display:flex;align-items:center;gap:8px}
 .streak-badge{display:flex;align-items:center;gap:4px;background:#fff8f0;border:1.5px solid #ffd180;border-radius:0;padding:5px 9px}
 .streak-text{font-size:8px;color:#e65100}
@@ -117,7 +123,7 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
 .form-input::placeholder{color:#ccc}
 .route-counter{display:flex;align-items:center;border:1.5px solid #eee;border-radius:0;overflow:hidden}
 .route-btn{width:44px;height:44px;background:#f8f8f8;border:none;cursor:pointer;font-size:18px;color:#555}
-.route-num{flex:1;text-align:center;font-size:14px;color:#111;font-family:'Galmuri14', monospace}
+.route-num{flex:1;text-align:center;font-size:14px;color:#111;font-family:'Galmuri11', monospace}
 .optional-toggle{display:flex;align-items:center;gap:6px;padding:10px 0;cursor:pointer;color:#bbb;font-size:9px;border:none;background:none;width:100%}
 .optional-section{display:none}
 .optional-section.show{display:block}
@@ -140,7 +146,7 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
 .toast.show{display:block}
 .bottomnav{background:#fff;border-top:1.5px solid #eee;display:flex;padding:14px 0 20px;flex-shrink:0}
 .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;padding:4px 0;color:#bbb}
-.nav-label{font-family:'Galmuri14', monospace;font-size:11px}
+.nav-label{font-family:'Galmuri11', monospace;font-size:11px}
 .nav-item.active{color:#111}
 .nav-item.active .nav-label{color:#111}
 </style>
