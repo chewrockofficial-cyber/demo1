@@ -35,7 +35,7 @@ html, body {
 .phone{
   width:360px;height:740px;background:#fff;
   border:2px solid #ddd;border-radius:0;
-  margin:1rem auto;display:flex;flex-direction:column;overflow:hidden
+  margin:1rem auto;display:flex;flex-direction:column;overflow:hidden;position:relative
 }
 .topbar{display:flex;justify-content:flex-end;align-items:center;padding:38px 38px 4px}
 .notif-wrap{position:relative;display:inline-block}
@@ -47,9 +47,9 @@ html, body {
 .stage-info-btn{background:none;border:1.5px solid #bbb;border-radius:50%;width:14px;height:14px;color:#999;font-size:9px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
 .stage-info-btn:active{transform:scale(0.9)}
 
-.stageinfo-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:700;align-items:center;justify-content:center}
+.stageinfo-backdrop{display:none;position:absolute;inset:0;background:rgba(0,0,0,0.5);z-index:700;align-items:center;justify-content:center}
 .stageinfo-backdrop.show{display:flex}
-.stageinfo-card{background:#fff;border:2px solid #111;width:86%;max-width:320px;max-height:80vh;overflow-y:auto;padding:20px 18px}
+.stageinfo-card{background:#fff;border:2px solid #111;width:86%;max-width:320px;max-height:80%;overflow-y:auto;padding:20px 18px}
 .stageinfo-title{font-size:14px;color:#111;text-align:center;margin-bottom:4px}
 .stageinfo-sub{font-size:10px;color:#999;text-align:center;margin-bottom:16px}
 .stageinfo-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #eee}
@@ -169,15 +169,15 @@ html, body {
 }
 
 /* 마이페이지 모달 */
-.mypage-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:600;align-items:flex-end;justify-content:center}
+.mypage-backdrop{display:none;position:absolute;inset:0;background:rgba(0,0,0,0.45);z-index:600;align-items:flex-end;justify-content:center}
 .mypage-backdrop.show{display:flex}
-.mypage-modal{background:#fff;width:360px;max-width:100vw;max-height:82vh;display:flex;flex-direction:column;
+.mypage-modal{background:#fff;width:360px;max-width:100%;max-height:92%;display:flex;flex-direction:column;
   border:var(--pxb-border) solid var(--pxb-ink);border-bottom:none;border-radius:0}
 .mypage-handle{width:40px;height:4px;background:#ddd;border:1px solid #ccc;margin:12px auto 0;flex-shrink:0}
 .mypage-head{display:flex;align-items:center;justify-content:space-between;padding:14px 18px 12px;border-bottom:2px solid #eee;flex-shrink:0}
 .mypage-name{font-size:16px;color:#111;letter-spacing:0.5px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
 .mypage-name::after{content:'✎';font-size:11px;color:#aaa}
-.name-edit-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:700;align-items:center;justify-content:center}
+.name-edit-backdrop{display:none;position:absolute;inset:0;background:rgba(0,0,0,0.5);z-index:700;align-items:center;justify-content:center}
 .name-edit-backdrop.show{display:flex}
 .name-edit-card{background:#fff;border:2px solid #111;width:82%;max-width:280px;padding:20px 18px}
 .name-edit-title{font-size:14px;color:#111;text-align:center;margin-bottom:14px}
@@ -188,7 +188,7 @@ html, body {
 .name-edit-cancel{width:100%;padding:8px;margin-top:8px;background:#fff;border:2px solid #111;font-size:11px;cursor:pointer;color:#555}
 
 /* 접속 달력 모달 */
-.calendar-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:700;align-items:center;justify-content:center}
+.calendar-backdrop{display:none;position:absolute;inset:0;background:rgba(0,0,0,0.5);z-index:700;align-items:center;justify-content:center}
 .calendar-backdrop.show{display:flex}
 .calendar-card{background:#fff;border:2px solid #111;width:88%;max-width:320px;padding:18px 16px}
 .calendar-title{font-size:14px;color:#111;text-align:center;margin-bottom:14px}
@@ -201,7 +201,7 @@ html, body {
 .mypage-code-btn{background:none;border:none;cursor:pointer;font-size:18px;padding:4px;flex-shrink:0}
 .mypage-code-btn img{width:32px;height:32px;object-fit:contain;image-rendering:pixelated;display:block}
 .mypage-code-btn:active{transform:scale(0.9)}
-.mycode-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:700;align-items:center;justify-content:center}
+.mycode-backdrop{display:none;position:absolute;inset:0;background:rgba(0,0,0,0.5);z-index:700;align-items:center;justify-content:center}
 .mycode-backdrop.show{display:flex}
 .mycode-card{background:#fff;border:2px solid #111;width:82%;max-width:280px;padding:20px 18px}
 .mycode-title{font-size:14px;color:#111;text-align:center;margin-bottom:4px}
@@ -210,7 +210,7 @@ html, body {
 .mycode-text{font-size:17px;color:#111;letter-spacing:3px}
 .mycode-copy-btn{background:#111;color:#fff;border:none;padding:6px 12px;font-size:11px;cursor:pointer}
 .mycode-copy-btn:active{transform:scale(0.95)}
-.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:10px 18px;border:2px solid #222;font-size:11px;z-index:999;white-space:nowrap;display:none}
+.toast{position:absolute;bottom:90px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:10px 18px;border:2px solid #222;font-size:11px;z-index:999;white-space:nowrap;display:none}
 .toast.show{display:block}
 .mypage-body{overflow-y:auto;padding:16px 18px 24px;flex:1}
 .mypage-section-title{font-size:11px;color:#888;margin-bottom:10px}
@@ -292,7 +292,6 @@ html, body {
       <img src="data:image/png;base64,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" style="width:36px;height:30px;image-rendering:pixelated;opacity:0.4"/>
     </div>
   </div>
-</div>
 
 <!-- 마이페이지 모달 -->
 <div class="mypage-backdrop" id="mypageBackdrop" onclick="closeMyPage(event)">
@@ -353,6 +352,7 @@ html, body {
 </div>
 
 <div class="toast" id="toast"></div>
+</div>
 
 <script>
 // 쵸크 잔여량 아이콘 (100개 이상: 쵸크백 / 100개 미만: 쵸크가루)
