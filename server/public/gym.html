@@ -204,6 +204,30 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
 .wall-detail-wrap{position:relative;border-bottom:2px solid #222;background:#f7f7f5;display:flex;align-items:center;justify-content:center;overflow:hidden}
 .wall-detail-img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;display:block}
 .wall-detail-hint{position:absolute;bottom:8px;left:8px;right:8px;background:rgba(0,0,0,0.72);color:#fff;font-size:10px;padding:6px 9px;text-align:center}
+.wall-install-marker{position:absolute;width:9%;height:9%;transform:translate(-50%,-50%);image-rendering:pixelated;pointer-events:none;filter:drop-shadow(0 1px 2px rgba(0,0,0,0.5))}
+.wall-install-preview{position:absolute;transform:translate(-50%,-50%);cursor:grab;outline:2px dashed #222;outline-offset:3px}
+.wall-install-preview.dragging{cursor:grabbing}
+.wall-install-preview-img{width:100%;height:100%;image-rendering:pixelated;opacity:0.9;pointer-events:none;display:block;filter:drop-shadow(0 1px 3px rgba(0,0,0,0.6))}
+.wall-install-resize-handle{position:absolute;right:-8px;bottom:-8px;width:16px;height:16px;background:#fff;border:2px solid #222;border-radius:50%;cursor:nwse-resize}
+.wall-install-preview.resizing .wall-install-resize-handle{background:#222}
+.wall-install-rotate-line{position:absolute;left:50%;top:-22px;width:2px;height:22px;background:#222;transform:translateX(-50%)}
+.wall-install-rotate-handle{position:absolute;left:50%;top:-38px;width:18px;height:18px;background:#fff;border:2px solid #222;border-radius:50%;transform:translateX(-50%);cursor:grab;display:flex;align-items:center;justify-content:center;font-size:11px;line-height:1;user-select:none}
+.wall-install-preview.rotating .wall-install-rotate-handle{background:#222;color:#fff;cursor:grabbing}
+.wall-install-preview.rotate-flipped .wall-install-rotate-line{top:100%;bottom:auto}
+.wall-install-preview.rotate-flipped .wall-install-rotate-handle{top:auto;bottom:-38px}
+.wall-detail-wrap.installing{cursor:crosshair}
+.wall-detail-wrap.adjusting{cursor:default}
+.wall-detail-wrap.installing .wall-detail-img{opacity:0.9}
+.wall-adjust-panel{background:#fff;border-bottom:2px solid #222;padding:10px 14px;display:flex;flex-direction:column;gap:8px}
+.wall-adjust-actions{display:flex;gap:8px}
+.wall-adjust-cancel{flex:1;padding:9px;background:#fff;color:#222;border:2px solid #222;font-size:11px;cursor:pointer}
+.wall-adjust-confirm{flex:1.4;padding:9px;background:#222;color:#fff;border:2px solid #222;font-size:11px;cursor:pointer}
+.wall-install-btn{width:100%;margin-bottom:14px;padding:11px;background:#fff;color:#222;border:2px solid #222;box-shadow:none;font-size:12px;cursor:pointer}
+.hold-picker-pop{background:#fff;border:2px solid #222;margin:-8px 0 14px;padding:8px;display:flex;flex-wrap:wrap;gap:8px}
+.hold-picker-item{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;width:64px;padding:6px;border:1.5px solid #eee}
+.hold-picker-item:hover{border-color:#222;background:#fafafa}
+.hold-picker-icon{width:32px;height:32px;object-fit:contain;image-rendering:pixelated}
+.hold-picker-name{font-size:9px;color:#333;text-align:center;line-height:1.3}
 
 
 /* 서브 모달 */
@@ -259,9 +283,12 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
 .discover-add-btn{flex-shrink:0;background:#222;color:#fff;border:2px solid #000;box-shadow:none;padding:7px 10px;font-size:10px;cursor:pointer;white-space:nowrap}
 .discover-add-btn:active{transform:scale(0.96)}
 .wall-install-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border:2px solid #222;box-shadow:none;background:#fff}
+.wall-install-item--editable{cursor:pointer}
+.wall-install-item--editable:active{transform:scale(0.98)}
 .wall-install-icon{width:30px;height:auto;image-rendering:pixelated;flex-shrink:0}
 .wall-install-name{font-size:12px;color:#111}
 .wall-install-meta{font-size:10px;color:#888;margin-top:2px}
+.wall-install-edit-hint{font-size:9px;color:#888;flex-shrink:0}
 .wall-share-btn{width:100%;margin-top:16px;padding:11px;background:#222;color:#fff;border:2px solid #000;box-shadow:none;font-size:12px;cursor:pointer}
 .wall-share-btn:active{transform:scale(0.97)}
 
@@ -495,6 +522,10 @@ const FRIENDS=[
 
 const USER={
   nabiStage:3, chalkCount:12,
+  holds:[
+    {icon:'blue', name:'블루 크림프', time:'오늘', place:'더클라임 강남'},
+    {icon:'yellow', name:'옐로 저그', time:'2일 전', place:'클라밍고 성수'},
+  ],
   gyms:[
     {id:'g1',name:'더클라임 강남',area:'서울 강남',level:3,chalkPool:247,chalkGoal:400,groupTeeAcquired:true,isPrimary:true,favoritedAt:Date.now(),inviteCode:'482910',description:'강남 최대 규모 클라이밍 암장이에요',
       // Lv.2 건물 + Lv.3 건물 좌측 영역
@@ -1022,13 +1053,45 @@ function openHoldDetail(i){
 function closeHoldDetail(e){ if(e&&e.target!==document.getElementById('holdDetailBackdrop'))return; document.getElementById('holdDetailBackdrop').classList.remove('show'); }
 function closeSubModal(e){ if(e&&e.target!==document.getElementById('subBackdrop'))return; document.getElementById('subBackdrop').classList.remove('show'); }
 
-function openWallPlan(floor){
-  const detailImg = WALL_DETAIL[floor.wallType] || WALL_DETAIL.flat;
-  const wallCanvas = `<div class="wall-detail-wrap" id="wallDetailWrap"><img class="wall-detail-img" src="${detailImg}" alt="클라이밍 벽 디테일"><div class="wall-detail-hint px">획득한 홀드를 여기에 설치할 수 있어요 (준비 중)</div></div>`;
+let CURRENT_WALL_FLOOR = null;
+let INSTALL_PENDING_HOLD = null; // 설치 대기 중인 홀드 (선택 후 벽 클릭 대기)
+let ADJUSTING_INSTALL = null; // 위치를 탭한 후, 크기/위치 조정 중인 홀드
+
+function renderWallMarkers(floor){
   const installs = floor.installs||[];
-  const installsHtml = installs.length
-    ? installs.map(i=>`<div class="wall-install-item"><img class="wall-install-icon" src="${HOLD_ICONS[i.icon]}" alt="${i.name}"><div style="flex:1"><div class="px wall-install-name">${i.name}</div><div class="px wall-install-meta">${i.installer} · ${i.time} 설치</div></div></div>`).join('')
+  return installs.map((i,idx)=>{
+    if(i.left==null || i.top==null) return '';
+    const w = i.width || i.size || 9;
+    const h = i.height || i.size || 9;
+    const rot = i.rotation || 0;
+    return `<img class="wall-install-marker" data-idx="${idx}" src="${HOLD_ICONS[i.icon]}" alt="${i.name}" title="${i.name}" style="left:${i.left}%;top:${i.top}%;width:${w}%;height:${h}%;transform:translate(-50%,-50%) rotate(${rot}deg)">`;
+  }).join('');
+}
+
+function renderInstallsList(floor){
+  const installs = floor.installs||[];
+  return installs.length
+    ? installs.map((i,idx)=>{
+        const editable = i.installer==='나' && i.left!=null && i.top!=null;
+        const cls = editable ? 'wall-install-item wall-install-item--editable' : 'wall-install-item';
+        const click = editable ? `onclick="openEditInstall(${idx})"` : '';
+        const editHint = editable ? `<div class="px wall-install-edit-hint">탭해서 수정 ›</div>` : '';
+        return `<div class="${cls}" ${click}><img class="wall-install-icon" src="${HOLD_ICONS[i.icon]}" alt="${i.name}"><div style="flex:1"><div class="px wall-install-name">${i.name}</div><div class="px wall-install-meta">${i.installer} · ${i.time} 설치</div></div>${editHint}</div>`;
+      }).join('')
     : `<div class="px" style="text-align:center;color:#bbb;font-size:11px;padding:16px 0">아직 설치된 홀드가 없어요</div>`;
+}
+
+function openWallPlan(floor){
+  CURRENT_WALL_FLOOR = floor;
+  INSTALL_PENDING_HOLD = null;
+  const detailImg = WALL_DETAIL[floor.wallType] || WALL_DETAIL.flat;
+  const myHolds = USER.holds||[];
+  const installBtnHtml = myHolds.length
+    ? `<button class="px wall-install-btn" id="wallInstallBtn" onclick="openHoldPicker()">🪨 보유한 홀드 설치하기 (${myHolds.length})</button>`
+    : '';
+  const wallCanvas = `<div class="wall-detail-wrap" id="wallDetailWrap" onclick="handleWallTap(event)"><img class="wall-detail-img" id="wallDetailImg" src="${detailImg}" alt="클라이밍 벽 디테일">${renderWallMarkers(floor)}<div class="wall-detail-hint px" id="wallDetailHint">${myHolds.length ? '아래 버튼으로 보유 홀드를 골라 벽에 탭해서 설치해보세요' : '획득한 홀드를 여기에 설치할 수 있어요'}</div></div>`;
+  const installs = floor.installs||[];
+  const installsHtml = renderInstallsList(floor);
 
   openSubModal(`🧗 ${floor.label} 벽`,`
     <div class="wall-modal-hint px" id="wallModalHint">← 오른쪽으로 스크롤하면 게시판이 보여요</div>
@@ -1036,9 +1099,10 @@ function openWallPlan(floor){
       <div class="wall-modal-page">
         ${wallCanvas}
         <div style="padding:14px">
-          <div class="px-title feed-section-title" style="margin-bottom:10px">🪨 누가 어떤 홀드를 설치했나요</div>
-          <div class="item-list">${installsHtml}</div>
-          <button class="px wall-share-btn" onclick="shareWall('${floor.label}')">📤 이 벽 자랑하기</button>
+          ${installBtnHtml}
+          <div class="px-title feed-section-title" style="margin-bottom:10px">누가 어떤 홀드를 설치했나요</div>
+          <div class="item-list" id="wallInstallsList">${installsHtml}</div>
+          <button class="px wall-share-btn" onclick="shareWall('${floor.label}', event)">루트 자랑하기(이미지 저장)</button>
         </div>
       </div>
       <div class="wall-modal-page" id="wallModalBoardPage"></div>
@@ -1103,15 +1167,329 @@ function openWallPlan(floor){
     }
   });
 }
-function shareWall(label){
-  const shareText = `내 클라이밍 암장의 ${label} 벽을 구경해보세요! 🧗`;
-  if(navigator.share){
-    navigator.share({title:'Chew Rock', text:shareText}).catch(()=>{});
-  } else if(navigator.clipboard){
-    navigator.clipboard.writeText(shareText).then(()=>toast2('공유 링크가 복사됐어요!')).catch(()=>toast2('공유하기 준비 중이에요'));
-  } else {
-    toast2('공유하기 준비 중이에요');
+
+function openHoldPicker(){
+  const myHolds = USER.holds||[];
+  if(!myHolds.length) return;
+  const existing = document.getElementById('holdPickerPop');
+  if(existing){ existing.remove(); return; }
+  const pop = document.createElement('div');
+  pop.className = 'hold-picker-pop';
+  pop.id = 'holdPickerPop';
+  pop.innerHTML = myHolds.map((h,hi)=>`
+    <div class="hold-picker-item" onclick="selectHoldToInstall(${hi})">
+      <img class="hold-picker-icon" src="${HOLD_ICONS[h.icon]}" alt="${h.name}">
+      <div class="px hold-picker-name">${h.name}</div>
+    </div>`).join('');
+  const btn = document.getElementById('wallInstallBtn');
+  btn.insertAdjacentElement('afterend', pop);
+}
+function selectHoldToInstall(i){
+  const h = (USER.holds||[])[i];
+  if(!h) return;
+  INSTALL_PENDING_HOLD = {index:i, hold:h};
+  const pop = document.getElementById('holdPickerPop');
+  if(pop) pop.remove();
+  const hint = document.getElementById('wallDetailHint');
+  if(hint) hint.textContent = `${h.name}을(를) 설치할 위치를 벽 이미지에서 탭하세요`;
+  const wrap = document.getElementById('wallDetailWrap');
+  if(wrap) wrap.classList.add('installing');
+}
+function handleWallTap(e){
+  // 조정 중일 때 벽을 다시 탭하면 미리보기 위치만 이동 (드래그 대신 재탭으로도 위치 조정 가능)
+  if(ADJUSTING_INSTALL){
+    const wrap = document.getElementById('wallDetailWrap');
+    const rect = wrap.getBoundingClientRect();
+    ADJUSTING_INSTALL.left = Number((((e.clientX-rect.left)/rect.width)*100).toFixed(1));
+    ADJUSTING_INSTALL.top = Number((((e.clientY-rect.top)/rect.height)*100).toFixed(1));
+    updatePreviewMarker();
+    return;
   }
+  if(!INSTALL_PENDING_HOLD) return;
+  const wrap = document.getElementById('wallDetailWrap');
+  const rect = wrap.getBoundingClientRect();
+  const left = Number((((e.clientX - rect.left) / rect.width) * 100).toFixed(1));
+  const top = Number((((e.clientY - rect.top) / rect.height) * 100).toFixed(1));
+  const {index, hold} = INSTALL_PENDING_HOLD;
+  ADJUSTING_INSTALL = {index, hold, left, top, width:9, height:9, rotation:0};
+  INSTALL_PENDING_HOLD = null;
+  wrap.classList.remove('installing');
+  wrap.classList.add('adjusting');
+  showAdjustUI();
+}
+
+function updatePreviewMarker(){
+  const wrap = document.getElementById('wallDetailWrap');
+  let marker = document.getElementById('wallInstallPreview');
+  const a = ADJUSTING_INSTALL;
+  if(!marker){
+    marker = document.createElement('div');
+    marker.id = 'wallInstallPreview';
+    marker.className = 'wall-install-preview';
+    marker.innerHTML = `<img class="wall-install-preview-img" src="${HOLD_ICONS[a.hold.icon]}" alt="${a.hold.name}">
+      <div class="wall-install-resize-handle" id="wallResizeHandle"></div>
+      <div class="wall-install-rotate-line"></div>
+      <div class="wall-install-rotate-handle" id="wallRotateHandle">↻</div>`;
+    wrap.appendChild(marker);
+    makePreviewDraggable(marker);
+    makeHandleResizable(marker.querySelector('#wallResizeHandle'), marker);
+    makeHandleRotatable(marker.querySelector('#wallRotateHandle'), marker);
+  }
+  marker.style.left = a.left+'%';
+  marker.style.top = a.top+'%';
+  marker.style.width = a.width+'%';
+  marker.style.height = a.height+'%';
+  marker.style.transform = `translate(-50%,-50%) rotate(${a.rotation||0}deg)`;
+  marker.classList.toggle('rotate-flipped', a.top < 15);
+}
+
+function makePreviewDraggable(marker){
+  let dragging = false;
+  const onDown = (ev)=>{
+    if(ev.target.id === 'wallResizeHandle' || ev.target.id === 'wallRotateHandle') return; // 리사이즈/회전 핸들은 별도 처리
+    dragging = true;
+    marker.classList.add('dragging');
+    ev.preventDefault();
+    ev.stopPropagation();
+  };
+  const onMove = (ev)=>{
+    if(!dragging || !ADJUSTING_INSTALL) return;
+    const wrap = document.getElementById('wallDetailWrap');
+    const rect = wrap.getBoundingClientRect();
+    const clientX = ev.touches ? ev.touches[0].clientX : ev.clientX;
+    const clientY = ev.touches ? ev.touches[0].clientY : ev.clientY;
+    let left = ((clientX-rect.left)/rect.width)*100;
+    let top = ((clientY-rect.top)/rect.height)*100;
+    left = Math.max(0, Math.min(100, left));
+    top = Math.max(0, Math.min(100, top));
+    ADJUSTING_INSTALL.left = Number(left.toFixed(1));
+    ADJUSTING_INSTALL.top = Number(top.toFixed(1));
+    marker.style.left = ADJUSTING_INSTALL.left+'%';
+    marker.style.top = ADJUSTING_INSTALL.top+'%';
+  };
+  const onUp = ()=>{ dragging=false; marker.classList.remove('dragging'); };
+  marker.addEventListener('mousedown', onDown);
+  marker.addEventListener('touchstart', onDown, {passive:false});
+  window.addEventListener('mousemove', onMove);
+  window.addEventListener('touchmove', onMove, {passive:false});
+  window.addEventListener('mouseup', onUp);
+  window.addEventListener('touchend', onUp);
+}
+
+// 리사이즈 핸들(우측 하단 모서리)을 드래그해서 가로/세로 크기를 각각 자유롭게 조절
+function makeHandleResizable(handle, marker){
+  let resizing = false;
+  const onDown = (ev)=>{
+    resizing = true;
+    marker.classList.add('resizing');
+    ev.preventDefault();
+    ev.stopPropagation();
+  };
+  const onMove = (ev)=>{
+    if(!resizing || !ADJUSTING_INSTALL) return;
+    const wrap = document.getElementById('wallDetailWrap');
+    const rect = wrap.getBoundingClientRect();
+    const clientX = ev.touches ? ev.touches[0].clientX : ev.clientX;
+    const clientY = ev.touches ? ev.touches[0].clientY : ev.clientY;
+    // 마커 중심 기준으로 핸들까지의 거리 * 2 = 전체 가로/세로 크기 (회전 반영: 화면상의 벡터를 마커의 회전되지 않은 기준축으로 되돌려서 계산)
+    const centerX = rect.left + rect.width*(ADJUSTING_INSTALL.left/100);
+    const centerY = rect.top + rect.height*(ADJUSTING_INSTALL.top/100);
+    const dx = clientX - centerX, dy = clientY - centerY;
+    const rot = -(ADJUSTING_INSTALL.rotation||0) * Math.PI/180;
+    const localDx = dx*Math.cos(rot) - dy*Math.sin(rot);
+    const localDy = dx*Math.sin(rot) + dy*Math.cos(rot);
+    let width = (localDx*2 / rect.width)*100;
+    let height = (localDy*2 / rect.height)*100;
+    width = Math.max(3, Math.min(40, width));
+    height = Math.max(3, Math.min(40, height));
+    ADJUSTING_INSTALL.width = Number(width.toFixed(1));
+    ADJUSTING_INSTALL.height = Number(height.toFixed(1));
+    marker.style.width = ADJUSTING_INSTALL.width+'%';
+    marker.style.height = ADJUSTING_INSTALL.height+'%';
+    ev.preventDefault();
+    ev.stopPropagation();
+  };
+  const onUp = ()=>{ resizing=false; marker.classList.remove('resizing'); };
+  handle.addEventListener('mousedown', onDown);
+  handle.addEventListener('touchstart', onDown, {passive:false});
+  window.addEventListener('mousemove', onMove);
+  window.addEventListener('touchmove', onMove, {passive:false});
+  window.addEventListener('mouseup', onUp);
+  window.addEventListener('touchend', onUp);
+}
+
+// 회전 핸들(위쪽 손잡이)을 드래그해서 마커를 중심 기준으로 회전
+function makeHandleRotatable(handle, marker){
+  let rotating = false;
+  const onDown = (ev)=>{
+    rotating = true;
+    marker.classList.add('rotating');
+    ev.preventDefault();
+    ev.stopPropagation();
+  };
+  const onMove = (ev)=>{
+    if(!rotating || !ADJUSTING_INSTALL) return;
+    const wrap = document.getElementById('wallDetailWrap');
+    const rect = wrap.getBoundingClientRect();
+    const clientX = ev.touches ? ev.touches[0].clientX : ev.clientX;
+    const clientY = ev.touches ? ev.touches[0].clientY : ev.clientY;
+    const centerX = rect.left + rect.width*(ADJUSTING_INSTALL.left/100);
+    const centerY = rect.top + rect.height*(ADJUSTING_INSTALL.top/100);
+    // 위쪽(0도)을 기준으로, 시계방향 각도를 계산
+    let deg = Math.atan2(clientX-centerX, -(clientY-centerY)) * 180/Math.PI;
+    deg = Math.round(deg);
+    ADJUSTING_INSTALL.rotation = deg;
+    marker.style.transform = `translate(-50%,-50%) rotate(${deg}deg)`;
+    ev.preventDefault();
+    ev.stopPropagation();
+  };
+  const onUp = ()=>{ rotating=false; marker.classList.remove('rotating'); };
+  handle.addEventListener('mousedown', onDown);
+  handle.addEventListener('touchstart', onDown, {passive:false});
+  window.addEventListener('mousemove', onMove);
+  window.addEventListener('touchmove', onMove, {passive:false});
+  window.addEventListener('mouseup', onUp);
+  window.addEventListener('touchend', onUp);
+}
+
+function showAdjustUI(){
+  updatePreviewMarker();
+  const hint = document.getElementById('wallDetailHint');
+  if(hint) hint.textContent = `${ADJUSTING_INSTALL.hold.name} - 마커를 드래그해 위치를, 모서리 점을 드래그해 크기를 조정하세요`;
+  let panel = document.getElementById('wallAdjustPanel');
+  if(!panel){
+    panel = document.createElement('div');
+    panel.id = 'wallAdjustPanel';
+    panel.className = 'wall-adjust-panel';
+    document.getElementById('wallDetailWrap').insertAdjacentElement('afterend', panel);
+  }
+  panel.innerHTML = `
+    <div class="wall-adjust-actions">
+      <button class="px wall-adjust-cancel" onclick="cancelInstallAdjust()">취소</button>
+      <button class="px wall-adjust-confirm" onclick="confirmInstallAdjust()">설치 완료</button>
+    </div>`;
+}
+function openEditInstall(idx){
+  const floor = CURRENT_WALL_FLOOR;
+  const inst = (floor.installs||[])[idx];
+  if(!inst) return;
+  ADJUSTING_INSTALL = {
+    editIndex: idx,
+    hold: {icon:inst.icon, name:inst.name},
+    left: inst.left, top: inst.top,
+    width: inst.width||inst.size||9, height: inst.height||inst.size||9,
+    rotation: inst.rotation||0
+  };
+  const wrap = document.getElementById('wallDetailWrap');
+  // 수정 중인 홀드는 실시간 미리보기와 겹치지 않도록 기존 마커 목록에서 잠시 숨김
+  wrap.querySelectorAll('.wall-install-marker').forEach(m=>{ if(Number(m.dataset.idx)===idx) m.style.display='none'; });
+  wrap.classList.add('adjusting');
+  document.getElementById('wallModalScroll').scrollTo({left:0, behavior:'smooth'});
+  document.getElementById('subBody').scrollTo({top:0, behavior:'smooth'});
+  showAdjustUI();
+}
+function cancelInstallAdjust(){
+  const wasEdit = ADJUSTING_INSTALL && ADJUSTING_INSTALL.editIndex!=null;
+  ADJUSTING_INSTALL = null;
+  const marker = document.getElementById('wallInstallPreview');
+  if(marker) marker.remove();
+  const panel = document.getElementById('wallAdjustPanel');
+  if(panel) panel.remove();
+  const wrap = document.getElementById('wallDetailWrap');
+  wrap.classList.remove('adjusting');
+  if(wasEdit){
+    wrap.querySelectorAll('.wall-install-marker').forEach(m=>{ m.style.display=''; });
+  }
+  const hint = document.getElementById('wallDetailHint');
+  const holdsLeft = (USER.holds||[]).length;
+  if(hint) hint.textContent = holdsLeft ? '아래 버튼으로 보유 홀드를 골라 벽에 탭해서 설치해보세요' : '획득한 홀드를 여기에 설치할 수 있어요';
+}
+function confirmInstallAdjust(){
+  if(!ADJUSTING_INSTALL) return;
+  const {index, editIndex, hold, left, top, width, height, rotation} = ADJUSTING_INSTALL;
+  const floor = CURRENT_WALL_FLOOR;
+  if(!floor.installs) floor.installs = [];
+  if(editIndex!=null){
+    // 기존에 설치된 홀드 수정 - 위치/크기/회전만 갱신, 새로 만들지 않음
+    const inst = floor.installs[editIndex];
+    Object.assign(inst, {left, top, width, height, rotation:rotation||0});
+  } else {
+    floor.installs.unshift({icon:hold.icon, name:hold.name, installer:'나', time:'방금', left, top, width, height, rotation:rotation||0});
+    USER.holds.splice(index, 1);
+  }
+  const marker = document.getElementById('wallInstallPreview');
+  if(marker) marker.remove();
+  const panel = document.getElementById('wallAdjustPanel');
+  if(panel) panel.remove();
+  ADJUSTING_INSTALL = null;
+  const wrap = document.getElementById('wallDetailWrap');
+  wrap.classList.remove('adjusting');
+  wrap.querySelectorAll('.wall-install-marker').forEach(m=>m.remove());
+  wrap.insertAdjacentHTML('beforeend', renderWallMarkers(floor));
+  document.getElementById('wallInstallsList').innerHTML = renderInstallsList(floor);
+  const hint = document.getElementById('wallDetailHint');
+  const installBtn = document.getElementById('wallInstallBtn');
+  if(USER.holds.length){
+    if(hint) hint.textContent = '아래 버튼으로 보유 홀드를 골라 벽에 탭해서 설치해보세요';
+    if(installBtn) installBtn.textContent = `🪨 보유한 홀드 설치하기 (${USER.holds.length})`;
+  } else {
+    if(hint) hint.textContent = '획득한 홀드를 여기에 설치할 수 있어요';
+    if(installBtn) installBtn.remove();
+  }
+  toast2(editIndex!=null ? `✏️ ${hold.name} 위치를 수정했어요!` : `🪨 ${hold.name}을(를) ${floor.label}에 설치했어요!`);
+}
+
+// 벽 이미지를 캔버스로 합성 (설치된 홀드 마커 포함) 후 공유용 Blob 생성
+function buildWallShareImage(floor, callback){
+  const detailImg = WALL_DETAIL[floor.wallType] || WALL_DETAIL.flat;
+  const base = new Image();
+  base.onload = ()=>{
+    const canvas = document.createElement('canvas');
+    canvas.width = base.naturalWidth;
+    canvas.height = base.naturalHeight;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(base, 0, 0);
+    const installs = (floor.installs||[]).filter(i=>i.left!=null && i.top!=null);
+    let remaining = installs.length;
+    if(remaining===0){ canvas.toBlob(callback, 'image/png'); return; }
+    installs.forEach(inst=>{
+      const icon = new Image();
+      icon.onload = ()=>{
+        const w = canvas.width*((inst.width||inst.size||9)/100);
+        const h = canvas.height*((inst.height||inst.size||9)/100);
+        const cx = canvas.width*(inst.left/100);
+        const cy = canvas.height*(inst.top/100);
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.rotate(((inst.rotation||0) * Math.PI)/180);
+        ctx.drawImage(icon, -w/2, -h/2, w, h);
+        ctx.restore();
+        remaining--;
+        if(remaining===0) canvas.toBlob(callback, 'image/png');
+      };
+      icon.onerror = ()=>{ remaining--; if(remaining===0) canvas.toBlob(callback, 'image/png'); };
+      icon.src = HOLD_ICONS[inst.icon];
+    });
+  };
+  base.src = detailImg;
+}
+function shareWall(label, evt){
+  const floor = CURRENT_WALL_FLOOR;
+  if(!floor){ toast2('저장할 벽 정보를 찾을 수 없어요'); return; }
+  toast2('🖼 이미지를 만들고 있어요...');
+  buildWallShareImage(floor, (blob)=>{
+    if(!blob){ toast2('이미지를 만들지 못했어요'); return; }
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const safeLabel = label.replace(/[^a-zA-Z0-9가-힣]/g, '');
+    a.href = url;
+    a.download = `chewrock_${safeLabel}_벽.png`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(()=>URL.revokeObjectURL(url), 2000);
+    toast2('📥 벽 이미지를 저장했어요!');
+  });
 }
 function openChalkInfo(g){
   const logs = g.floors.flatMap(f=>f.chalkLog||[]);
