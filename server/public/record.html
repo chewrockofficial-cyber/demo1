@@ -175,7 +175,7 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
     </div>
   </div>
   <div class="today-card">
-    <div class="today-status" id="todayStatus">오늘의 클라이밍을 기록하고 나비를 성장시켜보자</div>
+    <div class="today-status" id="todayStatus">오늘의 클라이밍을 기록하고 나비를 성장시켜요</div>
     <button class="px btn-record" onclick="openWriteModal()">기록 업로드</button>
   </div>
   <div class="view-tabs">
@@ -319,7 +319,7 @@ function updateHeader(){
   applyChalkIcon(state.chalkCount, document.getElementById('chalkIcon'))
   document.getElementById('todayStatus').innerHTML=state.todayRecorded
     ?'오늘 클라이밍 기록을 남겼어요 🎉<br><span>나비가 잘 자라고 있어요!</span>'
-    :'오늘의 클라이밍을 기록하고 나비를 성장시켜보자'
+    :'오늘의 클라이밍을 기록하고 나비를 성장시켜요'
 }
 function switchView(v){
   currentView=v
