@@ -50,15 +50,15 @@ html, body {
 .stageinfo-backdrop{display:none;position:absolute;inset:0;background:rgba(0,0,0,0.5);z-index:700;align-items:center;justify-content:center}
 .stageinfo-backdrop.show{display:flex}
 .stageinfo-card{background:#fff;border:2px solid #111;width:86%;max-width:320px;max-height:80%;overflow-y:auto;padding:20px 18px}
-.stageinfo-title{font-size:14px;color:#111;text-align:center;margin-bottom:4px}
-.stageinfo-sub{font-size:10px;color:#999;text-align:center;margin-bottom:16px}
+.stageinfo-title{font-size:15px;color:#111;text-align:center;margin-bottom:4px}
+.stageinfo-sub{font-size:11px;color:#999;text-align:center;margin-bottom:16px}
 .stageinfo-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #eee}
 .stageinfo-row:last-child{border-bottom:none}
 .stageinfo-row.current{background:#fafafa}
 .stageinfo-img{width:44px;height:auto;image-rendering:pixelated;flex-shrink:0}
-.stageinfo-name{font-size:12px;color:#111}
-.stageinfo-cond{font-size:10px;color:#999;margin-top:3px}
-.stageinfo-badge{font-size:8px;background:#111;color:#fff;padding:2px 6px;margin-left:6px;vertical-align:middle}
+.stageinfo-name{font-size:13px;color:#111}
+.stageinfo-cond{font-size:11px;color:#999;margin-top:3px}
+.stageinfo-badge{font-size:9px;background:#111;color:#fff;padding:2px 6px;margin-left:6px;vertical-align:middle}
 .stageinfo-warning{font-size:10px;color:#c0392b;background:#fdf2f1;border:1px solid #f0d0cd;padding:10px 12px;margin-top:14px;line-height:1.5}
 .pills{display:flex;gap:5px;justify-content:center;padding:10px 16px 4px;flex-wrap:wrap}
 .pill{font-size:8px;padding:5px 8px;border-radius:0;border:1.5px solid #ddd;color:#bbb;background:#f8f8f8;font-family:'Galmuri14', monospace}
@@ -422,9 +422,8 @@ html, body {
 <div class="stageinfo-backdrop" id="stageinfoBackdrop" onclick="closeStageInfo(event)">
   <div class="stageinfo-card" onclick="event.stopPropagation()">
     <div class="px stageinfo-title">나비 성장 단계</div>
-    <div class="px stageinfo-sub">최근 30일 기록 수에 따라 나비가 자라나요</div>
+    <div class="px stageinfo-sub">최근 30일간 기록이 없으면 나비는 뽀송해집니다.<br>꾸준히 기록해서 뽀얀 나비를 유지해 보세요!</div>
     <div id="stageinfoList"></div>
-    <div class="px stageinfo-warning">⚠️ 최근 30일간 기록이 없으면 나비는 뽀송해집니다. 꾸준히 기록해서 뽀얀 나비를 유지해 보세요!</div>
   </div>
 </div>
 
