@@ -643,7 +643,6 @@ function submitNameEdit() {
 
 // 최근 30일 활동 현황 (실서비스 연동 전 목업 데이터)
 var MY_ACTIVITY_30D = {
-  records:  { value: 12, delta: +4,  label: '기록 횟수' },
   visits:   { value: 21, delta: +6,  label: '접속 일수' },
   routes:   { value: 38, delta: +9,  label: '완등 루트 수' },
   friends:  { value: 5,  delta: +1,  label: '친구 수' },
@@ -663,7 +662,6 @@ CURRENT_STAGE = getNabiStageFromActivity(MY_ACTIVITY_30D.visits.value, MY_ACTIVI
   });
 })();
 var STAT_ACTIONS = {
-  records: function(){ window.location.href = 'record.html'; },
   visits:  function(){ openVisitCalendar(); },
   routes:  function(){ window.location.href = 'record.html'; },
   friends: function(){ window.location.href = 'gym.html'; },
