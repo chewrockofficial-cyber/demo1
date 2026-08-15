@@ -83,8 +83,8 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
 
 /* 상단 - 소속 암장 가로 스크롤 */
 .gym-scroll-row{display:flex;gap:20px;overflow-x:auto;padding:28px 16px 16px;flex-shrink:0;scrollbar-width:none;align-items:flex-end;background-repeat:no-repeat;background-size:cover;background-position:center bottom;}
-.gym-scroll-wrap{position:relative;flex-shrink:0}
-.street-pickup-layer{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.gym-scroll-wrap{position:relative;flex-shrink:0;z-index:1}
+.street-pickup-layer{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:1}
 .street-pickup-item{position:absolute;width:26px;height:26px;object-fit:contain;image-rendering:pixelated;cursor:pointer;pointer-events:auto;filter:drop-shadow(0 2px 3px rgba(0,0,0,0.35));animation:streetBob 2.2s ease-in-out infinite}
 .street-pickup-item:active{transform:scale(0.85)}
 @keyframes streetBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
@@ -108,7 +108,7 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
 .gift-set-item img{width:36px;height:36px;object-fit:contain;image-rendering:pixelated}
 .gift-set-item span{font-size:8px;color:#888}
 .gym-scroll-row::-webkit-scrollbar{display:none}
-.gym-card{flex-shrink:0;display:flex;flex-direction:column;align-items:center;cursor:pointer;width:122px;transition:transform .12s}
+.gym-card{flex-shrink:0;display:flex;flex-direction:column;align-items:center;cursor:pointer;width:122px;transition:transform .12s;position:relative;z-index:2}
 .gym-card:active{transform:scale(0.96)}
 .gym-card-img-wrap{width:122px;height:230px;display:flex;align-items:flex-end;justify-content:center;position:relative}
 .gym-card-img-wrap img{position:relative;z-index:1}
@@ -340,6 +340,12 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
 .mini-modal-btn:disabled{background:#ccc;border-color:#bbb;box-shadow:none;cursor:not-allowed;color:#eee}
 .mini-modal-btn:active{transform:scale(0.97)}
 .mini-modal-cancel{width:100%;padding:8px;margin-top:8px;background:#fff;border:2px solid #222;font-size:11px;cursor:pointer;color:#555}
+.walltype-picker{display:flex;gap:8px;margin:8px 0 14px}
+.walltype-opt{flex:1;border:1.5px solid #ddd;padding:6px 4px;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;box-sizing:border-box}
+.walltype-opt img{width:100%;height:40px;object-fit:cover}
+.walltype-opt span{font-size:9px;color:#666;text-align:center}
+.walltype-opt.active{border-color:#222;border-width:2px;background:#fafafa}
+.walltype-opt.active span{color:#111}
 .settings-section-label{font-size:10px;color:#999;margin:2px 0 10px}
 .settings-field{margin-bottom:14px}
 .settings-field-label{font-size:10px;color:#666;margin-bottom:5px}
@@ -402,8 +408,8 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
     </div>
     <!-- 상단: 소속 암장 가로 스크롤 -->
     <div class="gym-scroll-wrap" id="gymScrollWrap">
-      <div class="gym-scroll-row" id="gymScrollRow"></div>
       <div class="street-pickup-layer" id="streetPickupLayer"></div>
+      <div class="gym-scroll-row" id="gymScrollRow"></div>
     </div>
     <!-- 구분선 -->
     <div class="section-divider"></div>
@@ -791,7 +797,7 @@ function renderStreetPickups(){
   const layer = document.getElementById('streetPickupLayer');
   if(!layer) return;
   layer.innerHTML = '';
-  const count = Object.keys(HOLD_ICONS).length; // 테스트용: 모든 홀드 종류를 한 번에 보이게
+  const count = 2 + Math.floor(Math.random()*2); // 2~3개
   for(let i=0;i<count;i++){
     const item = randomHoldItem();
     const img = document.createElement('img');
@@ -1518,8 +1524,12 @@ function makeHandleResizable(handle, marker){
     const localDy = dx*Math.sin(rot) + dy*Math.cos(rot);
     let width = (localDx*2 / rect.width)*100;
     let height = (localDy*2 / rect.height)*100;
-    width = Math.max(6, Math.min(25, width));
-    height = Math.max(6, Math.min(25, height));
+    // 화질 저하 방지: 원본 이미지 해상도(naturalWidth/Height)를 넘어서는 확대는 막는다 (1:1 픽셀 비율이 상한)
+    const previewImg = marker.querySelector('.wall-install-preview-img');
+    const maxWidthPct = previewImg && previewImg.naturalWidth ? (previewImg.naturalWidth / rect.width) * 100 : 25;
+    const maxHeightPct = previewImg && previewImg.naturalHeight ? (previewImg.naturalHeight / rect.height) * 100 : 25;
+    width = Math.max(6, Math.min(maxWidthPct, width));
+    height = Math.max(6, Math.min(maxHeightPct, height));
     ADJUSTING_INSTALL.width = Number(width.toFixed(1));
     ADJUSTING_INSTALL.height = Number(height.toFixed(1));
     marker.style.width = ADJUSTING_INSTALL.width+'%';
@@ -1783,12 +1793,28 @@ function openJoinGym(){
     <div class="px mini-modal-title">🏢 암장 가입</div>
     <div class="px mini-modal-sub">암장 이름 또는 초대 코드를 입력해주세요</div>
     <input type="text" class="mini-modal-input" id="joinGymInput" placeholder="암장 이름 / 코드" maxlength="20">
+    <div class="px mini-modal-sub" style="margin-top:14px">새 암장이라면 벽 종류를 골라주세요</div>
+    <div class="walltype-picker" id="walltypePicker">
+      <div class="walltype-opt active" data-type="flat" onclick="selectWallType(this)">
+        <img src="${WALLS.flat}" alt="일반벽"><span class="px">일반벽</span>
+      </div>
+      <div class="walltype-opt" data-type="slant" onclick="selectWallType(this)">
+        <img src="${WALLS.slant}" alt="기울어진 벽"><span class="px">기울어진 벽</span>
+      </div>
+      <div class="walltype-opt" data-type="boulder" onclick="selectWallType(this)">
+        <img src="${WALLS.boulder}" alt="울퉁불퉁한 벽"><span class="px">울퉁불퉁한 벽</span>
+      </div>
+    </div>
     <button class="px mini-modal-btn" onclick="joinGym()">가입하기</button>
     <button class="px mini-modal-cancel" onclick="closeMiniModal()">취소</button>
   `);
   const input = document.getElementById('joinGymInput');
   input.focus();
   input.addEventListener('keydown', e=>{ if(e.key==='Enter' && !e.isComposing && e.keyCode!==229){ e.preventDefault(); joinGym(); } });
+}
+function selectWallType(el){
+  document.querySelectorAll('#walltypePicker .walltype-opt').forEach(o=>o.classList.remove('active'));
+  el.classList.add('active');
 }
 function joinGym(){
   const input = document.getElementById('joinGymInput');
@@ -1797,11 +1823,13 @@ function joinGym(){
   const already = USER.gyms.find(g=>g.name===name || g.inviteCode===name);
   if(already){ toast2(`이미 가입한 암장이에요 (${already.name})`); return; }
   const newCode = String(Math.floor(100000+Math.random()*900000));
+  const selectedWall = document.querySelector('#walltypePicker .walltype-opt.active');
+  const wallType = selectedWall ? selectedWall.getAttribute('data-type') : 'flat';
   USER.gyms.push({
     id:'g'+Date.now(), name, area:'', level:1, chalkPool:0, chalkGoal:400, groupTeeAcquired:false,
     isPrimary:false, inviteCode:newCode, description:'',
     hotspot:{l:0,t:0,w:100,h:100},
-    floors:[{label:'1F', wallType:'flat', routes:[], notes:[], items:[]}],
+    floors:[{label:'1F', wallType, routes:[], notes:[], items:[]}],
     members:[{id:'m1', name:'나', stage:USER.nabiStage, streak:0, isMe:true, isLeader:true, floor:'1F'}],
   });
   closeMiniModal();
