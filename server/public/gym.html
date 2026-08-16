@@ -226,7 +226,7 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
 
 /* 2D 평면 벽 스케마틱 (홀드 아이템 부착 기능 대비) */
 .wall-detail-wrap{position:relative;border-bottom:2px solid #222;background:#f7f7f5;display:flex;align-items:center;justify-content:center;overflow:hidden}
-.wall-detail-img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;display:block}
+.wall-detail-img{width:100%;height:100%;object-fit:cover;display:block}
 .wall-detail-hint{position:absolute;bottom:8px;left:8px;right:8px;background:rgba(0,0,0,0.72);color:#fff;font-size:10px;padding:6px 9px;text-align:center}
 .wall-install-marker{position:absolute;width:9%;height:9%;transform:translate(-50%,-50%);image-rendering:pixelated;pointer-events:none;filter:drop-shadow(0 1px 2px rgba(0,0,0,0.5))}
 .wall-install-preview{position:absolute;transform:translate(-50%,-50%);cursor:grab;outline:2px dashed #222;outline-offset:3px}
@@ -502,7 +502,7 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
 <!-- 신규 암장 생성 축하 - 홀드 세트 선물 이벤트 모달 -->
 <div class="pickup-backdrop" id="giftSetBackdrop" onclick="closeGiftSetModal(event)">
   <div class="pickup-card gift-set-card" onclick="event.stopPropagation()">
-    <div class="px gift-set-title">🎁 홀드 세트 선물!</div>
+    <div class="px gift-set-title">축하 선물 도착!</div>
     <div class="px gift-set-sub" id="giftSetSub"></div>
     <div class="gift-set-grid" id="giftSetGrid"></div>
     <button class="px pickup-btn pickup-btn-primary" onclick="openGiftSetGymChoice()">지금 설치하러 가기</button>
@@ -958,11 +958,12 @@ let PENDING_GIFT_SET = null;
 function triggerGymCreateGift(newGymName){
   const colors = Object.keys(HOLD_SETS);
   const color = colors[Math.floor(Math.random()*colors.length)];
-  const set = HOLD_SETS[color];
+  const fullSet = HOLD_SETS[color];
+  const set = fullSet.slice(0, 10); // 선물 세트는 최대 10개까지만, 나머지는 마을 줍줍으로 만날 수 있음
   PENDING_GIFT_GYM_NAME = newGymName;
   PENDING_GIFT_SET = set;
   const colorLabels = {red:'레드', orange:'오렌지', blue:'블루', green:'그린', yellow:'옐로', purple:'퍼플', pink:'핑크', black:'블랙', white:'화이트', gray:'그레이', teal:'민트', mint:'민트'};
-  document.getElementById('giftSetSub').textContent = `${newGymName} 개설을 축하해요! ${colorLabels[color]||color} 홀드 세트 ${set.length}개를 선물로 드려요`;
+  document.getElementById('giftSetSub').textContent = `${newGymName} 개설을 축하하며 ${colorLabels[color]||color} 홀드 세트 ${set.length}개를 선물로 드려요!`;
   document.getElementById('giftSetGrid').innerHTML = set.map(h=>
     `<div class="gift-set-item"><img src="${HOLD_ICONS[h.icon]}" alt="${h.name}"><span>${h.name}</span></div>`
   ).join('');
