@@ -304,6 +304,11 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
 .gym-member-avatar{width:64px;height:auto;image-rendering:pixelated;flex-shrink:0}
 .gym-member-name{font-size:14px;color:#111}
 .gym-member-streak{font-size:11px;color:#888;margin-top:3px}
+.gym-member-request-btn{flex-shrink:0;background:#fff;color:#111;border:1.5px solid #111;box-shadow:none;padding:8px 12px;font-size:10px;cursor:pointer;white-space:nowrap}
+.gym-member-request-btn:active{transform:scale(0.96)}
+.gym-member-request-btn.sent{color:#bbb;border-color:#ccc;cursor:default}
+.top-notif-banner{position:fixed;top:-100px;left:50%;transform:translateX(-50%);width:86%;max-width:320px;background:#fff;border:2px solid #111;padding:11px 14px;font-size:11px;color:#111;line-height:1.5;z-index:1000;transition:top 0.3s ease;cursor:pointer}
+.top-notif-banner.show{top:14px}
 .discover-add-btn{flex-shrink:0;background:#222;color:#fff;border:2px solid #000;box-shadow:none;padding:7px 10px;font-size:10px;cursor:pointer;white-space:nowrap}
 .discover-add-btn:active{transform:scale(0.96)}
 .wall-install-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border:2px solid #222;box-shadow:none;background:#fff}
@@ -480,6 +485,7 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
   </div>
 </div>
 <div class="toast" id="toast"></div>
+<div class="top-notif-banner px" id="topNotifBanner" onclick="hideTopBanner()"></div>
 
 <!-- 홀드 아이템 줍줍 모달 -->
 <div class="pickup-backdrop" id="pickupBackdrop" onclick="closePickupModal(event)">
@@ -1980,21 +1986,93 @@ function addFriendToList(){
   init();
 }
 
+function isAlreadyFriend(name){
+  return FRIENDS.some(f=>f.name===name);
+}
+const SENT_FRIEND_REQUESTS = new Set();
 function openGymMembers(g){
   const members = g.members||[];
   if(!members.length){ toast2('아직 등록된 멤버가 없어요'); return; }
   const html = `<div class="item-list">${members.map(m=>{
     const stageIdx = Math.min((m.stage||1)-1, 4);
+    const showRequestBtn = !m.isMe && !isAlreadyFriend(m.name);
+    const requestBtnHtml = !showRequestBtn ? '' : (
+      SENT_FRIEND_REQUESTS.has(m.name)
+        ? `<button class="gym-member-request-btn sent px" disabled>요청 완료</button>`
+        : `<button class="gym-member-request-btn px" onclick="sendFriendRequest('${m.name}', this)">친구 요청</button>`
+    );
     return `<div class="gym-member-item">
       <img class="gym-member-avatar" src="${NABI_FRONT[stageIdx]}" alt="${m.name}">
       <div style="flex:1">
         <div class="px gym-member-name">${m.name}${m.isMe ? ' (나)' : ''}</div>
         <div class="px gym-member-streak">🔥 연속 ${m.streak||0}일</div>
       </div>
+      ${requestBtnHtml}
     </div>`;
   }).join('')}</div>`;
   openSubModal(`👥 ${g.name} 크루`, html);
 }
+
+// ── 친구 요청 보내기 ──────────────────────────────────────────────
+function sendFriendRequest(name, btnEl){
+  if(SENT_FRIEND_REQUESTS.has(name)) return;
+  SENT_FRIEND_REQUESTS.add(name);
+  if(btnEl){
+    btnEl.textContent = '요청 완료';
+    btnEl.disabled = true;
+    btnEl.classList.add('sent');
+  }
+  toast2(`${name}에게 친구 요청을 보냈어요`);
+  pushFriendRequestNotification(name);
+  notifyFriendRequestReceived(name);
+}
+
+// 알림 내역(메인 탭)에서 나중에 확인할 수 있도록 로컬에 알림 데이터 적재
+// (notification.html은 아직 이 데이터를 직접 읽어오도록 연동되어 있지 않음 - 추후 연동 시 이 스키마 그대로 사용하면 됨)
+function pushFriendRequestNotification(name){
+  try {
+    const key = 'chewrock_notifications';
+    const list = JSON.parse(localStorage.getItem(key) || '[]');
+    list.unshift({
+      id: Date.now(),
+      type: 'friend',
+      icon: '👋',
+      iconClass: 'friend',
+      msg: `<span>${name}</span>님이 친구 요청을 보냈습니다.`,
+      time: '방금 전',
+      unread: true
+    });
+    localStorage.setItem(key, JSON.stringify(list));
+  } catch(e) { /* localStorage 사용 불가 환경은 조용히 무시 */ }
+}
+
+// 요청받은 나비가 알림을 받는 상황을 시뮬레이션
+// - 앱을 사용 중이면(포그라운드) 상단 미니 배너로 표시
+// - 알림 권한이 허용되어 있으면 배너/앱 아이콘 알림(브라우저 Notification API)도 함께 표시
+function notifyFriendRequestReceived(name){
+  showTopBanner(`${name}님이 친구 요청을 보냈습니다.`);
+  if(!('Notification' in window)) return;
+  if(Notification.permission === 'granted'){
+    new Notification('Chew Rock', { body: `${name}님이 친구 요청을 보냈습니다.` });
+  } else if(Notification.permission !== 'denied'){
+    Notification.requestPermission().then(perm=>{
+      if(perm === 'granted') new Notification('Chew Rock', { body: `${name}님이 친구 요청을 보냈습니다.` });
+    });
+  }
+}
+function showTopBanner(msg){
+  const banner = document.getElementById('topNotifBanner');
+  if(!banner) return;
+  banner.textContent = msg;
+  banner.classList.add('show');
+  clearTimeout(banner._hideTimer);
+  banner._hideTimer = setTimeout(()=>hideTopBanner(), 3000);
+}
+function hideTopBanner(){
+  const banner = document.getElementById('topNotifBanner');
+  if(banner) banner.classList.remove('show');
+}
+
 function openItems(items){
   openSubModal('📦 아이템함',`<div class="item-list">${items.map(it=>`<div class="item-item"><div class="item-icon-big">${it.icon}</div><div><div class="item-name">${it.name}</div><div class="px item-donor">${it.donor} · ${it.time} 기부</div></div><div class="px item-qty">x${it.qty}</div></div>`).join('')}</div>`);
 }
