@@ -1879,9 +1879,10 @@ function confirmDeleteFriend(friendId){
 function openJoinGym(){
   openMiniModal(`
     <div class="px mini-modal-title">암장 가입</div>
-    <div class="px mini-modal-sub">암장 이름 또는 초대 코드를 입력해주세요</div>
-    <input type="text" class="mini-modal-input" id="joinGymInput" placeholder="암장 이름 / 코드" maxlength="20">
-    <div class="px mini-modal-sub" style="margin-top:14px">새 암장이라면 벽 종류를 골라주세요</div>
+    <div class="px mini-modal-sub">가입하려는 암장 코드를 입력해주세요</div>
+    <input type="text" class="mini-modal-input" id="joinGymInput" placeholder="암장 코드" maxlength="20">
+    <div class="px mini-modal-sub" style="margin-top:14px">새 암장이라면 이름과 벽 종류를 골라주세요</div>
+    <input type="text" class="mini-modal-input" id="joinGymNameInput" placeholder="암장 이름" maxlength="20">
     <div class="walltype-picker" id="walltypePicker">
       <div class="walltype-opt active" data-type="flat" onclick="selectWallType(this)">
         <img src="${WALLS.flat}" alt="일반벽"><span class="px">일반벽</span>
@@ -1899,6 +1900,8 @@ function openJoinGym(){
   const input = document.getElementById('joinGymInput');
   input.focus();
   input.addEventListener('keydown', e=>{ if(e.key==='Enter' && !e.isComposing && e.keyCode!==229){ e.preventDefault(); joinGym(); } });
+  const nameInput = document.getElementById('joinGymNameInput');
+  nameInput.addEventListener('keydown', e=>{ if(e.key==='Enter' && !e.isComposing && e.keyCode!==229){ e.preventDefault(); joinGym(); } });
 }
 function selectWallType(el){
   document.querySelectorAll('#walltypePicker .walltype-opt').forEach(o=>o.classList.remove('active'));
@@ -1906,10 +1909,13 @@ function selectWallType(el){
 }
 function joinGym(){
   const input = document.getElementById('joinGymInput');
-  const name = input.value.trim();
-  if(!name){ toast2('암장 이름을 입력해주세요'); return; }
-  const already = USER.gyms.find(g=>g.name===name || g.inviteCode===name);
+  const code = input.value.trim();
+  if(!code){ toast2('암장 코드를 입력해주세요'); return; }
+  const already = USER.gyms.find(g=>g.name===code || g.inviteCode===code);
   if(already){ toast2(`이미 가입한 암장이에요 (${already.name})`); return; }
+  const nameInput = document.getElementById('joinGymNameInput');
+  const name = nameInput.value.trim();
+  if(!name){ toast2('암장 이름을 입력해주세요'); return; }
   const newCode = String(Math.floor(100000+Math.random()*900000));
   const selectedWall = document.querySelector('#walltypePicker .walltype-opt.active');
   const wallType = selectedWall ? selectedWall.getAttribute('data-type') : 'flat';
@@ -1928,8 +1934,8 @@ function joinGym(){
 function openAddFriend(){
   openMiniModal(`
     <div class="px mini-modal-title"> 친구 추가</div>
-    <div class="px mini-modal-sub">친구 이름 또는 코드를 입력해주세요</div>
-    <input type="text" class="mini-modal-input" id="addFriendInput" placeholder="친구 이름 / 코드" maxlength="20">
+    <div class="px mini-modal-sub">친구 코드를 입력해주세요</div>
+    <input type="text" class="mini-modal-input" id="addFriendInput" placeholder="친구 코드" maxlength="6" inputmode="numeric" pattern="[0-9]*">
     <button class="px mini-modal-btn" onclick="addFriendToList()">추가하기</button>
     <button class="px mini-modal-cancel" onclick="closeMiniModal()">취소</button>
   `);
@@ -1937,12 +1943,24 @@ function openAddFriend(){
   input.focus();
   input.addEventListener('keydown', e=>{ if(e.key==='Enter' && !e.isComposing && e.keyCode!==229){ e.preventDefault(); addFriendToList(); } });
 }
+const FRIEND_CODE_NAME_POOL = ['하늘나비', '라임나비', '보라나비', '주황나비', '산호나비', '바다나비', '민트나비', '체리나비', '레몬나비', '자두나비'];
+function resolveFriendNameByCode(code){
+  // 실제 서버에서는 코드로 해당 친구가 저장해둔 캐릭터 이름을 그대로 조회해오지만,
+  // 지금은 백엔드 연동 전이라 같은 코드가 항상 같은 이름으로 보이도록 코드값 기반으로 고정 매핑함
+  let hash = 0;
+  for (let i = 0; i < code.length; i++) hash = (hash * 31 + code.charCodeAt(i)) % 1000000007;
+  return FRIEND_CODE_NAME_POOL[hash % FRIEND_CODE_NAME_POOL.length];
+}
 function addFriendToList(){
   const input = document.getElementById('addFriendInput');
-  const name = input.value.trim();
-  if(!name){ toast2('친구 이름을 입력해주세요'); return; }
+  const code = input.value.trim();
+  if(!code){ toast2('친구 코드를 입력해주세요'); return; }
+  if(!/^\d{6}$/.test(code)){ toast2('올바른 친구 코드를 입력해주세요 (숫자 6자리)'); return; }
+  const already = FRIENDS.find(f=>f.code===code);
+  if(already){ toast2(`이미 친구예요 (${already.name})`); return; }
+  const name = resolveFriendNameByCode(code);
   FRIENDS.push({
-    id:'f'+Date.now(), name, accessory:null, level:1, streak:0, gymCount:0,
+    id:'f'+Date.now(), code, name, accessory:null, level:1, streak:0, gymCount:0,
     feed:[], holds:[],
   });
   closeMiniModal();
