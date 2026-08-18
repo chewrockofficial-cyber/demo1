@@ -2079,7 +2079,31 @@ function openItems(items){
 
 function toast2(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2500); }
 
+// 알림 내역(notification.html)에서 넘어온 딥링크 처리
+// ?open=gym&name=암장이름      -> 해당 암장 건물 클릭 화면
+// ?open=members&name=암장이름  -> 해당 암장 크루(멤버) 목록 화면
+// ?open=chalk&name=암장이름    -> 해당 암장 공동 쵸크 화면
+function handleNotificationDeepLink(){
+  const params = new URLSearchParams(window.location.search);
+  const open = params.get('open');
+  if(!open) return;
+  const name = params.get('name');
+  // 이름이 없거나 실제 가입한 암장 목록에 없으면(알림 목업 데이터와 실제 암장 목업이 서로 다른 데모 데이터라 발생 가능)
+  // 대표 암장으로 안전하게 대체한다
+  let g = USER.gyms.find(x => x.name === name);
+  if(!g) g = USER.gyms.find(x => x.isPrimary) || USER.gyms[0];
+  if(!g) return;
+  const idx = USER.gyms.indexOf(g);
+  openGym(idx);
+  if(open === 'members'){
+    setTimeout(() => openGymMembers(g), 60);
+  } else if(open === 'chalk'){
+    setTimeout(() => openChalkInfo(g), 60);
+  }
+}
+
 init();
+handleNotificationDeepLink();
 </script>
 </body>
 </html>

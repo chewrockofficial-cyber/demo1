@@ -65,9 +65,9 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
 .btn-accept,.btn-reject{padding:6px 12px;border-radius:0;font-size:8px;border:none;cursor:pointer;font-family:'Galmuri14', monospace}
 .btn-accept{background:#111;color:#fff}
 .btn-reject{background:#f0f0f0;color:#888}
-.modal-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:100;align-items:flex-end;justify-content:center}
+.modal-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:100;align-items:center;justify-content:center}
 .modal-backdrop.show{display:flex}
-.modal{background:#fff;border-radius:0;padding:24px 20px 36px;width:360px;max-width:100vw}
+.modal{background:#fff;border-radius:0;padding:22px 18px;width:82%;max-width:280px;max-height:80vh;overflow-y:auto;border:2px solid #111}
 .modal-handle{width:40px;height:4px;background:#e0e0e0;border-radius:0;margin:0 auto 18px}
 .modal-title{font-size:10px;color:#111;font-weight:400;letter-spacing:1px;margin-bottom:8px}
 .modal-sub{font-size:9px;color:#999;margin-bottom:16px;line-height:1.6}
@@ -82,6 +82,8 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
 .btn-confirm{flex:1;padding:12px;background:#111;color:#fff;border:none;border-radius:0;font-size:8px;cursor:pointer;font-family:'Galmuri14', monospace}
 .btn-close-modal{flex:1;padding:12px;background:#f5f5f5;color:#666;border:none;border-radius:0;font-size:8px;cursor:pointer;font-family:'Galmuri14', monospace}
 .btn-confirm:disabled{opacity:0.4;cursor:not-allowed}
+.btn-outline{flex:1;padding:12px;background:#fff;color:#111;border:1.5px solid #111;border-radius:0;font-size:8px;cursor:pointer;font-family:'Galmuri14', monospace}
+.btn-outline:active{transform:scale(0.97)}
 .bottomnav{background:#fff;border-top:1.5px solid #eee;display:flex;padding:14px 0 20px;flex-shrink:0}
 .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;padding:4px 0;color:#bbb}
 .nav-label{font-family:'Galmuri14', monospace;font-size:11px}
@@ -145,8 +147,7 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
 
 <div class="modal-backdrop" id="modal-backdrop" onclick="closeModal(event)">
   <div class="modal" onclick="event.stopPropagation()">
-    <div class="modal-handle"></div>
-    <div class="px modal-title">🪨 홀드를 배치할 암장을 선택해줘!</div>
+    <div class="px modal-title">홀드를 배치할 암장을 선택하세요!</div>
     <div class="modal-sub">획득한 홀드: <span id="modal-hold-name" style="color:#E65100;font-weight:400"></span></div>
     <div class="gym-list">
       <div class="gym-item" onclick="selectGym(this,'클라이밍 파크 홍대점')">
@@ -169,6 +170,26 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
   </div>
 </div>
 
+<div class="modal-backdrop" id="friend-modal-backdrop" onclick="closeFriendModal(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="px modal-title" id="friend-modal-title"></div>
+    <div class="modal-btns" style="margin-top:16px">
+      <button class="btn-outline px" onclick="acceptFriendModal()">수락</button>
+      <button class="btn-outline px" onclick="rejectFriendModal()">거절</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="group-modal-backdrop" onclick="closeGroupModal(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="px modal-title">나비가 모여 크루 단체티를 선물해드립니다!</div>
+    <div class="modal-btns" style="margin-top:16px">
+      <button class="btn-outline px" onclick="groupGoGym()">암장 확인</button>
+      <button class="btn-outline px" onclick="groupGoShop()">단체티 확인</button>
+    </div>
+  </div>
+</div>
+
 <script>
 // 알림 아이콘용 이미지 (gym.html 확정 에셋 재사용)
 const NOTIF_ICON_HOLD = 'data:image/png;base64,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';
@@ -180,15 +201,15 @@ const NOTIF_ICON_GROUP = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAB8
 const NOTIF_ICON_MAP = {hold:NOTIF_ICON_HOLD, friend:NOTIF_ICON_FRIEND, gym:NOTIF_ICON_GYM, upgrade:NOTIF_ICON_UPGRADE, chalk:NOTIF_ICON_CHALK, group:NOTIF_ICON_GROUP};
 
 const notifications=[
-  {id:1,type:'hold',icon:'🪨',iconClass:'hold',msg:'줍줍 성공! 마을에서 <span>저그 홀드</span>를 주웠습니다.',holdName:'저그 홀드',time:'방금 전',unread:true},
+  {id:1,type:'hold',icon:'🪨',iconClass:'hold',msg:'줍줍 성공! 마을에서 <span>저그 홀드</span>를 주웠습니다.',holdName:'저그 홀드',time:'방금 전',unread:true,installed:false,gymName:null},
   {id:2,type:'friend',icon:'👋',iconClass:'friend',msg:'<span>까만나비</span>님이 친구 요청을 보냈습니다.',time:'5분 전',unread:true},
-  {id:3,type:'gym_join_me',icon:'🧗',iconClass:'gym',msg:'<span>볼더링 클럽 강남</span>에 가입했습니다. (함께 쓸 쵸크를 기부해보세요!)',time:'1시간 전',unread:false},
+  {id:3,type:'gym_join_me',icon:'🧗',iconClass:'gym',msg:'<span>볼더링 클럽 강남</span>에 가입했습니다. (함께 쓸 쵸크를 기부해보세요!)',time:'1시간 전',unread:false,gymName:'볼더링 클럽 강남'},
   {id:4,type:'chalk',icon:'🤍',iconClass:'chalk',msg:'<span>5쵸크</span>를 획득했습니다!',time:'2시간 전',unread:false},
-  {id:5,type:'gym_join_other',icon:'🧗',iconClass:'gym',msg:'<span>하얀나비</span> 나비가 <span>볼더링 클럽 강남</span> 암장에 가입했습니다.',time:'3시간 전',unread:false},
-  {id:6,type:'chalk_donate',icon:'🤍',iconClass:'chalk',msg:'<span>회색나비</span> 나비가 <span>볼더링 클럽 강남</span>암장에 <span>10쵸크</span>를 기부했습니다.',time:'어제',unread:false},
-  {id:7,type:'upgrade',icon:'⬆️',iconClass:'upgrade',msg:'<span>볼더링 클럽 강남</span> 암장이 <span>암장 2단계</span>로 업그레이드 됐습니다.',time:'어제',unread:false},
+  {id:5,type:'gym_join_other',icon:'🧗',iconClass:'gym',msg:'<span>하얀나비</span> 나비가 <span>볼더링 클럽 강남</span> 암장에 가입했습니다.',time:'3시간 전',unread:false,gymName:'볼더링 클럽 강남'},
+  {id:6,type:'chalk_donate',icon:'🤍',iconClass:'chalk',msg:'<span>회색나비</span> 나비가 <span>볼더링 클럽 강남</span>암장에 <span>10쵸크</span>를 기부했습니다.',time:'어제',unread:false,gymName:'볼더링 클럽 강남'},
+  {id:7,type:'upgrade',icon:'⬆️',iconClass:'upgrade',msg:'<span>볼더링 클럽 강남</span> 암장이 <span>암장 2단계</span>로 업그레이드 됐습니다.',time:'어제',unread:false,gymName:'볼더링 클럽 강남'},
   {id:8,type:'group',icon:'👕',iconClass:'group',msg:'나비가 모여 단체가 되었습니다. 단체티를 선물해 드립니다!',time:'3일 전',unread:false},
-  {id:9,type:'gym_create',icon:'🏔️',iconClass:'gym',msg:'<span>락 스튜디오 합정</span> 암장을 개업했습니다. (다른 나비를 초대해보세요!)',time:'7일 전',unread:false}
+  {id:9,type:'gym_create',icon:'🏔️',iconClass:'gym',msg:'<span>락 스튜디오 합정</span> 암장을 개업했습니다. (다른 나비를 초대해보세요!)',time:'7일 전',unread:false,gymName:'락 스튜디오 합정'}
 ]
 function render(){
   const list=document.getElementById('notif-list')
@@ -198,23 +219,71 @@ function render(){
   }
   list.innerHTML=notifications.map(n=>{
     const iconHtml = `<img class="notif-icon-img" src="${NOTIF_ICON_MAP[n.iconClass]}" alt="${n.iconClass}">`
-    if(n.type==='friend') return `<div class="notif-item ${n.unread?'unread':''}" data-id="${n.id}"><div class="notif-icon">${iconHtml}</div><div class="notif-content"><div class="notif-msg">${n.msg}</div><div class="friend-btns"><button class="btn-accept px" onclick="acceptFriend(${n.id},event)">수락</button><button class="btn-reject px" onclick="rejectFriend(${n.id},event)">거절</button></div><div class="notif-time">${n.time}</div></div></div>`
-    if(n.type==='hold') return `<div class="notif-item ${n.unread?'unread':''}" data-id="${n.id}" onclick="openHoldModal('${n.holdName}',${n.id})"><div class="notif-icon">${iconHtml}</div><div class="notif-content"><div class="notif-msg">${n.msg}</div><div class="notif-time">${n.time} · 탭해서 암장 선택</div></div></div>`
+    if(n.type==='friend') return `<div class="notif-item ${n.unread?'unread':''}" data-id="${n.id}" onclick="openFriendModal(${n.id})"><div class="notif-icon">${iconHtml}</div><div class="notif-content"><div class="notif-msg">${n.msg}</div><div class="notif-time">${n.time} · 탭해서 수락/거절</div></div></div>`
+    if(n.type==='hold') return `<div class="notif-item ${n.unread?'unread':''}" data-id="${n.id}" onclick="openHoldModal('${n.holdName}',${n.id})"><div class="notif-icon">${iconHtml}</div><div class="notif-content"><div class="notif-msg">${n.msg}</div><div class="notif-time">${n.time} · ${n.installed?'탭해서 설치한 암장으로 이동':'탭해서 암장 선택'}</div></div></div>`
+    if(n.type==='gym_join_me' || n.type==='upgrade' || n.type==='gym_create') return `<div class="notif-item ${n.unread?'unread':''}" data-id="${n.id}" onclick="goToGym('${n.gymName}')"><div class="notif-icon">${iconHtml}</div><div class="notif-content"><div class="notif-msg">${n.msg}</div><div class="notif-time">${n.time}</div></div></div>`
+    if(n.type==='gym_join_other') return `<div class="notif-item ${n.unread?'unread':''}" data-id="${n.id}" onclick="goToMembers('${n.gymName}')"><div class="notif-icon">${iconHtml}</div><div class="notif-content"><div class="notif-msg">${n.msg}</div><div class="notif-time">${n.time}</div></div></div>`
+    if(n.type==='chalk_donate') return `<div class="notif-item ${n.unread?'unread':''}" data-id="${n.id}" onclick="goToChalk('${n.gymName}')"><div class="notif-icon">${iconHtml}</div><div class="notif-content"><div class="notif-msg">${n.msg}</div><div class="notif-time">${n.time}</div></div></div>`
+    if(n.type==='chalk') return `<div class="notif-item ${n.unread?'unread':''}" data-id="${n.id}" onclick="window.location.href='chalk-dashboard.html'"><div class="notif-icon">${iconHtml}</div><div class="notif-content"><div class="notif-msg">${n.msg}</div><div class="notif-time">${n.time}</div></div></div>`
+    if(n.type==='group') return `<div class="notif-item ${n.unread?'unread':''}" data-id="${n.id}" onclick="openGroupModal()"><div class="notif-icon">${iconHtml}</div><div class="notif-content"><div class="notif-msg">${n.msg}</div><div class="notif-time">${n.time}</div></div></div>`
     return `<div class="notif-item ${n.unread?'unread':''}" data-id="${n.id}"><div class="notif-icon">${iconHtml}</div><div class="notif-content"><div class="notif-msg">${n.msg}</div><div class="notif-time">${n.time}</div></div></div>`
   }).join('')
 }
-function acceptFriend(id,e){
-  e.stopPropagation()
-  document.querySelector(`[data-id="${id}"]`).querySelector('.notif-content').innerHTML='<div class="notif-msg">친구 요청을 <span>수락</span>했습니다. 🎉</div><div class="notif-time">방금 전</div>'
+function goToGym(name){
+  const item = notifications.find(n=>n.gymName===name)
+  if(item){ item.unread=false }
+  window.location.href = 'gym.html?open=gym&name=' + encodeURIComponent(name||'')
 }
-function rejectFriend(id,e){
-  e.stopPropagation()
+function goToMembers(name){
+  window.location.href = 'gym.html?open=members&name=' + encodeURIComponent(name||'')
+}
+function goToChalk(name){
+  window.location.href = 'gym.html?open=chalk&name=' + encodeURIComponent(name||'')
+}
+let currentFriendId=null
+function openFriendModal(id){
+  currentFriendId = id
+  const n = notifications.find(x=>x.id===id)
+  if(!n) return
+  document.getElementById('friend-modal-title').innerHTML = n.msg
+  document.getElementById('friend-modal-backdrop').classList.add('show')
   const item=document.querySelector(`[data-id="${id}"]`)
-  item.style.opacity='0.4'
-  item.style.pointerEvents='none'
+  if(item) item.classList.remove('unread')
+}
+function closeFriendModal(e){
+  if(e && e.target!==document.getElementById('friend-modal-backdrop')) return
+  document.getElementById('friend-modal-backdrop').classList.remove('show')
+}
+function acceptFriendModal(){
+  const item=document.querySelector(`[data-id="${currentFriendId}"]`)
+  if(item) item.querySelector('.notif-content').innerHTML='<div class="notif-msg">친구 요청을 <span>수락</span>했습니다. 🎉</div><div class="notif-time">방금 전</div>'
+  document.getElementById('friend-modal-backdrop').classList.remove('show')
+}
+function rejectFriendModal(){
+  const item=document.querySelector(`[data-id="${currentFriendId}"]`)
+  if(item){ item.style.opacity='0.4'; item.style.pointerEvents='none' }
+  document.getElementById('friend-modal-backdrop').classList.remove('show')
+}
+function openGroupModal(){
+  document.getElementById('group-modal-backdrop').classList.add('show')
+}
+function closeGroupModal(e){
+  if(e && e.target!==document.getElementById('group-modal-backdrop')) return
+  document.getElementById('group-modal-backdrop').classList.remove('show')
+}
+function groupGoGym(){
+  window.location.href = 'gym.html?open=gym'
+}
+function groupGoShop(){
+  window.location.href = 'shop.html'
 }
 let selectedGym=null
 function openHoldModal(holdName,id){
+  const n = notifications.find(x=>x.id===id)
+  if(n && n.installed){
+    goToGym(n.gymName)
+    return
+  }
   document.getElementById('modal-hold-name').textContent=holdName
   selectedGym=null
   document.querySelectorAll('.gym-item').forEach(el=>el.classList.remove('selected'))
