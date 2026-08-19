@@ -121,6 +121,16 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
 .cond-add-btn:active{transform:scale(0.94)}
 .cond-add-btn[disabled]{opacity:0.35;cursor:default}
 .cond-hidden-input{position:absolute;width:1px;height:1px;opacity:0;border:none;padding:0;margin:0;overflow:hidden}
+.emoji-modal-backdrop{display:none;position:absolute;inset:0;background:rgba(0,0,0,0.5);z-index:300;align-items:center;justify-content:center}
+.emoji-modal-backdrop.show{display:flex}
+.emoji-modal{background:#fff;border:2px solid #111;width:82%;max-width:300px;max-height:70%;display:flex;flex-direction:column}
+.emoji-modal-header{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1.5px solid #eee;flex-shrink:0}
+.emoji-modal-title{font-size:12px;color:#111;letter-spacing:0.5px}
+.emoji-modal-close{background:none;border:none;cursor:pointer;font-size:16px;color:#888;line-height:1;padding:0}
+.emoji-modal-body{overflow-y:auto;padding:12px 14px 16px}
+.emoji-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+.emoji-grid-btn{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:19px;background:#fff;border:1.5px solid #eee;cursor:pointer;padding:0;box-sizing:border-box}
+.emoji-grid-btn:active{transform:scale(0.92);background:#f5f5f5}
 .photo-upload{width:100%;height:110px;border:2px dashed #ddd;border-radius:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:pointer;background:#fafafa}
 .photo-upload-icon{font-size:28px;opacity:0.5}
 .photo-upload-text{font-size:7px;color:#bbb}
@@ -248,9 +258,8 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
         <div class="form-section" style="margin-top:12px">
           <div class="px form-label">컨디션 <span class="px cond-counter" id="condCounter">(0/5)</span></div>
           <div class="cond-picker-row" id="condPickerRow">
-            <button type="button" class="cond-add-btn" id="condAddBtn" onclick="focusCondInput()">+</button>
+            <button type="button" class="cond-add-btn" id="condAddBtn" onclick="openEmojiPicker()">+</button>
           </div>
-          <input type="text" id="condHiddenInput" class="cond-hidden-input" autocomplete="off">
         </div>
         <div class="form-section">
           <div class="px form-label">운동 시간 (분)</div>
@@ -260,6 +269,18 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
     </div>
     <div class="modal-footer">
       <button class="px btn-save" onclick="saveRecord()"><span id="btnSaveText">기록 저장하기</span></button>
+    </div>
+  </div>
+</div>
+
+<div class="emoji-modal-backdrop" id="emojiModalBackdrop" onclick="closeEmojiPicker(event)">
+  <div class="emoji-modal" onclick="event.stopPropagation()">
+    <div class="emoji-modal-header">
+      <div class="px emoji-modal-title">컨디션 이모지 선택</div>
+      <button class="emoji-modal-close" onclick="closeEmojiPicker()">✕</button>
+    </div>
+    <div class="emoji-modal-body">
+      <div class="emoji-grid" id="emojiGrid"></div>
     </div>
   </div>
 </div>
@@ -469,16 +490,27 @@ function renderCondPicker(){
   addBtn.style.display=full?'none':'flex'
   document.getElementById('condCounter').textContent=`(${condEmojis.length}/5)`
 }
-function focusCondInput(){
-  if(condEmojis.length>=5) return
-  document.getElementById('condHiddenInput').focus()
+
+const COND_EMOJI_LIST=['😊','🙂','😄','😆','😁','😅','😪','😴','🥵','🥶','😤','😰','💪','🔥','🎉','👍','👎','✅','❌','⭐','🌟','🙌','👏','🧗','🪨','⛰️','🏔️','💧','😢','😭','🥳','🤩','😎','🤕','😩','🙃','❤️','💦','⚡','🎯','🏆','😬']
+function renderEmojiGrid(){
+  const grid=document.getElementById('emojiGrid')
+  grid.innerHTML=COND_EMOJI_LIST.map(e=>`<button type="button" class="emoji-grid-btn" onclick="pickEmoji('${e}')">${e}</button>`).join('')
 }
-document.getElementById('condHiddenInput').addEventListener('input', e=>{
-  const chars=Array.from(e.target.value)
-  chars.forEach(ch=>{ if(condEmojis.length<5) condEmojis.push(ch) })
-  e.target.value=''
+function openEmojiPicker(){
+  if(condEmojis.length>=5) return
+  renderEmojiGrid()
+  document.getElementById('emojiModalBackdrop').classList.add('show')
+}
+function closeEmojiPicker(e){
+  if(e && e.target!==document.getElementById('emojiModalBackdrop')) return
+  document.getElementById('emojiModalBackdrop').classList.remove('show')
+}
+function pickEmoji(emo){
+  if(condEmojis.length>=5) return
+  condEmojis.push(emo)
   renderCondPicker()
-})
+  if(condEmojis.length>=5) closeEmojiPicker()
+}
 
 function toggleOptional(){const s=document.getElementById('optionalSection');const show=!s.classList.contains('show');s.classList.toggle('show',show);document.getElementById('optToggleIcon').textContent=show?'▼':'▶'}
 function saveRecord(){
