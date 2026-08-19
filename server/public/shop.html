@@ -118,6 +118,36 @@
     .scroll-area::-webkit-scrollbar-thumb { background: #ddd; border-radius:0; }
 
     /* 카테고리 탭 (예진님 pills 스타일) */
+    .own-toggle {
+      display: flex;
+      border: 1.5px solid #111;
+      margin: 4px 16px 12px;
+    }
+    .own-opt {
+      flex: 1;
+      padding: 9px 0;
+      text-align: center;
+      font-family: 'Galmuri11', monospace;
+      font-size: 11px;
+      color: #888;
+      cursor: pointer;
+      border-left: 1.5px solid #eee;
+      letter-spacing: 0.5px;
+    }
+    .own-opt:first-child { border-left: none; }
+    .own-opt.active {
+      background: #111;
+      color: #fff;
+    }
+    .empty-owned {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 40px 20px;
+      color: #bbb;
+      font-family: 'Galmuri11', monospace;
+      font-size: 11px;
+      letter-spacing: 0.5px;
+    }
     .pills {
       display: flex;
       gap: 5px;
@@ -330,6 +360,12 @@
 
     <!-- 스크롤 영역 -->
     <div class="scroll-area">
+      <div class="own-toggle">
+        <div class="own-opt active" data-own="all" onclick="setOwnFilter('all')">전체</div>
+        <div class="own-opt" data-own="owned" onclick="setOwnFilter('owned')">보유중</div>
+        <div class="own-opt" data-own="unowned" onclick="setOwnFilter('unowned')">미보유</div>
+      </div>
+
       <div class="pills" id="pills">
         <div class="pill active" data-category="all">ALL</div>
         <div class="pill" data-category="top">TOP</div>
@@ -441,9 +477,31 @@
       return outfit[item.slot] === item.id
     }
 
+    // 보유 필터 상태: 'all' | 'owned' | 'unowned'
+    let ownFilter = 'all'
+    function setOwnFilter(mode) {
+      ownFilter = mode
+      document.querySelectorAll('.own-opt').forEach(el => {
+        el.classList.toggle('active', el.dataset.own === mode)
+      })
+      render()
+    }
+
     function render() {
       const grid = document.getElementById('grid')
-      const filtered = currentCategory === 'all' ? items : items.filter(i => i.category === currentCategory)
+      let filtered = currentCategory === 'all' ? items : items.filter(i => i.category === currentCategory)
+      if (ownFilter === 'owned') filtered = filtered.filter(i => i.owned)
+      else if (ownFilter === 'unowned') filtered = filtered.filter(i => !i.owned)
+
+      // 필터 결과가 없을 때 안내
+      if (filtered.length === 0) {
+        const msg = ownFilter === 'owned' ? '아직 보유한 아이템이 없어요'
+                  : ownFilter === 'unowned' ? '이 카테고리는 모두 보유중이에요'
+                  : '아이템이 없어요'
+        grid.innerHTML = `<div class="empty-owned">${msg}</div>`
+        return
+      }
+
       grid.innerHTML = filtered.map(item => {
         const worn = item.owned && isWorn(item)
         const previewing = previewBySlot[item.slot] === item.id
