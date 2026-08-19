@@ -106,8 +106,8 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
 .modal-backdrop.show{display:flex}
 .modal{background:#fff;border-radius:0;width:360px;max-width:100%;max-height:92%;display:flex;flex-direction:column}
 .modal-handle{width:40px;height:4px;background:#e0e0e0;border-radius:0;margin:16px auto 0}
-.modal-header{display:flex;justify-content:space-between;align-items:center;padding:16px 20px 12px;border-bottom:1px solid #f0f0f0;flex-shrink:0}
-.modal-title{font-size:12px;color:#111;font-weight:400;letter-spacing:1px}
+.modal-header{display:flex;justify-content:space-between;align-items:center;padding:16px 20px 12px;border-bottom:none;flex-shrink:0}
+.modal-title{font-size:14px;color:#111;font-weight:400;letter-spacing:1px}
 .modal-close{background:none;border:none;cursor:pointer;font-size:16px;color:#bbb}
 .modal-body{overflow-y:auto;padding:16px 20px;flex:1}
 .modal-footer{padding:12px 20px 32px;border-top:1px solid #f0f0f0;flex-shrink:0}
@@ -124,19 +124,27 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
 .emoji-modal-backdrop{display:none;position:absolute;inset:0;background:rgba(0,0,0,0.5);z-index:300;align-items:center;justify-content:center}
 .emoji-modal-backdrop.show{display:flex}
 .emoji-modal{background:#fff;border:2px solid #111;width:82%;max-width:300px;max-height:70%;display:flex;flex-direction:column}
-.emoji-modal-header{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1.5px solid #eee;flex-shrink:0}
+.emoji-modal-header{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:none;flex-shrink:0}
 .emoji-modal-title{font-size:12px;color:#111;letter-spacing:0.5px}
 .emoji-modal-close{background:none;border:none;cursor:pointer;font-size:16px;color:#888;line-height:1;padding:0}
 .emoji-modal-body{overflow-y:auto;padding:12px 14px 16px}
 .emoji-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
-.emoji-grid-btn{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:19px;background:#fff;border:1.5px solid #eee;cursor:pointer;padding:0;box-sizing:border-box}
+.emoji-grid-btn{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:19px;background:#fff;border:none;cursor:pointer;padding:0;box-sizing:border-box}
 .emoji-grid-btn:active{transform:scale(0.92);background:#f5f5f5}
-.photo-upload{width:100%;height:110px;border:2px dashed #ddd;border-radius:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:pointer;background:#fafafa}
-.photo-upload-icon{font-size:28px;opacity:0.5}
-.photo-upload-text{font-size:7px;color:#bbb}
+.photo-upload{width:100%;height:110px;border:2px solid #111;border-radius:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:pointer;background:#fafafa}
+.photo-upload-text{font-size:10px;color:#bbb}
 .form-input{width:100%;padding:12px 14px;border:1.5px solid #111;border-radius:0;font-size:12px;color:#111;background:#fff;outline:none;font-family:inherit}
 .form-input:focus{border-color:#111}
 .form-input::placeholder{color:#ccc}
+/* 클라이밍장 자동완성 */
+.gym-autocomplete{position:relative}
+.gym-dropdown{display:none;position:absolute;top:100%;left:0;right:0;background:#fff;border:1.5px solid #eee;border-top:none;max-height:180px;overflow-y:auto;z-index:20}
+.gym-dropdown.show{display:block}
+.gym-option{padding:10px 14px;font-size:12px;color:#111;cursor:pointer;border-bottom:1px solid #f5f5f5;font-family:'Galmuri11',monospace}
+.gym-option:last-child{border-bottom:none}
+.gym-option:hover{background:#f5f5f5}
+.gym-option .match{color:#111;font-weight:bold}
+.gym-option .rest{color:#888}
 .grade-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
 .grade-row{display:flex;align-items:center;gap:8px;border:1.5px solid #111;border-radius:0;padding:6px 8px}
 .grade-row.on{border-color:#111;background:#fafafa}
@@ -223,20 +231,21 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
     <div class="modal-handle"></div>
     <div class="modal-header">
       <div class="px modal-title" id="modalTitleText">기록 업로드</div>
-      <button class="modal-close" onclick="closeWriteModal()">×</button>
     </div>
     <div class="modal-body">
       <div class="form-section">
         <div class="px form-label">사진 / 영상 <span style="color:#e23b3b">*필수</span></div>
         <input type="file" id="inputPhotoFile" accept="image/*" style="display:none" onchange="handlePhotoSelect(event)">
         <div class="photo-upload" id="photoUploadBox" onclick="document.getElementById('inputPhotoFile').click()">
-          <div class="photo-upload-icon">📷</div>
           <div class="px photo-upload-text">탭해서 사진 추가</div>
         </div>
       </div>
       <div class="form-section">
         <div class="px form-label">클라이밍장</div>
-        <input class="form-input" id="inputGym" type="text" placeholder="예) 더클라임 강남">
+        <div class="gym-autocomplete">
+          <input class="form-input" id="inputGym" type="text" placeholder="예) 더클라임 강남" autocomplete="off" oninput="onGymInput()" onfocus="onGymInput()">
+          <div class="gym-dropdown" id="gymDropdown"></div>
+        </div>
       </div>
       <div class="form-section">
         <div class="px form-label">날짜</div>
@@ -277,7 +286,6 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
   <div class="emoji-modal" onclick="event.stopPropagation()">
     <div class="emoji-modal-header">
       <div class="px emoji-modal-title">컨디션 이모지 선택</div>
-      <button class="emoji-modal-close" onclick="closeEmojiPicker()">✕</button>
     </div>
     <div class="emoji-modal-body">
       <div class="emoji-grid" id="emojiGrid"></div>
@@ -338,6 +346,69 @@ let editingRecordId=null
 let currentDetailId=null
 let state={nabiStage:3,chalkCount:12,streakDays:3,todayRecorded:false,totalRecordCount:4,rewardHistory:[],records:[{id:1,date:'2026-06-29',gym:'더클라임 강남',routes:5,grades:{blue:3,red:2},memo:'오랜만에 오버행 성공! 손이 많이 까졌지만 뿌듯하다',cond:'😊 최고',duration:90,photo:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAACWCAIAAAAUvlBOAAABmklEQVR4nO3SQQ3AIADAQED1RCACqTOxhmS5U9BH57PPgK+t2wH8k7FIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi8QLn1EC0KyOiEgAAAAASUVORK5CYII=',chalkReward:1,nabiGrew:true},{id:2,date:'2026-06-27',gym:'볼더링 클럽 홍대',routes:3,grades:{yellow:2,green:1},memo:'처음 와봤는데 홀드가 신선해서 좋았음',cond:'🙂 좋음',duration:60,photo:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAACWCAIAAAAUvlBOAAABmklEQVR4nO3SQQ3AIADAQED1RCACqTOxhmS5U9BH59nPgK+t2wH8k7FIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi8QLn6EC0ILWFdsAAAAASUVORK5CYII=',chalkReward:0,nabiGrew:true},{id:3,date:'2026-06-25',gym:'클라이밍 파크 강남',routes:8,grades:{red:5,black:3},memo:'친구랑 같이 와서 더 재밌었다. 5번 루트 드디어 완등!',cond:'😊 최고',duration:120,photo:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAACWCAIAAAAUvlBOAAABmklEQVR4nO3SQQ3AIADAQED1RCACqTOxhmS5U9BH5z7PgK+t2wH8k7FIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi4SxSBiLhLFIGIuEsUgYi8QLn40C0BXnTL8AAAAASUVORK5CYII=',chalkReward:1,nabiGrew:false}]}
 let routeCount=0,currentView='feed',selectedCalDate=null,calYear=2026,calMonth=7
+
+// ── 클라이밍장 자동완성 ──────────────────────────
+// 지금은 아래 목록에서 검색. 나중에 카카오 지도 API로 바꾸려면
+// searchGyms 함수 안만 API 호출로 교체하면 됨 (UI/드롭다운은 그대로 재사용)
+const GYM_LIST = [
+  '더클라임 강남점','더클라임 홍대점','더클라임 신사점','더클라임 양재점','더클라임 사당점',
+  '더클라임 신촌점','더클라임 마곡점','더클라임 논현점','더클라임 서울대점','더클라임 일산점',
+  '클라이밍파크 성수점','클라이밍파크 강남점','클라이밍파크 건대점',
+  '피커스 클라이밍 강남','피커스 클라이밍 신림','피커스 클라이밍 서면',
+  '볼더프렌즈 홍대','볼더프렌즈 강남','볼더프렌즈 잠실',
+  '더월 클라이밍 신촌','더월 클라이밍 강남',
+  '클라이밍고 성수','클라이밍고 연남',
+  '손상원클라이밍 홍대','손상원클라이밍 강남','손상원클라이밍 잠실',
+  '오디세이 클라이밍 강남','오디세이 클라이밍 판교',
+  '스톤에이지 클라이밍 부천','스톤에이지 클라이밍 인천',
+  '락트리 클라이밍 수원','비블럭 클라이밍 강남','비블럭 클라이밍 성수',
+]
+
+// 입력값으로 암장 검색 (나중에 이 함수만 카카오 API 호출로 교체하면 됨)
+function searchGyms(query) {
+  const q = query.trim()
+  if (!q) return []
+  const starts = GYM_LIST.filter(g => g.startsWith(q))
+  const contains = GYM_LIST.filter(g => !g.startsWith(q) && g.includes(q))
+  return [...starts, ...contains].slice(0, 8)
+}
+
+function onGymInput() {
+  const input = document.getElementById('inputGym')
+  const dd = document.getElementById('gymDropdown')
+  const q = input.value.trim()
+  const results = searchGyms(q)
+
+  if (results.length === 0 || (results.length === 1 && results[0] === q)) {
+    dd.classList.remove('show'); dd.innerHTML = ''; return
+  }
+
+  dd.innerHTML = results.map(g => {
+    const idx = g.indexOf(q)
+    let html
+    if (idx === 0) {
+      html = `<span class="match">${g.slice(0, q.length)}</span><span class="rest">${g.slice(q.length)}</span>`
+    } else {
+      html = `<span class="rest">${g}</span>`
+    }
+    return `<div class="gym-option" onmousedown="selectGym('${g.replace(/'/g, "\\'")}')">${html}</div>`
+  }).join('')
+  dd.classList.add('show')
+}
+
+function selectGym(name) {
+  document.getElementById('inputGym').value = name
+  const dd = document.getElementById('gymDropdown')
+  dd.classList.remove('show'); dd.innerHTML = ''
+}
+
+// 입력칸 밖 클릭하면 드롭다운 닫기
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.gym-autocomplete')) {
+    const dd = document.getElementById('gymDropdown')
+    if (dd) { dd.classList.remove('show'); dd.innerHTML = '' }
+  }
+})
 
 function init(){
   document.getElementById('inputDate').value=todayStr()
@@ -425,7 +496,7 @@ function openWriteModal(){
   renderCondPicker()
   document.getElementById('inputDur').value=''
   document.getElementById('inputPhotoFile').value=''
-  document.getElementById('photoUploadBox').innerHTML='<div class="photo-upload-icon">📷</div><div class="px photo-upload-text">탭해서 사진 추가</div>'
+  document.getElementById('photoUploadBox').innerHTML='<div class="px photo-upload-text">탭해서 사진 추가</div>'
   document.getElementById('optionalSection').classList.remove('show')
   document.getElementById('optToggleIcon').textContent='▶'
   document.getElementById('writeModalBackdrop').classList.add('show')
@@ -509,7 +580,7 @@ function pickEmoji(emo){
   if(condEmojis.length>=5) return
   condEmojis.push(emo)
   renderCondPicker()
-  if(condEmojis.length>=5) closeEmojiPicker()
+  closeEmojiPicker()
 }
 
 function toggleOptional(){const s=document.getElementById('optionalSection');const show=!s.classList.contains('show');s.classList.toggle('show',show);document.getElementById('optToggleIcon').textContent=show?'▼':'▶'}
@@ -593,7 +664,7 @@ function openEditModal(){
     document.getElementById('optToggleIcon').textContent='▼'
   }
   document.getElementById('inputPhotoFile').value=''
-  document.getElementById('photoUploadBox').innerHTML=r.photo?`<img src="${r.photo}" style="width:100%;height:100%;object-fit:cover">`:'<div class="photo-upload-icon">📷</div><div class="px photo-upload-text">탭해서 사진 추가</div>'
+  document.getElementById('photoUploadBox').innerHTML=r.photo?`<img src="${r.photo}" style="width:100%;height:100%;object-fit:cover">`:'<div class="px photo-upload-text">탭해서 사진 추가</div>'
   document.getElementById('modalTitleText').textContent='기록 수정'
   document.getElementById('btnSaveText').textContent='수정 완료'
   document.getElementById('writeModalBackdrop').classList.add('show')
