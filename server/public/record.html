@@ -48,7 +48,7 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
 .header-right{display:flex;align-items:center;gap:8px}
 .streak-badge{display:flex;align-items:center;justify-content:center;gap:4px;background:#fff;border:1.5px solid #111;border-radius:0;padding:5px 9px;flex:1;min-width:0;height:31px;box-sizing:border-box}
 .streak-text{white-space:nowrap}
-.chalk-badge{display:flex;align-items:center;justify-content:center;gap:4px;background:#fff;border:1.5px solid #111;border-radius:0;padding:5px 9px;flex:1;min-width:0;height:31px;box-sizing:border-box}
+.chalk-badge{display:flex;align-items:center;justify-content:center;gap:4px;background:#fff;border:1.5px solid #111;border-radius:0;padding:5px 9px;flex:1;min-width:0;height:31px;box-sizing:border-box;cursor:pointer}
 .streak-text{font-size:12px;color:#e65100}
 .chalk-text{font-size:12px;color:#111}
 .today-card{margin:0 24px 20px;background:#fafafa;border:1.5px solid #111;border-radius:0;padding:16px;flex-shrink:0}
@@ -113,6 +113,14 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
 .modal-footer{padding:12px 20px 32px;border-top:1px solid #f0f0f0;flex-shrink:0}
 .form-section{margin-bottom:16px}
 .form-label{font-size:12px;color:#888;margin-bottom:6px;letter-spacing:0.5px}
+.cond-counter{font-size:10px;color:#bbb}
+.cond-picker-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.cond-pill{display:inline-flex;align-items:center;justify-content:center;min-width:36px;height:36px;padding:0 8px;font-size:17px;background:#fff;border:1.5px solid #111;cursor:pointer;line-height:1;box-sizing:border-box}
+.cond-pill:active{transform:scale(0.94)}
+.cond-add-btn{width:36px;height:36px;display:flex;align-items:center;justify-content:center;background:#fff;border:1.5px solid #111;font-size:16px;color:#111;cursor:pointer;padding:0;box-sizing:border-box}
+.cond-add-btn:active{transform:scale(0.94)}
+.cond-add-btn[disabled]{opacity:0.35;cursor:default}
+.cond-hidden-input{position:absolute;width:1px;height:1px;opacity:0;border:none;padding:0;margin:0;overflow:hidden}
 .photo-upload{width:100%;height:110px;border:2px dashed #ddd;border-radius:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:pointer;background:#fafafa}
 .photo-upload-icon{font-size:28px;opacity:0.5}
 .photo-upload-text{font-size:7px;color:#bbb}
@@ -170,7 +178,7 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
   <div class="header">
     <div class="px header-title">기록</div>
     <div class="header-right">
-      <div class="chalk-badge"><img id="chalkIcon" src="" alt="chalk" style="width:16px;height:auto;image-rendering:pixelated" /><span class="px chalk-text" id="chalkText">12꼬집</span></div>
+      <div class="chalk-badge" onclick="window.location.href='chalk-dashboard.html'"><img id="chalkIcon" src="" alt="chalk" style="width:16px;height:auto;image-rendering:pixelated" /><span class="px chalk-text" id="chalkText">12꼬집</span></div>
     </div>
   </div>
   <div class="today-card">
@@ -238,8 +246,11 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
       </button>
       <div class="optional-section" id="optionalSection">
         <div class="form-section" style="margin-top:12px">
-          <div class="px form-label">컨디션</div>
-          <select class="form-select" id="inputCond"><option value="">선택 안함</option><option>😊 최고</option><option>🙂 좋음</option><option>😐 보통</option><option>😪 피곤</option></select>
+          <div class="px form-label">컨디션 <span class="px cond-counter" id="condCounter">(0/5)</span></div>
+          <div class="cond-picker-row" id="condPickerRow">
+            <button type="button" class="cond-add-btn" id="condAddBtn" onclick="focusCondInput()">+</button>
+          </div>
+          <input type="text" id="condHiddenInput" class="cond-hidden-input" autocomplete="off">
         </div>
         <div class="form-section">
           <div class="px form-label">운동 시간 (분)</div>
@@ -389,7 +400,8 @@ function openWriteModal(){
   document.getElementById('inputGym').value=''
   document.getElementById('inputMemo').value=''
   document.getElementById('inputDate').value=todayStr()
-  document.getElementById('inputCond').value=''
+  condEmojis=[]
+  renderCondPicker()
   document.getElementById('inputDur').value=''
   document.getElementById('inputPhotoFile').value=''
   document.getElementById('photoUploadBox').innerHTML='<div class="photo-upload-icon">📷</div><div class="px photo-upload-text">탭해서 사진 추가</div>'
@@ -438,12 +450,42 @@ function gradeChipsHtml(grades){
   if(entries.length===0) return ''
   return `<div class="grade-chips">${entries.map(c=>`<div class="grade-chip"><div class="grade-chip-dot" style="background:${c.hex}"></div><span class="grade-chip-num">${grades[c.key]}</span></div>`).join('')}</div>`
 }
+let condEmojis=[]
+function renderCondPicker(){
+  const row=document.getElementById('condPickerRow')
+  const addBtn=document.getElementById('condAddBtn')
+  row.querySelectorAll('.cond-pill').forEach(el=>el.remove())
+  condEmojis.forEach((emo,i)=>{
+    const pill=document.createElement('button')
+    pill.type='button'
+    pill.className='cond-pill px'
+    pill.textContent=emo
+    pill.title='탭해서 삭제'
+    pill.onclick=()=>{ condEmojis.splice(i,1); renderCondPicker() }
+    row.insertBefore(pill, addBtn)
+  })
+  const full=condEmojis.length>=5
+  addBtn.disabled=full
+  addBtn.style.display=full?'none':'flex'
+  document.getElementById('condCounter').textContent=`(${condEmojis.length}/5)`
+}
+function focusCondInput(){
+  if(condEmojis.length>=5) return
+  document.getElementById('condHiddenInput').focus()
+}
+document.getElementById('condHiddenInput').addEventListener('input', e=>{
+  const chars=Array.from(e.target.value)
+  chars.forEach(ch=>{ if(condEmojis.length<5) condEmojis.push(ch) })
+  e.target.value=''
+  renderCondPicker()
+})
+
 function toggleOptional(){const s=document.getElementById('optionalSection');const show=!s.classList.contains('show');s.classList.toggle('show',show);document.getElementById('optToggleIcon').textContent=show?'▼':'▶'}
 function saveRecord(){
   const gym=document.getElementById('inputGym').value.trim()
   const date=document.getElementById('inputDate').value
   const memo=document.getElementById('inputMemo').value.trim()
-  const cond=document.getElementById('inputCond').value
+  const cond=condEmojis.join('')
   const dur=parseInt(document.getElementById('inputDur').value)||0
   if(!selectedPhoto){alert('사진을 추가해주세요! 사진이 있어야 기록을 업로드할 수 있어요 📸');return}
   if(!gym){alert('클라이밍장 이름을 입력해주세요!');return}
@@ -511,7 +553,8 @@ function openEditModal(){
   document.getElementById('inputGym').value=r.gym
   document.getElementById('inputDate').value=r.date
   document.getElementById('inputMemo').value=r.memo||''
-  document.getElementById('inputCond').value=r.cond||''
+  condEmojis=r.cond?Array.from(r.cond):[]
+  renderCondPicker()
   document.getElementById('inputDur').value=r.duration||''
   if(r.cond||r.duration){
     document.getElementById('optionalSection').classList.add('show')
@@ -524,6 +567,7 @@ function openEditModal(){
   document.getElementById('writeModalBackdrop').classList.add('show')
 }
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800)}
+renderCondPicker()
 init()
 </script>
 </body>
