@@ -672,6 +672,14 @@ function openEditModal(){
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800)}
 renderCondPicker()
 init()
+
+// 메인 탭 상단 '기록 업로드' 바로가기 아이콘에서 넘어온 경우, 기록 업로드 모달을 바로 오픈
+(function(){
+  var params = new URLSearchParams(window.location.search);
+  if (params.get('openUpload') === '1') {
+    openWriteModal();
+  }
+})();
 </script>
 </body>
 </html>
