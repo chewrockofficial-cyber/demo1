@@ -280,12 +280,12 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
 .note-item{background:#fff;border:2px solid #222;box-shadow:none;padding:10px 12px}
 
 /* 친구 프로필 모달 */
-.friend-profile-head{display:flex;flex-direction:row;align-items:center;padding:14px 2px 18px;border-bottom:1.5px solid #eee;margin-bottom:16px}
+.friend-profile-head{display:flex;flex-direction:row;align-items:center;padding:14px 2px 18px;border-bottom:1.5px solid #eee;margin-bottom:16px;gap:10px}
 .friend-profile-avatar-col{flex:1;min-width:0;display:flex;align-items:center;justify-content:center}
 .friend-profile-avatar-wrap{position:relative;width:76px;height:76px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
 .friend-profile-avatar-wrap img{width:86px;height:auto}
 .friend-profile-accessory{position:absolute;top:-2px;right:-4px;font-size:16px}
-.friend-profile-stats{display:flex;flex-direction:column;gap:7px;flex:0 0 auto;width:132px;min-width:0}
+.friend-profile-stats{display:flex;flex-direction:column;gap:7px;flex:0 0 auto;width:calc(50% - 4px);min-width:0}
 .friend-profile-stat{display:flex;flex-direction:column;gap:2px;background:#fff;border:2px solid #222;box-shadow:none;padding:6px 9px}
 .friend-profile-stat-val{font-size:14px;color:#111;line-height:1.3}
 .friend-profile-stat-val--stage{font-size:12px;white-space:nowrap}
@@ -295,6 +295,8 @@ html,body{background:#f0f0f0;display:flex;justify-content:center;min-height:100v
 .feed-item-top{display:flex;justify-content:space-between;align-items:center}
 .feed-item-gym{font-size:12px;color:#111}
 .feed-item-date{font-size:9px;color:#aaa}
+.feed-item-bottom{display:flex;justify-content:space-between;align-items:center}
+.feed-item-cond{font-size:13px;line-height:1}
 .feed-item-routes{font-size:10px;color:#e63946}
 .feed-item-memo{font-size:10px;color:#666;margin-top:2px}
 .holds-grid{display:flex;flex-wrap:wrap;gap:8px}
@@ -561,38 +563,38 @@ const NOTE_COLORS=['#ffd6d6','#d6eaff','#d6ffd9','#fff3d6','#e8d6ff','#ffd6f0','
 
 // 친구를 맺은 나비들 (전부 확정 디폴트 나비 실루엣, 작은 착용 아이템만 다름)
 const FRIENDS=[
-  {id:'f1', name:'회색나비', accessory:'🎀', level:3, streak:7, gymCount:2,
+  {id:'f1', name:'회색나비', accessory:'🎀', level:3, streak:7, routes30d:38, gymCount:2,
     feed:[
-      {date:'오늘', gym:'더클라임 강남', routes:5, memo:'오늘도 완등 성공!'},
-      {date:'어제', gym:'더클라임 강남', routes:3, memo:'오버행 도전 중'},
-      {date:'3일 전', gym:'클라밍고 성수', routes:4, memo:'새 루트 세팅됐어요'},
+      {date:'오늘', gym:'더클라임 강남', routes:5, cond:'😊'},
+      {date:'어제', gym:'더클라임 강남', routes:3, cond:'🙂'},
+      {date:'3일 전', gym:'클라밍고 성수', routes:4},
     ],
     holds:[
       {icon:'orange', name:'오렌지 포켓', time:'오늘', place:'더클라임 강남 3F'},
       {icon:'blue', name:'블루 저그', time:'어제', place:'더클라임 강남 2F'},
     ]},
-  {id:'f2', name:'분홍나비', accessory:'🧣', level:2, streak:2, gymCount:1,
+  {id:'f2', name:'분홍나비', accessory:'🧣', level:2, streak:2, routes30d:12, gymCount:1,
     feed:[
-      {date:'오늘', gym:'비스킷 홍대', routes:2, memo:'초급 루트 완등!'},
-      {date:'2일 전', gym:'비스킷 홍대', routes:3, memo:''},
+      {date:'오늘', gym:'비스킷 홍대', routes:2, cond:'😐'},
+      {date:'2일 전', gym:'비스킷 홍대', routes:3},
     ],
     holds:[
       {icon:'yellow', name:'옐로 트라이앵글', time:'오늘', place:'비스킷 홍대 1F'},
     ]},
-  {id:'f3', name:'초크나비', accessory:'🏅', level:5, streak:14, gymCount:3,
+  {id:'f3', name:'초크나비', accessory:'🏅', level:5, streak:14, routes30d:65, gymCount:3,
     feed:[
-      {date:'오늘', gym:'클라밍고 성수', routes:8, memo:'V5 완등 🎉'},
-      {date:'어제', gym:'클라밍고 성수', routes:6, memo:''},
-      {date:'2일 전', gym:'더클라임 강남', routes:5, memo:'컨디션 최고'},
+      {date:'오늘', gym:'클라밍고 성수', routes:8, cond:'😊'},
+      {date:'어제', gym:'클라밍고 성수', routes:6},
+      {date:'2일 전', gym:'더클라임 강남', routes:5, cond:'🙂'},
     ],
     holds:[
       {icon:'purple', name:'퍼플 스타', time:'어제', place:'클라밍고 성수 4F'},
       {icon:'pink', name:'핑크 하트', time:'2일 전', place:'클라밍고 성수 3F'},
       {icon:'black', name:'블랙그레이 저그', time:'3일 전', place:'더클라임 강남 1F'},
     ]},
-  {id:'f4', name:'까만나비', accessory:null, level:1, streak:1, gymCount:1,
+  {id:'f4', name:'까만나비', accessory:null, level:1, streak:1, routes30d:5, gymCount:1,
     feed:[
-      {date:'오늘', gym:'비스킷 홍대', routes:1, memo:'클라이밍 시작했어요!'},
+      {date:'오늘', gym:'비스킷 홍대', routes:1},
     ],
     holds:[]},
 ];
@@ -1331,8 +1333,10 @@ function openFriendProfile(fr){
             <div class="px feed-item-gym">${f.gym}</div>
             <div class="px feed-item-date">${f.date}</div>
           </div>
-          <div class="px feed-item-routes">🧗 ${f.routes}개 루트 완등</div>
-          ${f.memo ? `<div class="px feed-item-memo">${f.memo}</div>` : ''}
+          <div class="feed-item-bottom">
+            <div class="px feed-item-routes">${f.routes}개 루트 완등</div>
+            ${f.cond ? `<div class="feed-item-cond">${f.cond}</div>` : ''}
+          </div>
         </div>`).join('')
     : `<div class="px" style="text-align:center;color:#bbb;font-size:11px;padding:20px 0">아직 기록이 없어요</div>`;
 
@@ -1341,7 +1345,6 @@ function openFriendProfile(fr){
     ? `<div class="holds-grid">${fr.holds.map((h,hi)=>`
         <div class="holds-chip" onclick="openHoldDetail(${hi})">
           <img class="holds-chip-icon-img" src="${HOLD_ICONS[h.icon]}" alt="${h.name}">
-          <div class="px holds-chip-name">${h.name}</div>
           <div class="px holds-chip-time">${h.time}</div>
         </div>`).join('')}</div>`
     : `<div class="px" style="text-align:center;color:#bbb;font-size:11px;padding:20px 0">아직 주운 홀드가 없어요</div>`;
@@ -1357,7 +1360,7 @@ function openFriendProfile(fr){
       </div>
       <div class="friend-profile-stats">
         <div class="friend-profile-stat"><div class="px friend-profile-stat-label">성장 단계</div><div class="px friend-profile-stat-val friend-profile-stat-val--stage">${stageName}</div></div>
-        <div class="friend-profile-stat"><div class="px friend-profile-stat-label">연속 기록</div><div class="px friend-profile-stat-val">${fr.streak||0}일</div></div>
+        <div class="friend-profile-stat"><div class="px friend-profile-stat-label">완등 루트 수(30일)</div><div class="px friend-profile-stat-val">${fr.routes30d||0}루트</div></div>
         <div class="friend-profile-stat"><div class="px friend-profile-stat-label">소속 암장</div><div class="px friend-profile-stat-val">${fr.gymCount||0}곳</div></div>
       </div>
     </div>
@@ -1390,8 +1393,7 @@ function openHoldDetail(i){
     <img class="hold-detail-icon" src="${HOLD_ICONS[h.icon]}" alt="${h.name}">
     <div class="px hold-detail-name">${h.name}</div>
     <div class="hold-detail-row"><span>언제</span><span>${h.time}</span></div>
-    <div class="hold-detail-row"><span>어디서</span><span>${h.place||'-'}</span></div>
-    <div class="hold-detail-row"><span>무엇을</span><span>${h.name}</span></div>
+    <div class="hold-detail-row"><span>현재 위치</span><span>${h.place||'-'}</span></div>
     <button class="px hold-detail-close" onclick="closeHoldDetail()">닫기</button>
   `;
   document.getElementById('holdDetailBackdrop').classList.add('show');
