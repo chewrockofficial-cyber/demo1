@@ -46,7 +46,7 @@
       flex-shrink: 0;
     }
     .topbar-title-sign {
-      height: 40px;
+      height: 55px;
       width: auto;
       image-rendering: pixelated;
       display: block;
@@ -350,9 +350,9 @@
   <div class="phone">
     <!-- 상단 -->
     <div class="topbar">
-      <img class="topbar-title-sign" src="/images/03.ui/sign_rock_cafe.png" alt="ROCK CAFE">
+      <img class="topbar-title-sign" src="/00.images/03.ui/sign_rock_cafe.png" alt="ROCK CAFE">
       <div class="balance">
-        <img id="balance-icon" src="/images/01.items/chalk_piece.png" alt="쵸크">
+        <img id="balance-icon" src="/00.images/01.items/chalk_piece.png" alt="쵸크">
         <span class="balance-text">×<span id="balance-count">128</span></span>
       </div>
     </div>
@@ -360,7 +360,7 @@
     <!-- 나비 미리보기 (스크롤 밖에 고정) -->
     <div class="preview">
       <div class="nabi-canvas" id="nabi-canvas">
-        <img class="layer-base" id="nabi-base" src="/images/00.nabi/nabi_front_01_basic.png" alt="나비">
+        <img class="layer-base" id="nabi-base" src="/00.images/00.nabi/nabi_front_shirt_lv1.png" alt="나비">
         <!-- 착용중인 아이템 레이어가 JS로 여기에 추가됨 -->
       </div>
     </div>
@@ -389,7 +389,7 @@
     <div class="buy-bar" id="buy-bar">
       <button class="buy-btn" id="buy-btn" onclick="confirmPurchase()">
         <span id="buy-btn-label">구매하기</span>
-        <img src="/images/01.items/chalk_piece.png" alt="">
+        <img src="/00.images/01.items/chalk_piece.png" alt="">
         <span id="buy-btn-price"></span>
       </button>
     </div>
@@ -417,7 +417,7 @@
     function updateBalance() {
       document.getElementById('balance-count').textContent = balance
       const icon = document.getElementById('balance-icon')
-      icon.src = balance >= 100 ? '/images/01.items/chalk_bag.png' : '/images/01.items/chalk_piece.png'
+      icon.src = balance >= 100 ? '/00.images/01.items/chalk_bag.png' : '/00.images/01.items/chalk_piece.png'
     }
 
     // ── 나비 캐릭터: 로그인 유저 정보와 동기화 ──────────
@@ -447,25 +447,25 @@
     // ── 아이템 ────────────────────
     // overlay: 나비에게 입혔을 때 겹쳐 보여줄 이미지 (fitting.html과 동일한 네이밍 규칙: {아이템명}_on_nabi.png)
     const items = [
-      { id: 1,  category: 'top',    slot: 'top', image: '/images/01.items/top_white_tshirt.png',           overlay: '/images/01.items/top_white_tshirt_on_nabi.png',           name: '화이트 티셔츠',       price: 12, owned: false, isNew: false },
-      { id: 2,  category: 'top',    slot: 'top', image: '/images/01.items/top_navy_crop.png',              overlay: '/images/01.items/top_navy_crop_on_nabi.png',              name: '네이비 크롭탑',       price: 15, owned: false, isNew: true  },
-      { id: 3,  category: 'etc',    slot: 'chalkbag', image: '/images/01.items/chalkbag_square_white.png',      overlay: '/images/01.items/chalkbag_square_white_on_nabi.png',      name: '스퀘어 초크백 화이트', price: 20, owned: false, isNew: false },
-      { id: 4,  category: 'etc',    slot: 'chalkbag', image: '/images/01.items/chalkbag_square_yellow.png',     overlay: '/images/01.items/chalkbag_square_yellow_on_nabi.png',     name: '스퀘어 초크백 옐로우', price: 22, owned: false, isNew: false },
-      { id: 5,  category: 'etc',    slot: 'chalkbag', image: '/images/01.items/chalkbag_round_black.png',       overlay: '/images/01.items/chalkbag_round_black_on_nabi.png',       name: '라운드 초크백 블랙',   price: 18, owned: false, isNew: true  },
-      { id: 6,  category: 'etc',    slot: 'chalkbag', image: '/images/01.items/chalkbag_round_khaki.png',       overlay: '/images/01.items/chalkbag_round_khaki_on_nabi.png',       name: '라운드 초크백 카키',   price: 18, owned: false, isNew: false },
-      { id: 7,  category: 'etc',    slot: 'chalkbag', image: '/images/01.items/chalkbag_round_pink.png',        overlay: '/images/01.items/chalkbag_round_pink_on_nabi.png',        name: '라운드 초크백 핑크',   price: 20, owned: false, isNew: true  },
-      { id: 8,  category: 'etc',    slot: 'brush', image: '/images/01.items/item_brush_short.png',           overlay: '/images/01.items/item_brush_short_on_nabi.png',           name: '숏 브러시',           price: 8,  owned: false, isNew: false },
-      { id: 9,  category: 'etc',    slot: 'brush', image: '/images/01.items/item_brush_long.png',            overlay: '/images/01.items/item_brush_long_on_nabi.png',            name: '롱 브러시',           price: 10, owned: false, isNew: false },
-      { id: 10, category: 'etc',    slot: 'hand', image: '/images/01.items/item_tripod.png',                overlay: '/images/01.items/item_tripod_on_nabi.png',                name: '기록용 삼각대',       price: 30, owned: false, isNew: false },
-      { id: 11, category: 'etc',    slot: 'hand', image: '/images/01.items/item_americano.png',             overlay: '/images/01.items/item_americano_on_nabi.png',             name: '아이스 아메리카노',   price: 5,  owned: false, isNew: false },
-      { id: 12, category: 'shoes',  slot: 'shoes', image: '/images/01.items/climbingshoes_black_gray.png',   overlay: '/images/01.items/climbingshoes_black_gray_on_nabi.png',   name: '클라이밍화 블랙',     price: 35, owned: false, isNew: false },
-      { id: 13, category: 'shoes',  slot: 'shoes', image: '/images/01.items/climbingshoes_gray_blue.png',    overlay: '/images/01.items/climbingshoes_gray_blue_on_nabi.png',    name: '클라이밍화 블루',     price: 35, owned: false, isNew: true  },
-      { id: 14, category: 'shoes',  slot: 'shoes', image: '/images/01.items/climbingshoes_white_pink.png',   overlay: '/images/01.items/climbingshoes_white_pink_on_nabi.png',   name: '클라이밍화 핑크',     price: 38, owned: false, isNew: true  },
-      { id: 15, category: 'shoes',  slot: 'shoes', image: '/images/01.items/climbingshoes_yellow_brown.png', overlay: '/images/01.items/climbingshoes_yellow_brown_on_nabi.png', name: '클라이밍화 브라운',   price: 32, owned: false, isNew: false },
-      { id: 16, category: 'shoes',  slot: 'shoes', image: '/images/01.items/climbingshoes_yellow_green.png', overlay: '/images/01.items/climbingshoes_yellow_green_on_nabi.png', name: '클라이밍화 그린',     price: 32, owned: false, isNew: false },
-      { id: 17, category: 'head',   slot: 'head', image: '/images/01.items/head_accessory_blue_beret.png',  overlay: '/images/01.items/head_accessory_blue_beret_on_nabi.png',  name: '블루 베레',           price: 12, owned: false, isNew: true  },
-      { id: 18, category: 'head',   slot: 'head', image: '/images/01.items/head_accessory_crown.png',       overlay: '/images/01.items/head_accessory_crown_on_nabi.png',       name: '왕관',               price: 50, owned: false, isNew: true  },
-      { id: 19, category: 'head',   slot: 'head', image: '/images/01.items/head_accessory_party_cone.png',  overlay: '/images/01.items/head_accessory_party_cone_on_nabi.png',  name: '파티 콘',            price: 8,  owned: false, isNew: true  },
+      { id: 1,  category: 'top',    slot: 'top', image: '/00.images/01.items/top_white_tshirt.png',           overlay: '/00.images/01.items/top_white_tshirt_on_nabi.png',           name: '화이트 티셔츠',       price: 12, owned: false, isNew: false },
+      { id: 2,  category: 'top',    slot: 'top', image: '/00.images/01.items/top_navy_crop.png',              overlay: '/00.images/01.items/top_navy_crop_on_nabi.png',              name: '네이비 크롭탑',       price: 15, owned: false, isNew: true  },
+      { id: 3,  category: 'etc',    slot: 'chalkbag', image: '/00.images/01.items/chalkbag_square_white.png',      overlay: '/00.images/01.items/chalkbag_square_white_on_nabi.png',      name: '스퀘어 초크백 화이트', price: 20, owned: false, isNew: false },
+      { id: 4,  category: 'etc',    slot: 'chalkbag', image: '/00.images/01.items/chalkbag_square_yellow.png',     overlay: '/00.images/01.items/chalkbag_square_yellow_on_nabi.png',     name: '스퀘어 초크백 옐로우', price: 22, owned: false, isNew: false },
+      { id: 5,  category: 'etc',    slot: 'chalkbag', image: '/00.images/01.items/chalkbag_round_black.png',       overlay: '/00.images/01.items/chalkbag_round_black_on_nabi.png',       name: '라운드 초크백 블랙',   price: 18, owned: false, isNew: true  },
+      { id: 6,  category: 'etc',    slot: 'chalkbag', image: '/00.images/01.items/chalkbag_round_khaki.png',       overlay: '/00.images/01.items/chalkbag_round_khaki_on_nabi.png',       name: '라운드 초크백 카키',   price: 18, owned: false, isNew: false },
+      { id: 7,  category: 'etc',    slot: 'chalkbag', image: '/00.images/01.items/chalkbag_round_pink.png',        overlay: '/00.images/01.items/chalkbag_round_pink_on_nabi.png',        name: '라운드 초크백 핑크',   price: 20, owned: false, isNew: true  },
+      { id: 8,  category: 'etc',    slot: 'brush', image: '/00.images/01.items/item_brush_short.png',           overlay: '/00.images/01.items/item_brush_short_on_nabi.png',           name: '숏 브러시',           price: 8,  owned: false, isNew: false },
+      { id: 9,  category: 'etc',    slot: 'brush', image: '/00.images/01.items/item_brush_long.png',            overlay: '/00.images/01.items/item_brush_long_on_nabi.png',            name: '롱 브러시',           price: 10, owned: false, isNew: false },
+      { id: 10, category: 'etc',    slot: 'hand', image: '/00.images/01.items/item_tripod.png',                overlay: '/00.images/01.items/item_tripod_on_nabi.png',                name: '기록용 삼각대',       price: 30, owned: false, isNew: false },
+      { id: 11, category: 'etc',    slot: 'hand', image: '/00.images/01.items/item_americano.png',             overlay: '/00.images/01.items/item_americano_on_nabi.png',             name: '아이스 아메리카노',   price: 5,  owned: false, isNew: false },
+      { id: 12, category: 'shoes',  slot: 'shoes', image: '/00.images/01.items/climbingshoes_black_gray.png',   overlay: '/00.images/01.items/climbingshoes_black_gray_on_nabi.png',   name: '클라이밍화 블랙',     price: 35, owned: false, isNew: false },
+      { id: 13, category: 'shoes',  slot: 'shoes', image: '/00.images/01.items/climbingshoes_gray_blue.png',    overlay: '/00.images/01.items/climbingshoes_gray_blue_on_nabi.png',    name: '클라이밍화 블루',     price: 35, owned: false, isNew: true  },
+      { id: 14, category: 'shoes',  slot: 'shoes', image: '/00.images/01.items/climbingshoes_white_pink.png',   overlay: '/00.images/01.items/climbingshoes_white_pink_on_nabi.png',   name: '클라이밍화 핑크',     price: 38, owned: false, isNew: true  },
+      { id: 15, category: 'shoes',  slot: 'shoes', image: '/00.images/01.items/climbingshoes_yellow_brown.png', overlay: '/00.images/01.items/climbingshoes_yellow_brown_on_nabi.png', name: '클라이밍화 브라운',   price: 32, owned: false, isNew: false },
+      { id: 16, category: 'shoes',  slot: 'shoes', image: '/00.images/01.items/climbingshoes_yellow_green.png', overlay: '/00.images/01.items/climbingshoes_yellow_green_on_nabi.png', name: '클라이밍화 그린',     price: 32, owned: false, isNew: false },
+      { id: 17, category: 'head',   slot: 'head', image: '/00.images/01.items/head_accessory_blue_beret.png',  overlay: '/00.images/01.items/head_accessory_blue_beret_on_nabi.png',  name: '블루 베레',           price: 12, owned: false, isNew: true  },
+      { id: 18, category: 'head',   slot: 'head', image: '/00.images/01.items/head_accessory_crown.png',       overlay: '/00.images/01.items/head_accessory_crown_on_nabi.png',       name: '왕관',               price: 50, owned: false, isNew: true  },
+      { id: 19, category: 'head',   slot: 'head', image: '/00.images/01.items/head_accessory_party_cone.png',  overlay: '/00.images/01.items/head_accessory_party_cone_on_nabi.png',  name: '파티 콘',            price: 8,  owned: false, isNew: true  },
     ]
 
     let currentCategory = 'all'
@@ -523,7 +523,7 @@
           <div class="item-price ${item.owned ? 'price-owned' : ''}">
             ${item.owned
               ? `<span class="item-price-text">${worn ? '착용중' : '탭하여 착용'}</span>`
-              : `<img src="/images/01.items/chalk_piece.png" alt=""><span class="item-price-text">×${item.price}</span>`}
+              : `<img src="/00.images/01.items/chalk_piece.png" alt=""><span class="item-price-text">×${item.price}</span>`}
           </div>
         </div>
       `}).join('')
@@ -638,7 +638,7 @@
     // ── 나비 미리보기 렌더링 ──────────────────────────
     function renderNabiPreview() {
       const canvas = document.getElementById('nabi-canvas')
-      document.getElementById('nabi-base').src = `/images/00.nabi/nabi_front_0${userLevel}_basic.png`
+      document.getElementById('nabi-base').src = `/00.images/00.nabi/nabi_front_shirt_lv${userLevel}.png`
 
       canvas.querySelectorAll('img:not(.layer-base)').forEach(el => el.remove())
 
