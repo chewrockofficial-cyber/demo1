@@ -213,7 +213,7 @@
 <body>
   <div class="phone">
     <div class="character">
-      <img src="/00.images/00.nabi/nabi_front_chalk_lv1.png" alt="Nabi">
+      <img id="characterImg" src="/00.images/00.nabi/nabi_front_chalk_lv1.png" alt="Nabi">
     </div>
     <div class="logo">
       <img id="logoImg" src="" alt="Chew Rock">
@@ -260,6 +260,22 @@
       const hour = new Date().getHours();
       const idx = Math.floor(hour / 8) % LOGO_VARIANTS.length;
       document.getElementById('logoImg').src = LOGO_VARIANTS[idx];
+    })();
+
+    // 캐릭터 5단계 (KST 기준, 24시간을 5구간으로 나눠 로테이션)
+    const NABI_LOGIN_VARIANTS = [
+      '/00.images/00.nabi/nabi_front_chalk_lv1.png',
+      '/00.images/00.nabi/nabi_front_chalk_lv2.png',
+      '/00.images/00.nabi/nabi_front_chalk_lv3.png',
+      '/00.images/00.nabi/nabi_front_chalk_lv4.png',
+      '/00.images/00.nabi/nabi_front_chalk_lv5.png',
+    ];
+    (function setCharacterByTimeBlock() {
+      const now = new Date();
+      const kstHour = (now.getUTCHours() + 9) % 24; // KST = UTC+9
+      const blockSize = 24 / NABI_LOGIN_VARIANTS.length; // 4.8시간
+      const idx = Math.min(Math.floor(kstHour / blockSize), NABI_LOGIN_VARIANTS.length - 1);
+      document.getElementById('characterImg').src = NABI_LOGIN_VARIANTS[idx];
     })();
 
     let currentTab = 'login'
